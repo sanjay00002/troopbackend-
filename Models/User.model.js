@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const sequelize = require('sequelize');
 const { Schema } = mongoose;
 
 const userSchema = new Schema(
@@ -15,7 +16,7 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const User = mongoose.model('User', userSchema);
