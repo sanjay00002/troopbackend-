@@ -24,6 +24,7 @@ export default (sequelize, DataTypes) => {
   }
   Profile.init(
     {
+      phoneNumber: { type: DataTypes.STRING, allowNull: false, unique: true },
       profileImage: { type: DataTypes.STRING, allowNull: true },
       referralCode: { type: DataTypes.STRING, allowNull: false },
       referrer: { type: DataTypes.STRING, allowNull: true },

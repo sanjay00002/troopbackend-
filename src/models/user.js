@@ -12,8 +12,7 @@ export default (sequelize, DataTypes) => {
   }
   User.init(
     {
-      username: { type: DataTypes.STRING, allowNull: false },
-      phoneNumber: { type: DataTypes.STRING, allowNull: false, unique: true },
+      username: { type: DataTypes.STRING, allowNull: false, unique: true },
     },
     {
       sequelize,
