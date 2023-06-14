@@ -13,6 +13,9 @@ export default (sequelize, DataTypes) => {
   User.init(
     {
       username: { type: DataTypes.STRING, allowNull: false, unique: true },
+      accessToken: { type: DataTypes.STRING, allowNull: true },
+      refreshToken: { type: DataTypes.STRING, allowNull: true },
+      loggedInAt: { type: DataTypes.DATE, allowNull: true },
     },
     {
       sequelize,

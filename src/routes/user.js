@@ -1,11 +1,9 @@
 import { Router } from 'express';
-import AuthController from '../controllers/AuthController';
 import UserController from '../controllers/UserController';
+import validate from '../middleware/auth';
 
 const router = Router();
 
-router.route('/create').post(AuthController.signUp);
-
-router.route('/').post(UserController.getUserDetails);
+router.route('/').post(validate, UserController.getUserDetails);
 
 module.exports = router;
