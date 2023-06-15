@@ -7,6 +7,6 @@ router.route('/create').post(AuthController.signUp);
 
 router.route('/signIn').post(AuthController.signIn);
 
-router.route('/refresh').post(AuthController.refreshToken);
+router.route('/refresh').post(AuthController.refreshTokens);
 
 module.exports = router;

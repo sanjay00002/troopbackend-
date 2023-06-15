@@ -92,7 +92,7 @@ export default {
     }
   },
 
-  refreshToken: async function (req, res) {
+  refreshTokens: async function (req, res) {
     try {
       const refreshToken = req.headers['authorization'].split(' ')[1];
 
@@ -119,11 +119,12 @@ export default {
       await jwt.verify(refreshToken, SECRET, async (error, decoded) => {
         if (!error) {
           const foundUser = await User.findByPk(decoded?.id);
-          console.log('User: ', foundUser);
+
+          const refreshTokenDB = await foundUser.get('refreshToken');
 
           const isValidRefreshToken = await bcrypt.compare(
             refreshToken,
-            foundUser.get('refreshToken'),
+            refreshTokenDB,
           );
 
           if (isValidRefreshToken) {
@@ -142,10 +143,10 @@ export default {
             const accessTokenHash = await bcrypt.hash(newAccessToken, salt);
             const refershTokenHash = await bcrypt.hash(newRefreshToken, salt);
 
-            foundUser.accessToken = accessTokenHash;
-            foundUser.refreshToken = refershTokenHash;
-
-            await foundUser.save();
+            await foundUser.update({
+              accessToken: accessTokenHash,
+              refreshToken: refershTokenHash,
+            });
 
             return res.status(200).json({
               accessToken: newAccessToken,

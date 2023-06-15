@@ -29,14 +29,9 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
 
-    await queryInterface.removeConstraint('Profiles', {
-      fields: ['userId'],
-      type: 'foreign key',
-      name: 'user_profile_fk_constraint',
-      references: {
-        table: 'Users',
-        field: 'id',
-      },
-    });
+    await queryInterface.removeConstraint(
+      'Profiles',
+      'user_profile_fk_constraint',
+    );
   },
 };
