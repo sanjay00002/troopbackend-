@@ -168,9 +168,7 @@ export default {
             }
           }
         } else {
-          return res
-            .status(403)
-            .json({ message: 'Refresh Token Invalid!', error });
+          return res.status(403).json({ message: 'Refresh Token Invalid!' });
         }
       });
     } catch (error) {
