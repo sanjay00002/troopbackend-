@@ -1,6 +1,5 @@
-'use strict';
 const { Model } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   class Contest extends Model {
     /**
      * Helper method for defining associations.
@@ -39,10 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       likes: DataTypes.INTEGER,
       slots: DataTypes.INTEGER,
       startTime: DataTypes.DATE,
-      endtime: DataTypes.DATE,
+      endTime: DataTypes.DATE,
       participants: DataTypes.ARRAY(DataTypes.INTEGER),
       winners: DataTypes.JSON,
-      prizeDistribution: DataTypes.ARRAY(DataTypes.INTEGER),
+      priceDistribution: DataTypes.ARRAY(DataTypes.INTEGER),
     },
     {
       sequelize,

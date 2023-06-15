@@ -43,13 +43,13 @@ export async function up(queryInterface, Sequelize) {
     },
     slots: {
       type: Sequelize.INTEGER,
-      defaultValue: 0,
+      allowNull: false,
     },
     startTime: {
       type: Sequelize.DATE,
       allowNull: true,
     },
-    endtime: {
+    endTime: {
       type: Sequelize.DATE,
       allowNull: false,
     },
@@ -61,7 +61,7 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.JSON,
       allowNull: true,
     },
-    prizeDistribution: {
+    priceDistribution: {
       type: Sequelize.ARRAY(Sequelize.INTEGER),
       allowNull: false,
     },
