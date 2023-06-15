@@ -6,9 +6,9 @@ export default function validate(req, res, next) {
 
   const accessToken = token?.split(' ')[1];
 
-  jwt.verify(accessToken, SECRET, (error, userId) => {
+  jwt.verify(accessToken, SECRET, (error, user) => {
     if (!error) {
-      req.id = userId;
+      req.id = user.id;
       next();
     } else {
       return res.status(403).json({ message: 'User Unauthorized!' });

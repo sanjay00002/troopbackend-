@@ -94,8 +94,28 @@ export default {
 
   refreshToken: async function (req, res) {
     try {
-      const refreshToken = req.body.token;
+      const refreshToken = req.headers['authorization'].split(' ')[1];
 
+      /*
+       *  Verify the Token
+       *  If valid token:
+       *    - Fetch the user with id present in the token
+       *    - Compare the token in the DB with the one recieved // An extra check
+       *    - If matches:
+       *      - Create a new access & refresh tokens
+       *      - Hash and store it into the DB
+       *      - Send the tokens as a response
+       *    - Else: // Token Reuse situation | Valid Token getting reused
+       *      - Try to fetch the user with the id present in the token i.e. the hacked user
+       *      - If user found:
+       *        - Reset the refresh and access Tokens in the DB for the hacked user
+       *        - Now user needs to login again
+       *        - Return 403 response
+       *      - Else: // Attacker tried to get tokens for non-existing user
+       *        - Return 403 response
+       *  Else: // Token Reuse situation but wasn't verified | Non-valid token getting reused
+       *    - Return 403 response, unauthorized access
+       */
       await jwt.verify(refreshToken, SECRET, async (error, decoded) => {
         if (!error) {
           const foundUser = await User.findByPk(decoded?.id);
@@ -126,16 +146,27 @@ export default {
             foundUser.refreshToken = refershTokenHash;
 
             await foundUser.save();
+
             return res.status(200).json({
               accessToken: newAccessToken,
               refershToken: newRefreshToken,
             });
-          }
+          } else {
+            // Refresh Token Reuse
+            // Hacked User
+            const hackedUser = await User.findByPk(decoded?.id);
 
-          return res.status(403).json({
-            message: 'Invalid Refresh Token',
-            errorMessage: 'Refresh Token not verified from backend',
-          });
+            if (hackedUser) {
+              await hackedUser.update({
+                accessToken: null,
+                refreshToken: null,
+              });
+
+              return res.status(403).json({ error: 'Permission Denied' });
+            } else {
+              return res.sendStatus(403);
+            }
+          }
         } else {
           return res
             .status(403)

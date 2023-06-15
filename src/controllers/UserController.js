@@ -5,7 +5,7 @@ const { User } = model;
 
 export default {
   getUserDetails: async function (req, res) {
-    const { id } = req?.body;
+    const { id } = req;
 
     try {
       const user = await User.findByPk(id);
