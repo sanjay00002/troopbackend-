@@ -18,6 +18,7 @@ export default {
         algorithm: ALGORITHM,
         expiresIn: REFRESH_TOKEN_EXPIRY,
       });
+      console.log('Access Token: ', accessToken);
       console.log('Refresh Token: ', refreshToken);
 
       return { accessToken, refreshToken };

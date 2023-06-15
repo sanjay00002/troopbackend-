@@ -2,7 +2,8 @@ import { Op } from 'sequelize';
 import model from '../models';
 import JWTController from './JWTController';
 import * as bcrypt from 'bcrypt';
-import { SALT_ROUNDS } from '../utils/settings';
+import { SALT_ROUNDS, SECRET } from '../utils/settings';
+import jwt from 'jsonwebtoken';
 
 const { User } = model;
 
@@ -93,6 +94,54 @@ export default {
 
   refreshToken: async function (req, res) {
     try {
+      const refreshToken = req.body.token;
+
+      await jwt.verify(refreshToken, SECRET, async (error, decoded) => {
+        if (!error) {
+          const foundUser = await User.findByPk(decoded?.id);
+          console.log('User: ', foundUser);
+
+          const isValidRefreshToken = await bcrypt.compare(
+            refreshToken,
+            foundUser.get('refreshToken'),
+          );
+
+          if (isValidRefreshToken) {
+            const { newAccessToken, newRefreshToken } =
+              await JWTController.createToken(
+                { id: foundUser.get('id') },
+                true,
+              ).then((tokens) => ({
+                newAccessToken: tokens.accessToken,
+                newRefreshToken: tokens.refreshToken,
+              }));
+
+            console.log('New: ', newAccessToken, newRefreshToken);
+
+            const salt = await bcrypt.genSalt(SALT_ROUNDS);
+            const accessTokenHash = await bcrypt.hash(newAccessToken, salt);
+            const refershTokenHash = await bcrypt.hash(newRefreshToken, salt);
+
+            foundUser.accessToken = accessTokenHash;
+            foundUser.refreshToken = refershTokenHash;
+
+            await foundUser.save();
+            return res.status(200).json({
+              accessToken: newAccessToken,
+              refershToken: newRefreshToken,
+            });
+          }
+
+          return res.status(403).json({
+            message: 'Invalid Refresh Token',
+            errorMessage: 'Refresh Token not verified from backend',
+          });
+        } else {
+          return res
+            .status(403)
+            .json({ message: 'Refresh Token Invalid!', error });
+        }
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({
