@@ -9,6 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.User.hasMany(Contest, {
+        foreignKey: 'createdBy',
+        sourceKey: 'id',
+      });
+
+      Contest.belongsTo(models.User, {
+        foreignKey: 'createdBy',
+        targetKey: 'id',
+        constraints: true,
+        keyType: DataTypes.INTEGER,
+        uniqueKey: 'user_contest_fk_constraint',
+      });
     }
   }
   Contest.init(
