@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node server.js"
+    "start": "nodemon --exec babel-node server.js",
+    "migrate": "npx sequelize-cli db:migrate",
+    "undo-migration": "npx sequelize-cli db:migrate:undo",
+    "undo-all-migration": "npx sequelize-cli db:migrate:undo:all",
+    "generate-migration": "npx sequelize-cli migration:generate --name"
   },
   "repository": {
     "type": "git",

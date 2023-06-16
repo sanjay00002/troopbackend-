@@ -21,7 +21,7 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
     },
-    referred_at: {
+    referredAt: {
       type: Sequelize.DATE,
       allowNull: true,
     },

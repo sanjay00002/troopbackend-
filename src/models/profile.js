@@ -28,7 +28,7 @@ export default (sequelize, DataTypes) => {
       profileImage: { type: DataTypes.STRING, allowNull: true },
       referralCode: { type: DataTypes.STRING, allowNull: false },
       referrer: { type: DataTypes.STRING, allowNull: true },
-      referred_at: { type: DataTypes.DATE, allowNull: true },
+      referredAt: { type: DataTypes.DATE, allowNull: true },
     },
     {
       sequelize,

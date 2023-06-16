@@ -25,7 +25,6 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
-// app.use('/contests' , contestRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/contest', contestRouter);
