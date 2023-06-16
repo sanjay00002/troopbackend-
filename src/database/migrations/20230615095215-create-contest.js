@@ -57,11 +57,11 @@ export async function up(queryInterface, Sequelize) {
       allowNull: true,
     },
     winners: {
-      type: Sequelize.JSON,
+      type: Sequelize.ARRAY(Sequelize.JSON),
       allowNull: true,
     },
     priceDistribution: {
-      type: Sequelize.ARRAY(Sequelize.INTEGER),
+      type: Sequelize.ARRAY(Sequelize.JSON),
       allowNull: false,
     },
     createdAt: {

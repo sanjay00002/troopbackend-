@@ -1,5 +1,19 @@
 {
   "development": {
+    "username": "deeptalekar",
+    "password": "OyKezClFij32",
+    "database": "neondb",
+    "host": "ep-morning-moon-305076.us-east-2.aws.neon.tech",
+    "port": "5432",
+    "dialect": "postgresql",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "local": {
     "username": "postgres",
     "password": "123456789",
     "database": "Troop_App",
