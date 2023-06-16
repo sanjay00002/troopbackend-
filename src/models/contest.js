@@ -1,4 +1,6 @@
 const { Model } = require('sequelize');
+import { nanoid } from 'nanoid/async';
+
 export default (sequelize, DataTypes) => {
   class Contest extends Model {
     /**
@@ -48,5 +50,11 @@ export default (sequelize, DataTypes) => {
       modelName: 'Contest',
     },
   );
+  Contest.beforeCreate(async (user, option) => {
+    if (user.isNewRecord) {
+      const id = await nanoid(10);
+      user.id = id;
+    }
+  });
   return Contest;
 };
