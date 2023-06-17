@@ -4,11 +4,118 @@ import JWTController from './JWTController';
 import * as bcrypt from 'bcrypt';
 import { SALT_ROUNDS, SECRET } from '../utils/settings';
 import jwt from 'jsonwebtoken';
+import { generateReferralCode } from '../lib/referralCode';
+import moment from 'moment';
 
-const { User } = model;
+const { User, Profile } = model;
 
 export default {
   signUp: async (req, res) => {
+    const userDetails = req.body;
+
+    try {
+      /*
+       *  1. Existing user present as guest signs up
+       *  2. New user signing up
+       *
+       *  Is there a existing profile of that user and tries to signUp again
+       *  Check if the username is not falsy value
+       *
+       */
+      const existingUserAsGuest = await User.findOne({
+        where: { username: userDetails?.username },
+      });
+
+      console.log('Existing User as Guest: ', existingUserAsGuest);
+
+      if (existingUserAsGuest) {
+        const existingProfile = await Profile.findOne({
+          where: { userId: await existingUserAsGuest.get('id') },
+        });
+
+        if (await existingProfile?.get('id')) {
+          return res.status(422).json({
+            message: 'Profile already exists',
+          });
+        }
+
+        // * User present as guest but without profile
+
+        const existingUserId = await existingUserAsGuest.get('id');
+
+        // Check if the username is not falsy value
+        if (userDetails?.username) {
+          // Generate a referral code
+          const referralCode = await generateReferralCode();
+
+          const newUser = await Profile.create({
+            userId: existingUserId,
+            phoneNumber: userDetails?.phoneNumber,
+            referralCode: referralCode,
+            referrer: userDetails?.referrer ?? null,
+            referredAt: userDetails?.referrer ? moment().toISOString() : null,
+            profileImage: userDetails?.profileImage ?? null,
+          });
+
+          return res.status(200).json({
+            ...(await newUser.get()),
+            message: 'Profile Created Successfully',
+          });
+        } else {
+          return res.status(400).json({ message: 'Provided a bad username' });
+        }
+      } else {
+        // * New User sigining up
+        const existingUser = await User.findOne({
+          where: { username: userDetails?.username },
+        });
+
+        if (existingUser) {
+          return res.status(422).json({
+            message: 'User with the given username already exists',
+          });
+        }
+
+        // Check if the username is not falsy value
+        if (userDetails?.username) {
+          const newUser = await User.create({
+            username: userDetails?.username,
+          });
+
+          const newUserId = await newUser?.get('id');
+
+          if (newUserId) {
+            // * Create the profile for the new user
+
+            const referralCode = await generateReferralCode();
+
+            const newUser = await Profile.create({
+              userId: newUserId,
+              phoneNumber: userDetails?.phoneNumber,
+              referralCode: referralCode,
+              referrer: userDetails?.referrer ?? null,
+              referredAt: userDetails?.referrer ? moment().toISOString() : null,
+              profileImage: userDetails?.profileImage ?? null,
+            });
+
+            return res.status(200).json({
+              ...(await newUser.get()),
+              message: 'User and Profile Created Successfully',
+            });
+          }
+        } else {
+          return res.status(400).json({ message: 'Provided a bad username' });
+        }
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errorMessage: error?.message,
+        error: 'Something went wrong while creating the profile',
+      });
+    }
+  },
+
+  signUpAsGuest: async (req, res) => {
     const { username } = req?.body;
 
     try {
@@ -69,7 +176,7 @@ export default {
 
         user.accessToken = accessTokenHash;
         user.refreshToken = refershTokenHash;
-        user.loggedInAt = new Date().toISOString();
+        user.loggedInAt = moment().toISOString();
 
         await user.save();
 

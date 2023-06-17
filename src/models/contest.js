@@ -50,10 +50,10 @@ export default (sequelize, DataTypes) => {
       modelName: 'Contest',
     },
   );
-  Contest.beforeCreate(async (user, option) => {
-    if (user.isNewRecord) {
+  Contest.beforeCreate(async (contest, option) => {
+    if (contest.isNewRecord) {
       const id = await nanoid(10);
-      user.id = id;
+      contest.id = id;
     }
   });
   return Contest;
