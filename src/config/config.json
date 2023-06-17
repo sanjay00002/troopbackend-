@@ -3,7 +3,7 @@
     "username": "deeptalekar",
     "password": "OyKezClFij32",
     "database": "neondb",
-    "host": "ep-morning-moon-305076.us-east-2.aws.neon.tech",
+    "host": "ep-aged-mode-781861.us-east-2.aws.neon.tech",
     "port": "5432",
     "dialect": "postgresql",
     "dialectOptions": {
