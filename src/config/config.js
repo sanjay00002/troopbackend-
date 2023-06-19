@@ -1,16 +1,24 @@
 module.exports = {
+  local: {
+    username: process.env.PGUSER,
+    password: process.env.PGPASSWORD,
+    database: process.env.PGDATABASE,
+    host: process.env.HOST,
+    port: process.env.PORT,
+    dialect: 'postgres',
+  },
   development: {
-    use_env_variable: 'DATABASE_URL',
-    dialect: 'postgresql',
+    username: process.env.PGUSER,
+    password: process.env.PGPASSWORD,
+    database: process.env.PGDATABASE,
+    host: process.env.HOST,
+    port: process.env.PORT,
+    dialect: 'postgres',
     dialectOptions: {
       ssl: {
-        require: true,
+        require: process.env.PGSSLMODE,
         rejectUnauthorized: false,
       },
     },
-  },
-  local: {
-    use_env_variable: 'DATABASE_URL',
-    dialect: 'postgresql',
   },
 };

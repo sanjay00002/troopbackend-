@@ -26,9 +26,9 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
-app.use('api/v1/auth', authRouter);
-app.use('api/v1/user', userRouter);
-app.use('api/v1/contest', contestRouter);
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/contest', contestRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

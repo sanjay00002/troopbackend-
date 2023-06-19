@@ -1,5 +1,6 @@
 import { Model } from 'sequelize';
 import { generateUserId } from '../lib/userId';
+
 export default (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -35,7 +36,7 @@ export default (sequelize, DataTypes) => {
       modelName: 'User',
     },
   );
-  User.beforeCreate(async (user, option) => {
+  User.beforeValidate(async (user, option) => {
     if (user.isNewRecord) {
       const id = `Troop-${await generateUserId()}`;
       user.id = id;

@@ -1,7 +1,7 @@
 import { configDotenv } from 'dotenv';
 
-// configDotenv({ path: './.env.local' });
-configDotenv({ path: './.env.dev' });
+configDotenv({ path: './.env.local' });
+// configDotenv({ path: './.env.dev' });
 
 export const SECRET = process.env.JWT_SECRET;
 export const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
