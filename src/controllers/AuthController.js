@@ -1,4 +1,3 @@
-import { Op } from 'sequelize';
 import model from '../models';
 import JWTController from './JWTController';
 import * as bcrypt from 'bcrypt';
@@ -14,151 +13,65 @@ export default {
     const userDetails = req.body;
 
     try {
-      /*
-       *  1. Existing user present as guest signs up
-       *  2. New user signing up
-       *
-       *  Is there a existing profile of that user and tries to signUp again
-       *  Check if the username is not falsy value
-       *
-       */
-      const existingUserAsGuest = await User.findOne({
-        where: { username: userDetails?.username },
-      });
+      let newUser;
 
-      console.log('Existing User as Guest: ', existingUserAsGuest);
+      // Verified User i.e. signs up with phone number
+      if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) {
+        const referralCode = await generateReferralCode();
 
-      if (existingUserAsGuest) {
-        const existingProfile = await Profile.findOne({
-          where: { userId: await existingUserAsGuest.get('id') },
+        newUser = await User.create({
+          username: userDetails?.username,
+          phoneNumber: userDetails?.phoneNumber,
+          firstName: userDetails?.firstName,
+          lastName: userDetails?.lastName,
+          profileImage: userDetails?.profileImage,
+          referralCode: referralCode,
+          referrer: userDetails?.referrer,
+          referredAt: userDetails?.referrer ? moment().toISOString() : null,
         });
-
-        if (await existingProfile?.get('id')) {
-          return res.status(422).json({
-            message: 'Profile already exists',
-          });
-        }
-
-        // * User present as guest but without profile
-
-        const existingUserId = await existingUserAsGuest.get('id');
-
-        // Check if the username is not falsy value
-        if (userDetails?.username) {
-          // Generate a referral code
-          const referralCode = await generateReferralCode();
-
-          const newUser = await Profile.create({
-            userId: existingUserId,
-            phoneNumber: userDetails?.phoneNumber,
-            referralCode: referralCode,
-            referrer: userDetails?.referrer ?? null,
-            referredAt: userDetails?.referrer ? moment().toISOString() : null,
-            profileImage: userDetails?.profileImage ?? null,
-          });
-
-          return res.status(200).json({
-            ...(await newUser.get()),
-            message: 'Profile Created Successfully',
-          });
-        } else {
-          return res.status(400).json({ message: 'Provided a bad username' });
-        }
       } else {
-        // * New User sigining up
-        const existingUser = await User.findOne({
-          where: { username: userDetails?.username },
+        // Unverified User i.e. Guest
+        newUser = await User.create({
+          username: 'Trooper',
         });
-
-        if (existingUser) {
-          return res.status(422).json({
-            message: 'User with the given username already exists',
-          });
-        }
-
-        // Check if the username is not falsy value
-        if (userDetails?.username) {
-          const newUser = await User.create({
-            username: userDetails?.username,
-          });
-
-          const newUserId = await newUser?.get('id');
-
-          if (newUserId) {
-            // * Create the profile for the new user
-
-            const referralCode = await generateReferralCode();
-
-            const newUser = await Profile.create({
-              userId: newUserId,
-              phoneNumber: userDetails?.phoneNumber,
-              referralCode: referralCode,
-              referrer: userDetails?.referrer ?? null,
-              referredAt: userDetails?.referrer ? moment().toISOString() : null,
-              profileImage: userDetails?.profileImage ?? null,
-            });
-
-            return res.status(200).json({
-              ...(await newUser.get()),
-              message: 'User and Profile Created Successfully',
-            });
-          }
-        } else {
-          return res.status(400).json({ message: 'Provided a bad username' });
-        }
       }
+
+      const newUserId = await newUser?.get('id');
+      // Generate Tokens for the user
+      const { accessToken, refreshToken } = await JWTController.createToken(
+        { id: newUserId },
+        true,
+      );
+
+      const salt = await bcrypt.genSalt(SALT_ROUNDS);
+      const accessTokenHash = await bcrypt.hash(accessToken, salt);
+      const refershTokenHash = await bcrypt.hash(refreshToken, salt);
+
+      newUser.accessToken = accessTokenHash;
+      newUser.refreshToken = refershTokenHash;
+      newUser.loggedInAt = moment().toISOString();
+
+      await newUser.save();
+
+      return res.status(200).json({
+        id: newUserId,
+        accessToken,
+        refreshToken,
+      });
     } catch (error) {
+      console.error('Some error: ', error);
       return res.status(500).json({
         errorMessage: error?.message,
-        error: 'Something went wrong while creating the profile',
-      });
-    }
-  },
-
-  signUpAsGuest: async (req, res) => {
-    const { username } = req?.body;
-
-    try {
-      const existingUser = await User.findOne({
-        where: { username },
-      });
-
-      if (existingUser) {
-        return res.status(422).json({
-          message: 'User with the given username already exists',
-        });
-      }
-
-      // Check if the username is not falsy value
-      if (username) {
-        const newUser = await User.create({
-          username,
-        });
-
-        if (newUser.get('id')) {
-          return res.status(201).json({
-            id: newUser.get('id'),
-            message: 'Account Created Successfully',
-          });
-        }
-      } else {
-        return res.status(400).json({ message: 'Provided a bad username' });
-      }
-    } catch (error) {
-      return res.status(500).json({
-        errorMessage: error?.message,
-        error: 'Something went wrong while creating the user',
+        error: 'Something went wrong while signing up the user',
       });
     }
   },
 
   signIn: async function (req, res) {
-    const { username } = req?.body;
+    const { id } = req?.body;
 
     try {
-      const user = await User.findOne({
-        where: { username: username },
-      });
+      const user = await User.findByPk(id);
 
       console.log('User: ', user);
 
@@ -183,12 +96,12 @@ export default {
         console.log('Saved', user);
 
         return res.status(200).json({
-          id: user?.get('id'),
+          id: await user?.get('id'),
           accessToken,
           refreshToken,
         });
       } else {
-        return res.status(400).json({ message: 'Provided a bad username' });
+        return res.status(400).json({ message: 'Provided a bad user id' });
       }
     } catch (error) {
       console.error(error);

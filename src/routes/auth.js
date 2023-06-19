@@ -3,9 +3,7 @@ import AuthController from '../controllers/AuthController';
 
 const router = Router();
 
-router.route('/create').post(AuthController.signUpAsGuest);
-
-router.route('/createProfile').post(AuthController.signUp);
+router.route('/signUp').post(AuthController.signUp);
 
 router.route('/signIn').post(AuthController.signIn);
 

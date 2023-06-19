@@ -13,6 +13,13 @@ export default {
       const result = {
         id: user.id,
         username: user.username,
+        phoneNumber: user.phoneNumber,
+        firstName: user.firstName,
+        lastName: user.firstName,
+        profileImage: user.profileImage,
+        referralCode: user.referralCode,
+        referrer: user.referrer,
+        referredAt: user.referredAt,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       };
