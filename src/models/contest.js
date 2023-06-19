@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
         foreignKey: 'createdBy',
         targetKey: 'id',
         constraints: true,
-        keyType: DataTypes.INTEGER,
+        keyType: DataTypes.STRING,
         uniqueKey: 'user_contest_fk_constraint',
       });
     }

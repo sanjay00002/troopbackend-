@@ -7,6 +7,7 @@ import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
 
 require('dotenv').config({ path: './.env.local' });
+// require('dotenv').config({ path: './.env.dev' });
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -25,9 +26,9 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
-app.use('/contest', contestRouter);
+app.use('api/v1/auth', authRouter);
+app.use('api/v1/user', userRouter);
+app.use('api/v1/contest', contestRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

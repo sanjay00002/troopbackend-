@@ -4,18 +4,55 @@ export async function up(queryInterface, Sequelize) {
   await queryInterface.createTable('Users', {
     id: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
     },
     username: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 'Trooper',
+      unique: false,
     },
     phoneNumber: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
+    },
+    firstName: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    profileImage: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    referralCode: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    referrer: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    referredAt: {
+      type: Sequelize.DATE,
+      allowNull: true,
+    },
+    accessToken: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    refreshToken: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    loggedInAt: {
+      type: Sequelize.STRING,
+      allowNull: true,
     },
     createdAt: {
       allowNull: false,

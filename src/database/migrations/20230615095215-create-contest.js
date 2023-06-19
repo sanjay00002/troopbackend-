@@ -33,7 +33,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
     createdBy: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     likes: {
