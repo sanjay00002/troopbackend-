@@ -1,7 +1,6 @@
 import model from '../models';
 import JWTController from './JWTController';
-import * as bcrypt from 'bcrypt';
-import { SALT_ROUNDS, SECRET } from '../utils/settings';
+import { REFRESH_SECRET } from '../utils/settings';
 import jwt from 'jsonwebtoken';
 import { generateReferralCode } from '../lib/referralCode';
 import moment from 'moment';
@@ -43,12 +42,11 @@ export default {
         true,
       );
 
-      const salt = await bcrypt.genSalt(SALT_ROUNDS);
-      const accessTokenHash = await bcrypt.hash(accessToken, salt);
-      const refershTokenHash = await bcrypt.hash(refreshToken, salt);
+      const accessTokenHash = await JWTController.hashToken(accessToken);
+      const refreshTokenHash = await JWTController.hashToken(refreshToken);
 
       newUser.accessToken = accessTokenHash;
-      newUser.refreshToken = refershTokenHash;
+      newUser.refreshToken = refreshTokenHash;
       newUser.loggedInAt = moment().toISOString();
 
       await newUser.save();
@@ -83,12 +81,11 @@ export default {
           true,
         );
 
-        const salt = await bcrypt.genSalt(SALT_ROUNDS);
-        const accessTokenHash = await bcrypt.hash(accessToken, salt);
-        const refershTokenHash = await bcrypt.hash(refreshToken, salt);
+        const accessTokenHash = await JWTController.hashToken(accessToken);
+        const refreshTokenHash = await JWTController.hashToken(refreshToken);
 
         user.accessToken = accessTokenHash;
-        user.refreshToken = refershTokenHash;
+        user.refreshToken = refreshTokenHash;
         user.loggedInAt = moment().toISOString();
 
         await user.save();
@@ -136,16 +133,22 @@ export default {
        *  Else: // Token Reuse situation but wasn't verified | Non-valid token getting reused
        *    - Return 403 response, unauthorized access
        */
-      await jwt.verify(refreshToken, SECRET, async (error, decoded) => {
+      await jwt.verify(refreshToken, REFRESH_SECRET, async (error, decoded) => {
         if (!error) {
-          const foundUser = await User.findByPk(decoded?.id);
+          const recievedRefreshTokenHash = await JWTController.hashToken(
+            refreshToken,
+          );
+
+          const foundUser = await User.findOne({ where: { id: decoded?.id } });
 
           const refreshTokenDB = await foundUser.get('refreshToken');
+          console.log('Refresh Token from Req: ', recievedRefreshTokenHash);
+          console.log('Refresh Token from DB: ', refreshTokenDB);
 
-          const isValidRefreshToken = await bcrypt.compare(
-            refreshToken,
-            refreshTokenDB,
-          );
+          const isValidRefreshToken =
+            refreshTokenDB === recievedRefreshTokenHash;
+
+          console.log('Is Valid refresh token: ', isValidRefreshToken);
 
           if (isValidRefreshToken) {
             const { newAccessToken, newRefreshToken } =
@@ -159,13 +162,16 @@ export default {
 
             console.log('New: ', newAccessToken, newRefreshToken);
 
-            const salt = await bcrypt.genSalt(SALT_ROUNDS);
-            const accessTokenHash = await bcrypt.hash(newAccessToken, salt);
-            const refershTokenHash = await bcrypt.hash(newRefreshToken, salt);
+            const accessTokenHash = await JWTController.hashToken(
+              newAccessToken,
+            );
+            const refreshTokenHash = await JWTController.hashToken(
+              newRefreshToken,
+            );
 
             await foundUser.update({
               accessToken: accessTokenHash,
-              refreshToken: refershTokenHash,
+              refreshToken: refreshTokenHash,
             });
 
             return res.status(200).json({

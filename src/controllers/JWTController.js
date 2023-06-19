@@ -2,9 +2,11 @@ import jwt from 'jsonwebtoken';
 import {
   ACCESS_TOKEN_EXPIRY,
   ALGORITHM,
+  REFRESH_SECRET,
   REFRESH_TOKEN_EXPIRY,
   SECRET,
 } from '../utils/settings';
+import crypto from 'crypto';
 
 export default {
   createToken: async (payload, refresh = false) => {
@@ -14,7 +16,7 @@ export default {
     });
 
     if (refresh) {
-      const refreshToken = jwt.sign(payload, SECRET, {
+      const refreshToken = jwt.sign(payload, REFRESH_SECRET, {
         algorithm: ALGORITHM,
         expiresIn: REFRESH_TOKEN_EXPIRY,
       });
@@ -26,5 +28,14 @@ export default {
     console.log('Access Token: ', accessToken);
 
     return accessToken;
+  },
+  hashToken: async (token) => {
+    const algorithm = 'sha256';
+
+    const hash = await crypto.createHash(algorithm);
+    hash.update(token);
+    const hashedToken = await hash.digest('hex');
+
+    return hashedToken;
   },
 };
