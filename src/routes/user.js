@@ -6,6 +6,4 @@ const router = Router();
 
 router.route('/').post(validate, UserController.getUserById);
 
-router.route('/profile').post(validate, UserController.getProfileByUserId);
-
 module.exports = router;

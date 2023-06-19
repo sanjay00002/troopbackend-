@@ -6,4 +6,10 @@ const router = Router();
 
 router.route('/create').post(validate, ContestController.createContest);
 
+router.route('/contestById').post(validate, ContestController.getContestById);
+
+router
+  .route('/contestByCategory')
+  .post(validate, ContestController.getContestsByCategory);
+
 module.exports = router;
