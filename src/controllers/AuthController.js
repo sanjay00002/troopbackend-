@@ -5,6 +5,8 @@ import { SALT_ROUNDS, SECRET } from '../utils/settings';
 import jwt from 'jsonwebtoken';
 import { generateReferralCode } from '../lib/referralCode';
 import moment from 'moment';
+import { verifyOtp } from '../middleware/verifyOtp';
+import { generateOtp } from '../middleware/verifyOtp';
 
 const { User, Profile } = model;
 
@@ -199,5 +201,36 @@ export default {
         error: 'Something went wrong while refreshing the token',
       });
     }
+  },  
+  generteOtp: async function(req,res){
+    const user = req.body;
+    if(user){
+      const pn = "+91" + user.phoneNumber;
+      generateOtp(pn);
+    }
   },
+  verifyOtp: async function(req,res){
+    try {
+      const verify = req.body;
+      const status = await verifyOtp(verify.phoneNumber, verify.otpCode);
+      console.log(status);
+  
+      if (status === "approved") {
+        res.status(200).json({
+          message: 'Otp Verified'
+        });
+      } else {
+        res.status(500).json({
+          message: 'Wrong otp entered'
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: 'Internal Server Error'
+      });
+    }
+  },
+
+
 };
