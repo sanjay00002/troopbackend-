@@ -6,8 +6,8 @@ import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
 
-require('dotenv').config({ path: './.env.local' });
-// require('dotenv').config({ path: './.env.dev' });
+// require('dotenv').config({ path: './.env.local' });
+require('dotenv').config({ path: './.env' });
 
 const app = express();
 const port = process.env.PORT || 5000;
