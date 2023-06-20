@@ -8,8 +8,6 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const verifySid = process.env.TWILIO_VERIFY_SID;
 
-console.log('Account SID: ', accountSid);
-
 const client = require('twilio')(accountSid, authToken);
 
 export async function generateOtp(phoneNumber) {

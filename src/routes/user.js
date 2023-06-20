@@ -6,4 +6,6 @@ const router = Router();
 
 router.route('/').post(validate, UserController.getUserById);
 
+router.route('/').put(validate, UserController.updateUserById);
+
 module.exports = router;
