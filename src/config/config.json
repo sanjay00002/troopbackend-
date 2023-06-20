@@ -5,7 +5,7 @@
     "database": "neondb",
     "host": "ep-aged-mode-781861.us-east-2.aws.neon.tech",
     "port": "5432",
-    "dialect": "postgresql",
+    "dialect": "postgres",
     "dialectOptions": {
       "ssl": {
         "require": true,
@@ -19,6 +19,6 @@
     "database": "Troop_App",
     "host": "localhost",
     "port": "5432",
-    "dialect": "postgresql"
+    "dialect": "postgres"
   }
 }

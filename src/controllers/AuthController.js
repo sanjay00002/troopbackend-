@@ -1,12 +1,14 @@
+import jwt from 'jsonwebtoken';
+import moment from 'moment';
+
+import { REFRESH_SECRET } from '../utils/settings';
+import { generateReferralCode } from '../lib/referralCode';
+
+import { verifyOTP } from '../lib/verifyOtp';
+import { generateOtp } from '../lib/verifyOtp';
+
 import model from '../models';
 import JWTController from './JWTController';
-import * as bcrypt from 'bcrypt';
-import { SALT_ROUNDS, SECRET } from '../utils/settings';
-import jwt from 'jsonwebtoken';
-import { generateReferralCode } from '../lib/referralCode';
-import moment from 'moment';
-import { verifyOtp } from '../middleware/verifyOtp';
-import { generateOtp } from '../middleware/verifyOtp';
 
 const { User, Profile } = model;
 
@@ -45,12 +47,11 @@ export default {
         true,
       );
 
-      const salt = await bcrypt.genSalt(SALT_ROUNDS);
-      const accessTokenHash = await bcrypt.hash(accessToken, salt);
-      const refershTokenHash = await bcrypt.hash(refreshToken, salt);
+      const accessTokenHash = await JWTController.hashToken(accessToken);
+      const refreshTokenHash = await JWTController.hashToken(refreshToken);
 
       newUser.accessToken = accessTokenHash;
-      newUser.refreshToken = refershTokenHash;
+      newUser.refreshToken = refreshTokenHash;
       newUser.loggedInAt = moment().toISOString();
 
       await newUser.save();
@@ -85,12 +86,11 @@ export default {
           true,
         );
 
-        const salt = await bcrypt.genSalt(SALT_ROUNDS);
-        const accessTokenHash = await bcrypt.hash(accessToken, salt);
-        const refershTokenHash = await bcrypt.hash(refreshToken, salt);
+        const accessTokenHash = await JWTController.hashToken(accessToken);
+        const refreshTokenHash = await JWTController.hashToken(refreshToken);
 
         user.accessToken = accessTokenHash;
-        user.refreshToken = refershTokenHash;
+        user.refreshToken = refreshTokenHash;
         user.loggedInAt = moment().toISOString();
 
         await user.save();
@@ -138,16 +138,22 @@ export default {
        *  Else: // Token Reuse situation but wasn't verified | Non-valid token getting reused
        *    - Return 403 response, unauthorized access
        */
-      await jwt.verify(refreshToken, SECRET, async (error, decoded) => {
+      await jwt.verify(refreshToken, REFRESH_SECRET, async (error, decoded) => {
         if (!error) {
-          const foundUser = await User.findByPk(decoded?.id);
+          const recievedRefreshTokenHash = await JWTController.hashToken(
+            refreshToken,
+          );
+
+          const foundUser = await User.findOne({ where: { id: decoded?.id } });
 
           const refreshTokenDB = await foundUser.get('refreshToken');
+          console.log('Refresh Token from Req: ', recievedRefreshTokenHash);
+          console.log('Refresh Token from DB: ', refreshTokenDB);
 
-          const isValidRefreshToken = await bcrypt.compare(
-            refreshToken,
-            refreshTokenDB,
-          );
+          const isValidRefreshToken =
+            refreshTokenDB === recievedRefreshTokenHash;
+
+          console.log('Is Valid refresh token: ', isValidRefreshToken);
 
           if (isValidRefreshToken) {
             const { newAccessToken, newRefreshToken } =
@@ -161,13 +167,16 @@ export default {
 
             console.log('New: ', newAccessToken, newRefreshToken);
 
-            const salt = await bcrypt.genSalt(SALT_ROUNDS);
-            const accessTokenHash = await bcrypt.hash(newAccessToken, salt);
-            const refershTokenHash = await bcrypt.hash(newRefreshToken, salt);
+            const accessTokenHash = await JWTController.hashToken(
+              newAccessToken,
+            );
+            const refreshTokenHash = await JWTController.hashToken(
+              newRefreshToken,
+            );
 
             await foundUser.update({
               accessToken: accessTokenHash,
-              refreshToken: refershTokenHash,
+              refreshToken: refreshTokenHash,
             });
 
             return res.status(200).json({
@@ -201,36 +210,72 @@ export default {
         error: 'Something went wrong while refreshing the token',
       });
     }
-  },  
-  generteOtp: async function(req,res){
-    const user = req.body;
-    if(user){
-      const pn = "+91" + user.phoneNumber;
-      generateOtp(pn);
-    }
   },
-  verifyOtp: async function(req,res){
+
+  generteOtp: async function (req, res) {
+    const { phoneNumber } = req.body;
     try {
-      const verify = req.body;
-      const status = await verifyOtp(verify.phoneNumber, verify.otpCode);
-      console.log(status);
-  
-      if (status === "approved") {
-        res.status(200).json({
-          message: 'Otp Verified'
-        });
+      if (
+        phoneNumber &&
+        phoneNumber?.includes('+') &&
+        phoneNumber?.length > 10
+      ) {
+        const twilioResp = await generateOtp(phoneNumber);
+
+        console.log('Twilio Response: ', twilioResp);
+
+        if (
+          twilioResp?.status === 'pending' &&
+          twilioResp?.sendCodeAttempts?.length >= 1
+        ) {
+          return res.status(200).json({
+            message: 'OTP Successfully Sent!',
+          });
+        } else {
+          return res
+            .status(500)
+            .json({ message: 'Something bad happened while generating OTP' });
+        }
       } else {
-        res.status(500).json({
-          message: 'Wrong otp entered'
+        if (!phoneNumber.includes('+')) {
+          return res.status(400).json({
+            message: 'Country code missing in phone number!',
+          });
+        }
+
+        return res.status(422).status.json({
+          error: 'Provided a bad phone number!',
         });
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        message: 'Internal Server Error'
+      console.error('Error while generating OTP: ', error);
+      return res.status(500).json({
+        errorMessage: error?.message,
+        error: 'Something went wrong while generating the OTP',
       });
     }
   },
 
+  verifyOtp: async function (req, res) {
+    const { phoneNumber, code } = req.body;
+    try {
+      const twilioResp = await verifyOTP(phoneNumber, code);
+      console.log('Verify Twilio Response: ', twilioResp);
 
+      if (twilioResp?.valid && twilioResp?.status === 'approved') {
+        res.status(200).json({
+          message: 'Otp Verified!',
+        });
+      } else {
+        res.status(500).json({
+          message: 'Incorrect OTP!',
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        errorMessage: error.message,
+        error: 'Something went wrong while verifying the OTP',
+      });
+    }
+  },
 };
