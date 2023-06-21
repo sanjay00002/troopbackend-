@@ -63,6 +63,12 @@ export default {
           error: 'No User Found!',
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error while updating every user', error);
+      return res.status(500).json({
+        errorMessage: error.message,
+        error: 'Something went wrong while updating the user by ID!',
+      });
+    }
   },
 };
