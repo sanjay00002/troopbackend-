@@ -12,4 +12,6 @@ router
   .route('/contestByCategory')
   .post(validate, ContestController.getContestsByCategory);
 
+router.route('/join').post(validate, ContestController.joinContestById);
+
 module.exports = router;

@@ -20,7 +20,7 @@ export async function up(queryInterface, Sequelize) {
     type: 'foreign key',
     name: 'contest_participants_fk_constraint',
     references: {
-      table: 'Users',
+      table: 'Contests',
       field: 'id',
     },
   });

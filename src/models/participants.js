@@ -34,6 +34,12 @@ export default (sequelize, DataTypes) => {
   }
   Participants.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
       points: DataTypes.INTEGER,
       selectedStocks: DataTypes.ARRAY(DataTypes.STRING),
       rank: DataTypes.INTEGER,

@@ -41,7 +41,7 @@ export default (sequelize, DataTypes) => {
       slots: DataTypes.INTEGER,
       startTime: DataTypes.DATE,
       endTime: DataTypes.DATE,
-      participants: DataTypes.ARRAY(DataTypes.INTEGER),
+      participants: DataTypes.ARRAY(DataTypes.STRING),
       winners: DataTypes.ARRAY(DataTypes.JSON),
       priceDistribution: DataTypes.ARRAY(DataTypes.JSON),
     },
