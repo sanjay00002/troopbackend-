@@ -5,6 +5,7 @@ import { Sequelize } from 'sequelize';
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
+import botRouter from './src/routes/bot';
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
@@ -29,6 +30,7 @@ sequelize
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/contest', contestRouter);
+app.use('/api/v1/bot', botRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

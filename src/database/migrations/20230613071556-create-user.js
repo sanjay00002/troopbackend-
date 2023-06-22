@@ -26,6 +26,11 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    isBot: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     profileImage: {
       type: Sequelize.STRING,
       allowNull: true,

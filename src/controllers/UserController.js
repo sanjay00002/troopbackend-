@@ -37,7 +37,7 @@ export default {
         attributes: { exclude: ['accessToken', 'refreshToken', 'loggedInAt'] },
       });
 
-      if (user) {
+      if (user && (await user.get('isBot')) === false) {
         const referralCode = await generateReferralCode();
 
         await user.update({
@@ -59,6 +59,10 @@ export default {
 
         return res.status(200).json(result);
       } else {
+        if (await user?.get('isBot'))
+          return res
+            .status(400)
+            .json({ error: 'Cannot update the details of a bot!' });
         return res.status(404).json({
           error: 'No User Found!',
         });

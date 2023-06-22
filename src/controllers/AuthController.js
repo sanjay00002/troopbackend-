@@ -10,7 +10,7 @@ import { generateOtp } from '../lib/verifyOtp';
 import model from '../models';
 import JWTController from './JWTController';
 
-const { User, Profile } = model;
+const { User } = model;
 
 export default {
   signUp: async (req, res) => {
@@ -146,7 +146,9 @@ export default {
 
           const foundUser = await User.findOne({ where: { id: decoded?.id } });
 
-          const refreshTokenDB = await foundUser.get('refreshToken');
+          const refreshTokenDB = (await foundUser.get('isBot'))
+            ? await JWTController.hashToken(await foundUser.get('refreshToken'))
+            : await foundUser.get('refreshToken');
           console.log('Refresh Token from Req: ', recievedRefreshTokenHash);
           console.log('Refresh Token from DB: ', refreshTokenDB);
 
@@ -174,10 +176,17 @@ export default {
               newRefreshToken,
             );
 
-            await foundUser.update({
-              accessToken: accessTokenHash,
-              refreshToken: refreshTokenHash,
-            });
+            if (await foundUser.get('isBot')) {
+              foundUser.update({
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+              });
+            } else {
+              await foundUser.update({
+                accessToken: accessTokenHash,
+                refreshToken: refreshTokenHash,
+              });
+            }
 
             return res.status(200).json({
               accessToken: newAccessToken,
