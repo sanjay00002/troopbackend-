@@ -1,7 +1,8 @@
 import { Op } from 'sequelize';
 import model from '../models';
+import moment from 'moment';
 
-const { Contest } = model;
+const { Contest, Participants } = model;
 
 export default {
   createContest: async function (req, res) {
@@ -76,6 +77,81 @@ export default {
     } catch (error) {
       return res.status(500).json({
         error: 'Something went wrong while fetching contest by id',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  joinContestById: async function (req, res) {
+    const userId = req.id;
+    const contestDetails = req.body;
+
+    /*
+     *  Check if there is any contest with the given id
+     *  Check if the user has already joined the contest by checking the userId and contestId in the Participants table
+     *  Add User to the contest as well as to the array of participants in the Contest table
+     */
+
+    try {
+      if (contestDetails?.id) {
+        const existingContest = await Contest.findByPk(contestDetails?.id);
+
+        console.log('Existing Contest: ', existingContest);
+
+        // * Check if contest exists
+        if (existingContest) {
+          const alreadyJoined = await Participants.findOne({
+            where: { userId, contestId: contestDetails.id },
+          });
+
+          // * Check if user has already joined the contest
+          if (alreadyJoined) {
+            return res.status(400).json({
+              message: 'User has already joined the contest',
+            });
+          }
+
+          // * Add user to the contest
+          const newParticipant = await Participants.create({
+            userId,
+            contestId: contestDetails.id,
+            selectedStocks: contestDetails?.selectedStocks,
+            joinedAt: moment().toISOString(),
+          });
+
+          // * Add user in the participants field of the Contest Schema as well
+          if (newParticipant) {
+            const result = await newParticipant.get();
+            console.log('Result: ', result);
+            const joinedContest = await existingContest.get('participants');
+            console.log('Joined Contest: ', joinedContest);
+            const newParticipants =
+              joinedContest !== null ? [...joinedContest] : [];
+
+            newParticipants.push(userId);
+
+            console.log('Participants: ', newParticipants);
+
+            await existingContest.update({
+              participants: newParticipants,
+            });
+
+            return res.status(201).json({ ...result });
+          }
+        } else {
+          return res.status(404).json({
+            message: 'No Contest Found!',
+          });
+        }
+      } else {
+        return res.status(422).json({
+          error: 'Provided a bad contest id!',
+        });
+      }
+    } catch (error) {
+      console.error('Error while joining the contest: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while joining the contest by id',
         errorMessage: error.message,
       });
     }

@@ -53,7 +53,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
     participants: {
-      type: Sequelize.ARRAY(Sequelize.INTEGER),
+      type: Sequelize.ARRAY(Sequelize.STRING),
       allowNull: true,
     },
     winners: {

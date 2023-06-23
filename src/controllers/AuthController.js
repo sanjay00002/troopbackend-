@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
+import { faker } from '@faker-js/faker/locale/en_IN';
 
 import { REFRESH_SECRET } from '../utils/settings';
 import { generateReferralCode } from '../lib/referralCode';
@@ -10,7 +11,7 @@ import { generateOtp } from '../lib/verifyOtp';
 import model from '../models';
 import JWTController from './JWTController';
 
-const { User, Profile } = model;
+const { User } = model;
 
 export default {
   signUp: async (req, res) => {
@@ -23,8 +24,21 @@ export default {
       if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) {
         const referralCode = await generateReferralCode();
 
+        if (!userDetails?.firstName || !userDetails?.lastName) {
+          return res
+            .status(400)
+            .json({ message: 'Please provide first & last name!' });
+        }
+        const username =
+          userDetails?.firstName || userDetails?.lastName
+            ? faker.internet.userName({
+                firstName: userDetails?.firstName,
+                lastName: userDetails?.lastName,
+              })
+            : 'Trooper';
+
         newUser = await User.create({
-          username: userDetails?.username,
+          username: userDetails?.username ?? username,
           phoneNumber: userDetails?.phoneNumber,
           firstName: userDetails?.firstName,
           lastName: userDetails?.lastName,
@@ -114,6 +128,59 @@ export default {
     }
   },
 
+  signInWithPhoneNumber: async function (req, res) {
+    const { phoneNumber } = req.body;
+
+    try {
+      if (phoneNumber.includes('+')) {
+        const user = await User.findOne({
+          where: { phoneNumber },
+        });
+
+        if (user) {
+          const userId = user.get('id');
+
+          const { accessToken, refreshToken } = await JWTController.createToken(
+            { id: userId },
+            true,
+          );
+
+          const accessTokenHash = await JWTController.hashToken(accessToken);
+          const refreshTokenHash = await JWTController.hashToken(refreshToken);
+
+          user.accessToken = accessTokenHash;
+          user.refreshToken = refreshTokenHash;
+          user.loggedInAt = moment().toISOString();
+
+          await user.save();
+
+          console.log('Saved', user);
+
+          return res.status(200).json({
+            id: await user?.get('id'),
+            accessToken,
+            refreshToken,
+          });
+        } else {
+          return res.status(404).json({
+            message: "User doesn't exists with the given phone number",
+          });
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ message: 'Please provide the country code!' });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        errorMessage: error?.message,
+        error:
+          'Something went wrong while signing in the user with phone number',
+      });
+    }
+  },
+
   refreshTokens: async function (req, res) {
     try {
       const refreshToken = req.headers['authorization'].split(' ')[1];
@@ -146,7 +213,9 @@ export default {
 
           const foundUser = await User.findOne({ where: { id: decoded?.id } });
 
-          const refreshTokenDB = await foundUser.get('refreshToken');
+          const refreshTokenDB = (await foundUser.get('isBot'))
+            ? await JWTController.hashToken(await foundUser.get('refreshToken'))
+            : await foundUser.get('refreshToken');
           console.log('Refresh Token from Req: ', recievedRefreshTokenHash);
           console.log('Refresh Token from DB: ', refreshTokenDB);
 
@@ -174,10 +243,17 @@ export default {
               newRefreshToken,
             );
 
-            await foundUser.update({
-              accessToken: accessTokenHash,
-              refreshToken: refreshTokenHash,
-            });
+            if (await foundUser.get('isBot')) {
+              foundUser.update({
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+              });
+            } else {
+              await foundUser.update({
+                accessToken: accessTokenHash,
+                refreshToken: refreshTokenHash,
+              });
+            }
 
             return res.status(200).json({
               accessToken: newAccessToken,
