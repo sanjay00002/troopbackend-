@@ -114,6 +114,59 @@ export default {
     }
   },
 
+  signInWithPhoneNumber: async function (req, res) {
+    const { phoneNumber } = req.body;
+
+    try {
+      if (phoneNumber.includes('+')) {
+        const user = await User.findOne({
+          where: { phoneNumber },
+        });
+
+        if (user) {
+          const userId = user.get('id');
+
+          const { accessToken, refreshToken } = await JWTController.createToken(
+            { id: userId },
+            true,
+          );
+
+          const accessTokenHash = await JWTController.hashToken(accessToken);
+          const refreshTokenHash = await JWTController.hashToken(refreshToken);
+
+          user.accessToken = accessTokenHash;
+          user.refreshToken = refreshTokenHash;
+          user.loggedInAt = moment().toISOString();
+
+          await user.save();
+
+          console.log('Saved', user);
+
+          return res.status(200).json({
+            id: await user?.get('id'),
+            accessToken,
+            refreshToken,
+          });
+        } else {
+          return res.status(404).json({
+            message: "User doesn't exists with the given phone number",
+          });
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ message: 'Please provide the country code!' });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        errorMessage: error?.message,
+        error:
+          'Something went wrong while signing in the user with phone number',
+      });
+    }
+  },
+
   refreshTokens: async function (req, res) {
     try {
       const refreshToken = req.headers['authorization'].split(' ')[1];
