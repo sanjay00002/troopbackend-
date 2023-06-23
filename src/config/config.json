@@ -15,7 +15,7 @@
   },
   "local": {
     "username": "postgres",
-    "password": "1234",
+    "password": "12345678@a",
     "database": "Troop_App",
     "host": "localhost",
     "port": "5432",

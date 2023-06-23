@@ -5,6 +5,8 @@ const { User } = model;
 
 export default {
   getUserById: async function (req, res) {
+
+
     const { id } = req;
 
     try {

@@ -2,22 +2,16 @@ import express, { json } from 'express';
 import cors from 'cors';
 import { Sequelize } from 'sequelize';
 const http = require('http');
-const socketIO = require('socket.io');
 
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
 import botRouter from './src/routes/bot';
+const chatWSServer = require('./chatWS');
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: {
-    origin: "*"
-  }
-});
 
 const port = process.env.PORT || 5001;
 
@@ -40,32 +34,10 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/contest', contestRouter);
 app.use('/api/v1/bot', botRouter);
 
-// app.listen(port, () => {
-//   console.log(`Server is running at port: ${port}`);
-// });
-
-
-
-io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  // Listen for 'chat message' events from the client
-  socket.on('chat message', (message) => {
-    console.log('Received message:', message.content);
-
-    // Broadcast the received message to all connected clients, including the sender
-    // Later will change it to Broadcast to only the sender and the receiver
-    io.emit('chat message', message);
-  });
-
-
-  // Listen for 'disconnect' events from clients
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
-
+app.listen(port, () => {
+  console.log(`Server is running at port: ${port}`);
 });
 
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+chatWSServer.listen("5002", () => {
+  console.log('chat ws server listening on 5002')
+})
