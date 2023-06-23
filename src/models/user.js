@@ -50,13 +50,10 @@ export default (sequelize, DataTypes) => {
     if (user.isBot) {
       const firstName = faker.person.firstName();
       const lastName = faker.person.lastName();
-      const username = faker.internet.userName(
-        {
-          firstName: firstName,
-          lastName: lastName,
-        },
-        false,
-      );
+      const username = faker.internet.userName({
+        firstName: firstName,
+        lastName: lastName,
+      });
 
       user.firstName = firstName;
       user.lastName = lastName;

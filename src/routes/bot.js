@@ -6,4 +6,6 @@ const router = Router();
 
 router.route('/create').post(BotController.createBot);
 
+router.route('/bulkCreate').post(BotController.createBots);
+
 module.exports = router;
