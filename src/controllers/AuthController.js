@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
+import { faker } from '@faker-js/faker/locale/en_IN';
 
 import { REFRESH_SECRET } from '../utils/settings';
 import { generateReferralCode } from '../lib/referralCode';
@@ -23,8 +24,21 @@ export default {
       if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) {
         const referralCode = await generateReferralCode();
 
+        if (!userDetails?.firstName || !userDetails?.lastName) {
+          return res
+            .status(400)
+            .json({ message: 'Please provide first & last name!' });
+        }
+        const username =
+          userDetails?.firstName || userDetails?.lastName
+            ? faker.internet.userName({
+                firstName: userDetails?.firstName,
+                lastName: userDetails?.lastName,
+              })
+            : 'Trooper';
+
         newUser = await User.create({
-          username: userDetails?.username,
+          username: userDetails?.username ?? username,
           phoneNumber: userDetails?.phoneNumber,
           firstName: userDetails?.firstName,
           lastName: userDetails?.lastName,
