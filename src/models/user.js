@@ -26,6 +26,7 @@ export default (sequelize, DataTypes) => {
       lastName: { type: DataTypes.STRING, allowNull: true },
       isBot: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       profileImage: { type: DataTypes.STRING, allowNull: true },
+      points: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
       referralCode: { type: DataTypes.STRING, allowNull: true },
       referrer: { type: DataTypes.STRING, allowNull: true },
       referredAt: { type: DataTypes.DATE, allowNull: true },
