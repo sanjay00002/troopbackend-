@@ -28,7 +28,7 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     await queryInterface.removeConstraint(
-      'ContestWinners',
+      'ContestPriceDistributions',
       'contest_contestpricedistribution_fk_constraint',
     );
   },

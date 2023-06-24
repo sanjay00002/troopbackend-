@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
 
-const { Contest, Participants } = model;
+const { Contest, ContestPriceDistribution, Participants, User } = model;
 
 export default {
   createContest: async function (req, res) {
@@ -10,20 +10,48 @@ export default {
     const userId = req.id;
 
     try {
-      const newContest = await Contest.create({
-        name: contest?.name,
-        category: contest?.category,
-        pricePool: contest?.pricePool,
-        createdBy: userId,
-        slots: contest?.slots,
-        startTime: contest?.startTime,
-        endTime: contest?.endTime,
-        priceDistribution: contest?.priceDistribution,
-      });
+      const user = await User.findByPk(userId);
 
-      if (await newContest.get('id')) {
-        return res.status(201).json({
-          ...(await newContest.get()),
+      if (user) {
+        const newContest = await Contest.create({
+          name: contest?.name,
+          category: contest?.category,
+          pricePool: contest?.pricePool,
+          createdBy: userId,
+          slots: contest?.slots,
+          startTime: contest?.startTime,
+          endTime: contest?.endTime,
+          entryAmount: contest?.entryAmount,
+        });
+
+        const newContestId = await newContest.get('id');
+
+        if (newContestId) {
+          if (contest?.priceDistribution) {
+            for (let i = 0; i < contest?.priceDistribution?.length; i++) {
+              await ContestPriceDistribution.create({
+                contestId: newContestId,
+                rankStart: contest?.priceDistribution[i].rankStart,
+                rankEnd: contest?.priceDistribution[i].rankEnd,
+                priceAmount: contest?.priceDistribution[i].priceAmount,
+              });
+            }
+          }
+
+          const priceDistribution = await ContestPriceDistribution.findAll({
+            where: { contestId: newContestId },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            order: [['rankStart', 'ASC']],
+          });
+
+          return res.status(201).json({
+            ...(await newContest.get()),
+            priceDistribution: priceDistribution,
+          });
+        }
+      } else {
+        return res.status(400).json({
+          message: 'Cannot create contest without non-existing user!',
         });
       }
     } catch (error) {

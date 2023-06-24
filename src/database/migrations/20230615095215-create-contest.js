@@ -24,6 +24,10 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    entryAmount: {
+      type: Sequelize.DOUBLE,
+      allowNull: false,
+    },
     description: {
       type: Sequelize.STRING(512),
       allowNull: true,
@@ -46,22 +50,10 @@ export async function up(queryInterface, Sequelize) {
     },
     startTime: {
       type: Sequelize.DATE,
-      allowNull: true,
+      allowNull: false,
     },
     endTime: {
       type: Sequelize.DATE,
-      allowNull: false,
-    },
-    participants: {
-      type: Sequelize.ARRAY(Sequelize.STRING),
-      allowNull: true,
-    },
-    winners: {
-      type: Sequelize.ARRAY(Sequelize.JSON),
-      allowNull: true,
-    },
-    priceDistribution: {
-      type: Sequelize.ARRAY(Sequelize.JSON),
       allowNull: false,
     },
     createdAt: {
