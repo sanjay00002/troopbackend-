@@ -22,6 +22,8 @@ export default (sequelize, DataTypes) => {
         keyType: DataTypes.STRING,
         uniqueKey: 'user_contest_fk_constraint',
       });
+
+      Contest.belongsToMany(models.Stock, { through: models.ContestStocks });
     }
   }
   Contest.init(
