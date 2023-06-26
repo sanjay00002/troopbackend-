@@ -1,0 +1,18 @@
+version: '3'
+services:
+  node:
+    # will build ./docker/node/Dockerfile
+    build:
+      dockerfile: ./docker/node/Dockerfile
+      context: .
+    ports:
+     - "5000:5000"
+    # volumes:
+    #  - .:/code
+  java:
+    # will build ./docker/java/Dockerfile
+    build: 
+      dockerfile: ./docker/java/Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
