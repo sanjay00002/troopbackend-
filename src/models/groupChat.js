@@ -1,8 +1,10 @@
 const { Model } = require('sequelize');
 import { nanoid } from 'nanoid/async';
 
+import { v4 as uuidv4 } from 'uuid';
+
 export default (sequelize, DataTypes) => {
-  class Contest extends Model {
+  class GroupChat extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,51 +12,39 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.User.hasMany(Contest,{
+      models.User.hasMany(GroupChat,{
         foreignKey: 'createdBy',
         sourceKey: 'id',
       });
 
-      Contest.belongsTo(models.User, {
+      GroupChat.belongsTo(models.User, {
         foreignKey: 'createdBy',
         targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: 'user_contest_fk_constraint',
+        uniqueKey: 'user_GroupChat_fk_constraint',
       });
     }
   }
-  Contest.init(
+
+
+  GroupChat.init(
     {
-      category: DataTypes.ENUM([
-        'Special',
-        'Sectoral',
-        'Practice',
-        'Head2Head',
-        'Custom',
-      ]),
       name: DataTypes.STRING,
       image: DataTypes.STRING,
       description: DataTypes.STRING(512),
-      pricePool: DataTypes.DOUBLE,
-      likes: DataTypes.INTEGER,
-      slots: DataTypes.INTEGER,
-      startTime: DataTypes.DATE,
-      endTime: DataTypes.DATE,
       participants: DataTypes.ARRAY(DataTypes.STRING),
-      winners: DataTypes.ARRAY(DataTypes.JSON),
-      priceDistribution: DataTypes.ARRAY(DataTypes.JSON),
     },
     {
       sequelize,
-      modelName: 'Contest',
+      modelName: 'GroupChat',
     },
   );
-  Contest.beforeValidate(async (contest, option) => {
-    if (contest.isNewRecord) {
-      const id = await nanoid(10);
-      contest.id = id;
+  GroupChat.beforeValidate(async (GroupChat, option) => {
+    if (GroupChat.isNewRecord) {
+      const id = uuidv4().slice(0,8);
+      GroupChat.id = id;
     }
   });
-  return Contest;
+  return GroupChat;
 };

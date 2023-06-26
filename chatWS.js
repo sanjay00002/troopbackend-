@@ -12,6 +12,7 @@ const io = socketIO(chatWSServer, {
 });
 
 const privateChatNamespace = io.of('/chat');
+const groupChatNamespace = io.of('/groupchat');
 
 privateChatNamespace.on('connection', (socket) => {
   const userId = socket.handshake.query.userId;
@@ -46,8 +47,7 @@ privateChatNamespace.on('connection', (socket) => {
       console.error('Error saving message:', error);
     }
 
-    // Broadcast the received message to all connected clients, including the sender
-    // Later will change it to Broadcast to only the sender and the receiver
+  
   });
 
   // Listen for 'disconnect' events from clients
@@ -55,6 +55,12 @@ privateChatNamespace.on('connection', (socket) => {
     console.log('A user disconnected with user ID', userId);
   });
 });
+
+groupChatNamespace.on('connection', (socket) => {
+
+});
+
+
 
 function generateRoomId(senderId, receiverId) {
   const separator = '_';

@@ -17,6 +17,8 @@ export default {
   signUp: async (req, res) => {
     const userDetails = req.body;
 
+    console.log(userDetails)
+
     try {
       let newUser;
 
