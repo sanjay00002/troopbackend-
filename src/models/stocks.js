@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Stocks.belongsToMany(models.Contest, { through: models.ContestStocks });
+      // Stocks.belongsToMany(models.Contest, { through: models.ContestStocks });
     }
   }
   Stocks.init(

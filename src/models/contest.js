@@ -23,7 +23,11 @@ export default (sequelize, DataTypes) => {
         uniqueKey: 'user_contest_fk_constraint',
       });
 
-      Contest.belongsToMany(models.Stock, { through: models.ContestStocks });
+      Contest.belongsToMany(models.Stocks, {
+        through: models.ContestStocks,
+        foreignKey: 'contestId',
+        otherKey: 'stockId',
+      });
     }
   }
   Contest.init(
