@@ -11,7 +11,7 @@ import { generateOtp } from '../lib/verifyOtp';
 import model from '../models';
 import JWTController from './JWTController';
 
-const { User } = model;
+const { User, UserRole, Role } = model;
 
 export default {
   signUp: async (req, res) => {
@@ -19,6 +19,7 @@ export default {
 
     try {
       let newUser;
+      let role;
 
       // Verified User i.e. signs up with phone number
       if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) {
@@ -47,10 +48,18 @@ export default {
           referrer: userDetails?.referrer,
           referredAt: userDetails?.referrer ? moment().toISOString() : null,
         });
+
+        role = await Role.findOne({
+          where: { role: 'user' },
+        });
       } else {
         // Unverified User i.e. Guest
         newUser = await User.create({
           username: 'Trooper',
+        });
+
+        role = await Role.findOne({
+          where: { role: 'guest' },
         });
       }
 
@@ -69,6 +78,11 @@ export default {
       newUser.loggedInAt = moment().toISOString();
 
       await newUser.save();
+
+      await UserRole.create({
+        userId: newUserId,
+        roleId: await role.get('id'),
+      });
 
       return res.status(200).json({
         id: newUserId,
