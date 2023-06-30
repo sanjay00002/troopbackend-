@@ -7,7 +7,11 @@ RUN mvn clean package -DskipTests
 
 
 FROM openjdk:19
+
 COPY --from=build /target/Troopapi-0.0.1-SNAPSHOT.jar troopapi.jar
+
 ENV PORT=8080
+
 EXPOSE 8080
-ENTRYPOINT [ "java", "-jar", "troopapi.jar" ]
+
+CMD [ "java", "-jar", "troopapi.jar" ]
