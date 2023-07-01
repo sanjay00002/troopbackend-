@@ -1,6 +1,6 @@
 import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
-  class Stocks extends Model {
+  class SubCategories extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -8,19 +8,19 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Stocks.belongsToMany(models.Contest, { through: models.ContestStocks });
     }
   }
-  Stocks.init(
+  SubCategories.init(
     {
-      name: { type: DataTypes.STRING, allowNull: false },
-      token: { type: DataTypes.STRING, allowNull: false },
-      exchangeType: { type: DataTypes.INTEGER, allowNull: false },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
-      modelName: 'Stocks',
+      modelName: 'SubCategories',
     },
   );
-  return Stocks;
+  return SubCategories;
 };

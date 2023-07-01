@@ -28,6 +28,19 @@ export default (sequelize, DataTypes) => {
         foreignKey: 'contestId',
         otherKey: 'stockId',
       });
+
+      models.SubCategories.hasOne(Contest, {
+        foreignKey: 'subCategoryId',
+        sourceKey: 'id',
+      });
+
+      Contest.belongsTo(models.SubCategories, {
+        foreignKey: 'subCategoryId',
+        targetKey: 'id',
+        constraints: true,
+        keyType: DataTypes.INTEGER,
+        uniqueKey: 'subcategories_contest_fk_constraint',
+      });
     }
   }
   Contest.init(
@@ -38,8 +51,12 @@ export default (sequelize, DataTypes) => {
           'Sectoral',
           'Practice',
           'Head2Head',
-          'Custom',
+          'Private',
         ]),
+        allowNull: false,
+      },
+      subCategoryId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       name: { type: DataTypes.STRING, allowNull: true },

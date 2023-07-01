@@ -7,13 +7,11 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
     },
     category: {
-      type: Sequelize.ENUM([
-        'Special',
-        'Sectoral',
-        'Practice',
-        'Head2Head',
-        'Custom',
-      ]),
+      type: Sequelize.ENUM(['Special', 'Sectoral', 'Head2Head', 'Private']),
+      allowNull: false,
+    },
+    subCategoryId: {
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     name: {

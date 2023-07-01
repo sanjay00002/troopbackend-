@@ -1,6 +1,6 @@
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Stocks', {
+  await queryInterface.createTable('Portfolios', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -9,13 +9,17 @@ export async function up(queryInterface, Sequelize) {
     },
     name: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    token: {
+    userId: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    exchangeType: {
+    score: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+    },
+    subCategoryId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
@@ -30,5 +34,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Stocks');
+  await queryInterface.dropTable('Portfolios');
 }

@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: './.env' });
 
 // Download the helper library from https://www.twilio.com/docs/node/install
 // Set environment variables for your credentials

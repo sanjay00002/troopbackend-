@@ -5,26 +5,41 @@ const { User, UserRole, Role } = model;
 
 export default {
   getUserById: async function (req, res) {
-    const { id } = req;
+    const id = req?.body?.id ? req?.body?.id : req?.id;
 
     try {
-      const user = await User.findOne({
-        where: { id: id },
-        attributes: {
-          exclude: ['accessToken', 'refreshToken', 'loggedInAt'],
+      // const user = await User.findOne({
+      //   where: { id: id },
+      //   attributes: {
+      //     exclude: ['accessToken', 'refreshToken', 'loggedInAt'],
+      //   },
+      //   include: [
+      //     {
+      //       model: UserRole,
+      //       required: true,
+      //       include: [
+      //         {
+      //           model: Role,
+      //           required: true,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // });
+
+      const user = await User.findByPk(id, {
+        attributes: { exclude: ['accessToken', 'refreshToken', 'loggedInAt'] },
+        where: {
+          '$UserRoles.userId$': id,
         },
-        include: [
-          {
-            model: UserRole,
+        include: {
+          model: UserRole,
+          required: true,
+          include: {
+            model: Role,
             required: true,
-            include: [
-              {
-                model: Role,
-                required: true,
-              },
-            ],
           },
-        ],
+        },
       });
 
       const userId = await user?.get('id');
@@ -65,7 +80,7 @@ export default {
     }
   },
 
-  updateUserById: async function (req, res) {
+  updateCurrentUser: async function (req, res) {
     const userDetails = req.body;
     const userId = req.id;
     try {

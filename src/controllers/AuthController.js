@@ -79,9 +79,11 @@ export default {
 
       await newUser.save();
 
+      const roleId = await role?.get('id');
+
       await UserRole.create({
         userId: newUserId,
-        roleId: await role.get('id'),
+        roleId: roleId,
       });
 
       return res.status(200).json({
@@ -302,7 +304,7 @@ export default {
     }
   },
 
-  generteOtp: async function (req, res) {
+  generateOtp: async function (req, res) {
     const { phoneNumber } = req.body;
     try {
       if (

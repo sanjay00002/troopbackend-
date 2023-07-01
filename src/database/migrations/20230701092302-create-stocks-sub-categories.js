@@ -1,21 +1,17 @@
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Stocks', {
+  await queryInterface.createTable('StocksSubCategories', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    name: {
-      type: Sequelize.STRING,
+    stockId: {
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
-    token: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    exchangeType: {
+    subCategoryId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
@@ -30,5 +26,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Stocks');
+  await queryInterface.dropTable('StocksSubCategories');
 }
