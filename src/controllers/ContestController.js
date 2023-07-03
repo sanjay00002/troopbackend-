@@ -5,7 +5,8 @@ import moment from 'moment';
 const {
   Contest,
   ContestPriceDistribution,
-  Participants,
+  ContestWinners,
+  ContestParticipants,
   User,
   StocksSubCategories,
   Stocks,
@@ -78,12 +79,19 @@ export default {
     try {
       // * Fetch the contest and the prize distribution
       const contest = await Contest.findByPk(id, {
-        include: {
-          model: ContestPriceDistribution,
-          require: true,
-          attributes: { exclude: ['createdAt', 'updatedAt'] },
-          order: [['rankStart', 'ASC']],
-        },
+        include: [
+          {
+            model: ContestPriceDistribution,
+            require: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            order: [['rankStart', 'ASC']],
+          },
+          {
+            model: ContestWinners,
+            require: true,
+            attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
+          },
+        ],
       });
 
       console.log('Constest: ', contest);
@@ -119,9 +127,18 @@ export default {
 
         console.log('Stocks Arr: ', stocksArr);
 
+        // * Fetch the the number of participants who have joined the contest
+
+        const participants = await ContestParticipants.findAndCountAll({
+          where: { contestId: await contest.get('id') },
+        });
+
+        console.log('Participants: ', participants);
+
         const result = {
           ...(await contest.get()),
           stocks: stocksArr,
+          participants: participants.count,
         };
         return res.status(200).json(result);
       } else {
@@ -165,7 +182,8 @@ export default {
     /*
      *  Check if there is any contest with the given id
      *  Check if the user has already joined the contest by checking the userId and contestId in the Participants table
-     *  Add User to the contest as well as to the array of participants in the Contest table
+     *  Check if there is an available slot to join
+     *    Add User to the ContestParticipants Table
      */
 
     try {
@@ -176,8 +194,9 @@ export default {
 
         // * Check if contest exists
         if (existingContest) {
-          const alreadyJoined = await Participants.findOne({
-            where: { userId, contestId: contestDetails.id },
+          const exisitngContestId = await existingContest.get('id');
+          const alreadyJoined = await ContestParticipants.findOne({
+            where: { userId, contestId: exisitngContestId },
           });
 
           // * Check if user has already joined the contest
@@ -187,32 +206,27 @@ export default {
             });
           }
 
-          // * Add user to the contest
-          const newParticipant = await Participants.create({
-            userId,
-            contestId: contestDetails.id,
-            selectedStocks: contestDetails?.selectedStocks,
-            joinedAt: moment().toISOString(),
+          // * Check if there is an available slot to join
+          const totalParticipants = await ContestParticipants.findAndCountAll({
+            where: { contestId: exisitngContestId },
           });
 
-          // * Add user in the participants field of the Contest Schema as well
-          if (newParticipant) {
-            const result = await newParticipant.get();
-            console.log('Result: ', result);
-            const joinedContest = await existingContest.get('participants');
-            console.log('Joined Contest: ', joinedContest);
-            const newParticipants =
-              joinedContest !== null ? [...joinedContest] : [];
-
-            newParticipants.push(userId);
-
-            console.log('Participants: ', newParticipants);
-
-            await existingContest.update({
-              participants: newParticipants,
+          if (totalParticipants >= (await existingContest.get('slots'))) {
+            return res.status(400).json({
+              message: 'Slot are full, no more slots available!',
             });
+          }
 
-            return res.status(201).json({ ...result });
+          // * Add User to the ContestParticipants Table
+          const newParticipant = await ContestParticipants.create({
+            userId,
+            contestId: exisitngContestId,
+          });
+
+          if (newParticipant) {
+            // TODO: Think on what to return
+
+            return res.status(201);
           }
         } else {
           return res.status(404).json({

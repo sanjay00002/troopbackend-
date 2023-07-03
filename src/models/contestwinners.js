@@ -40,6 +40,10 @@ export default (sequelize, DataTypes) => {
       rank: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
+      name: {
+        plural: 'winners',
+        singular: 'winner',
+      },
       sequelize,
       modelName: 'ContestWinners',
     },
