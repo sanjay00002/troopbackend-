@@ -52,7 +52,7 @@ public class paymentServiceImpl implements paymentService{
         int linkAmount = (int) pay.getAmount();
         String linkCurrency = "INR";
         String linkPurpose = "1888838888883";        
-        String returnUrl  = "http://localhost:8080/v1/updateWallet?link_id="+linkId+"&wallet_id="+pay.getId();
+        String returnUrl  = "http://localhost:5000/api/v1/wallet/update?link_id=" + linkId + "&wallet_id=" + pay.getId();
         boolean linkAutoReminders = true;
         boolean linkPartialPayments = true;
         int linkMinimumPartialAmount = 25;
