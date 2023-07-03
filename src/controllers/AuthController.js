@@ -11,7 +11,7 @@ import { generateOtp } from '../lib/verifyOtp';
 import model from '../models';
 import JWTController from './JWTController';
 
-const { User, UserRole, Role } = model;
+const { User, UserRole, Role, Wallet } = model;
 
 export default {
   signUp: async (req, res) => {
@@ -84,6 +84,11 @@ export default {
       await UserRole.create({
         userId: newUserId,
         roleId: roleId,
+      });
+
+      // * Create a new wallet for the new user
+      await Wallet.create({
+        userId: newUserId,
       });
 
       return res.status(200).json({

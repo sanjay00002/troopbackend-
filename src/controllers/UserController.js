@@ -1,7 +1,7 @@
 import { generateReferralCode } from '../lib/referralCode';
 import model from '../models';
 
-const { User, UserRole, Role } = model;
+const { User, UserRole, Role, Wallet } = model;
 
 export default {
   getUserById: async function (req, res) {
@@ -32,14 +32,21 @@ export default {
         where: {
           '$UserRoles.userId$': id,
         },
-        include: {
-          model: UserRole,
-          required: true,
-          include: {
-            model: Role,
+        include: [
+          {
+            model: UserRole,
             required: true,
+            include: {
+              model: Role,
+              required: true,
+            },
           },
-        },
+          {
+            model: Wallet,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt', 'userId'] },
+          },
+        ],
       });
 
       const userId = await user?.get('id');
@@ -65,6 +72,7 @@ export default {
           createdAt: await user.get('createdAt'),
           updatedAt: await user.get('updatedAt'),
           role: await user.get('UserRoles')[0]?.Role?.get('role'),
+          wallet: await user.get('wallet')?.get(),
         };
         return res.status(200).json(result);
       } else {

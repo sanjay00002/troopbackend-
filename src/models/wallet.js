@@ -31,13 +31,17 @@ export default (sequelize, DataTypes) => {
       userId: { type: DataTypes.STRING, allowNull: false },
     },
     {
+      name: {
+        plural: 'wallets',
+        singular: 'wallet',
+      },
       sequelize,
       modelName: 'Wallet',
     },
   );
   Wallet.beforeValidate(async (wallet, options) => {
     if (wallet.isNewRecord) {
-      const id = `Wallet-${generateUserId()}`;
+      const id = `Wallet-${await generateUserId()}`;
       wallet.id = id;
     }
   });
