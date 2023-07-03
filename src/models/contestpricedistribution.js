@@ -30,6 +30,10 @@ export default (sequelize, DataTypes) => {
       priceAmount: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
+      name: {
+        plural: 'priceDistributions',
+        singular: 'priceDistribution',
+      },
       sequelize,
       modelName: 'ContestPriceDistribution',
     },

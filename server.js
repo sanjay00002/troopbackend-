@@ -6,7 +6,8 @@ import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
 import botRouter from './src/routes/bot';
-import subCategories from './src/routes/subCategories';
+import subCategoriesRouter from './src/routes/subCategories';
+import stocksRouter from './src/routes/stocks';
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
@@ -32,7 +33,8 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/contest', contestRouter);
 app.use('/api/v1/bot', botRouter);
-app.use('/api/v1/sub-category', subCategories);
+app.use('/api/v1/sub-category', subCategoriesRouter);
+app.use('/api/v1/stocks', stocksRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

@@ -17,6 +17,10 @@ export default (sequelize, DataTypes) => {
       exchangeType: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
+      name: {
+        plural: 'stocks',
+        singular: 'stock',
+      },
       sequelize,
       modelName: 'Stocks',
     },

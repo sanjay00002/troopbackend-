@@ -1,8 +1,15 @@
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
 
-const { Contest, ContestPriceDistribution, Participants, User } = model;
+const {
+  Contest,
+  ContestPriceDistribution,
+  Participants,
+  User,
+  StocksSubCategories,
+  Stocks,
+} = model;
 
 export default {
   createContest: async function (req, res) {
@@ -12,16 +19,19 @@ export default {
     try {
       const user = await User.findByPk(userId);
 
-      if (user) {
+      if (user && !user?.isBot) {
         const newContest = await Contest.create({
           name: contest?.name,
+          image: contest?.image,
+          description: contest?.description,
+          entryAmount: contest?.entryAmount,
           category: contest?.category,
+          subCategoryId: contest?.subCategoryId,
           pricePool: contest?.pricePool,
           createdBy: userId,
           slots: contest?.slots,
           startTime: contest?.startTime,
           endTime: contest?.endTime,
-          entryAmount: contest?.entryAmount,
         });
 
         const newContestId = await newContest.get('id');
@@ -66,16 +76,54 @@ export default {
     const { id } = req.body;
 
     try {
-      const contest = await Contest.findOne({
-        where: {
-          id: id,
+      // * Fetch the contest and the prize distribution
+      const contest = await Contest.findByPk(id, {
+        include: {
+          model: ContestPriceDistribution,
+          require: true,
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+          order: [['rankStart', 'ASC']],
         },
       });
 
+      console.log('Constest: ', contest);
+
       if (contest) {
-        return res.status(200).json({
-          ...(await contest.get()),
+        // * Fetch the stocks related to the subCategory
+
+        const stocks = await StocksSubCategories.findAll({
+          where: {
+            subCategoryId: await contest.get('subCategoryId'),
+          },
+          attributes: {
+            exclude: [
+              'createdAt',
+              'updatedAt',
+              'stockId',
+              'subCategoryId',
+              'id',
+            ],
+          },
+          include: {
+            model: Stocks,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
         });
+
+        console.log('Stocks: ', stocks);
+
+        const stocksArr = await Promise.all(
+          stocks?.map(async (stock) => await stock.get('stock').get()),
+        );
+
+        console.log('Stocks Arr: ', stocksArr);
+
+        const result = {
+          ...(await contest.get()),
+          stocks: stocksArr,
+        };
+        return res.status(200).json(result);
       } else {
         return res.status(404).json({ error: 'No contest found!' });
       }
