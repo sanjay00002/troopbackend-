@@ -7,6 +7,9 @@ const {
   ContestPriceDistribution,
   ContestWinners,
   ContestParticipants,
+  ContestPortfolios,
+  Portfolio,
+  PortfolioStocks,
   User,
   StocksSubCategories,
   Stocks,
@@ -175,13 +178,20 @@ export default {
     }
   },
 
+  /**
+   *
+   * @param id integer
+   * @param portfolio id, name, stocks
+   * @param portfolio.stocks stockId, action, captain, viceCaptain
+   * @returns
+   */
   joinContestById: async function (req, res) {
     const userId = req.id;
     const contestDetails = req.body;
 
     /*
      *  Check if there is any contest with the given id
-     *  Check if the user has already joined the contest by checking the userId and contestId in the Participants table
+    //  *  Check if the user has already joined the contest by checking the userId and contestId in the Participants table
      *  Check if there is an available slot to join
      *    Add User to the ContestParticipants Table
      */
@@ -195,16 +205,16 @@ export default {
         // * Check if contest exists
         if (existingContest) {
           const exisitngContestId = await existingContest.get('id');
-          const alreadyJoined = await ContestParticipants.findOne({
-            where: { userId, contestId: exisitngContestId },
-          });
+          // const alreadyJoined = await ContestParticipants.findOne({
+          //   where: { userId, contestId: exisitngContestId },
+          // });
 
           // * Check if user has already joined the contest
-          if (alreadyJoined) {
-            return res.status(400).json({
-              message: 'User has already joined the contest',
-            });
-          }
+          // if (alreadyJoined) {
+          //   return res.status(400).json({
+          //     message: 'User has already joined the contest',
+          //   });
+          // }
 
           // * Check if there is an available slot to join
           const totalParticipants = await ContestParticipants.findAndCountAll({
@@ -224,9 +234,51 @@ export default {
           });
 
           if (newParticipant) {
-            // TODO: Think on what to return
+            // TODO: Create a Portfolio and add Stocks to PortfolioStocks OR Select a portfolio
 
-            return res.status(201);
+            const existingPortfolio = await Portfolio.findByPk(
+              contestDetails?.portfolio?.id,
+            );
+
+            if (existingPortfolio?.id) {
+              // * Insert Contest id and portfolio id into ContestPortfolios Table if portfolio selected already exists
+              await ContestPortfolios.create({
+                contestId: exisitngContestId,
+                portfolioId: existingPortfolio.id,
+              });
+            } else {
+              // * Create new portfolio for the user with the stocks selected
+              // * Will recieve a list of object of stocks containing the stockId, action, and captain and viceCaptian fields
+              const portfolio = await Portfolio.create({
+                name: contestDetails?.portfolio?.name ?? null,
+                userId: userId,
+                subCategoryId: await existingContest.get('subCategoryId'),
+              });
+
+              for (
+                let i = 0;
+                i < contestDetails?.portfolio?.stocks.length;
+                i++
+              ) {
+                const stock = contestDetails?.portfolio?.stocks[i];
+                await PortfolioStocks.create({
+                  portfolioId: await portfolio.get('id'),
+                  stockId: stock?.stockId,
+                  action: stock?.action,
+                  captain: stock?.captain,
+                  viceCaptain: stock?.viceCaptain,
+                });
+              }
+
+              await ContestPortfolios.create({
+                contestId: exisitngContestId,
+                portfolioId: await portfolio.get('id'),
+              });
+            }
+
+            return res.status(200).json({
+              message: 'Join Contest Successful',
+            });
           }
         } else {
           return res.status(404).json({
