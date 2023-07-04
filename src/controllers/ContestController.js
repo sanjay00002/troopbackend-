@@ -14,6 +14,7 @@ const {
   User,
   StocksSubCategories,
   Stocks,
+  SubCategories,
 } = model;
 
 export default {
@@ -25,43 +26,54 @@ export default {
       const user = await User.findByPk(userId);
 
       if (user && !user?.isBot) {
-        const newContest = await Contest.create({
-          name: contest?.name,
-          image: contest?.image,
-          description: contest?.description,
-          entryAmount: contest?.entryAmount,
-          category: contest?.category,
-          subCategoryId: contest?.subCategoryId,
-          pricePool: contest?.pricePool,
-          createdBy: userId,
-          slots: contest?.slots,
-          startTime: contest?.startTime,
-          endTime: contest?.endTime,
-        });
+        const subCategory = await SubCategories.findByPk(
+          contest?.subCategoryId,
+        );
 
-        const newContestId = await newContest.get('id');
-
-        if (newContestId) {
-          if (contest?.priceDistribution) {
-            for (let i = 0; i < contest?.priceDistribution?.length; i++) {
-              await ContestPriceDistribution.create({
-                contestId: newContestId,
-                rankStart: contest?.priceDistribution[i].rankStart,
-                rankEnd: contest?.priceDistribution[i].rankEnd,
-                priceAmount: contest?.priceDistribution[i].priceAmount,
-              });
-            }
-          }
-
-          const priceDistribution = await ContestPriceDistribution.findAll({
-            where: { contestId: newContestId },
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-            order: [['rankStart', 'ASC']],
+        // * Check if the sub category provided exists
+        if (subCategory) {
+          const newContest = await Contest.create({
+            name: contest?.name,
+            image: contest?.image,
+            description: contest?.description,
+            entryAmount: contest?.entryAmount,
+            category: contest?.category,
+            subCategoryId: subCategory.id,
+            pricePool: contest?.pricePool,
+            createdBy: userId,
+            slots: contest?.slots,
+            startTime: contest?.startTime,
+            endTime: contest?.endTime,
           });
 
-          return res.status(201).json({
-            ...(await newContest.get()),
-            priceDistribution: priceDistribution,
+          const newContestId = await newContest.get('id');
+
+          if (newContestId) {
+            if (contest?.priceDistribution) {
+              for (let i = 0; i < contest?.priceDistribution?.length; i++) {
+                await ContestPriceDistribution.create({
+                  contestId: newContestId,
+                  rankStart: contest?.priceDistribution[i].rankStart,
+                  rankEnd: contest?.priceDistribution[i].rankEnd,
+                  priceAmount: contest?.priceDistribution[i].priceAmount,
+                });
+              }
+            }
+
+            const priceDistribution = await ContestPriceDistribution.findAll({
+              where: { contestId: newContestId },
+              attributes: { exclude: ['createdAt', 'updatedAt'] },
+              order: [['rankStart', 'ASC']],
+            });
+
+            return res.status(201).json({
+              ...(await newContest.get()),
+              priceDistribution: priceDistribution,
+            });
+          }
+        } else {
+          return res.status(400).json({
+            message: 'Cannot create contest without non-existing sub-category!',
           });
         }
       } else {
@@ -205,19 +217,22 @@ export default {
 
         console.log('Existing Contest: ', existingContest);
 
-        // * Check if contest exists the contest has not started yet
+        // * Check if contest exists
         if (existingContest) {
+          // * Check if the contest has not started yet
+          if (
+            moment(existingContest?.startTime) > moment() &&
+            moment(existingContest.endTime) < moment()
+          ) {
+            return res.status(403).json({
+              message: 'Contest is live! Cannot join!',
+            });
+          } else if (moment(existingContest.endTime) < moment()) {
+            return res.status(403).json({
+              message: 'Contest has ended',
+            });
+          }
           const exisitngContestId = await existingContest.get('id');
-          // const alreadyJoined = await ContestParticipants.findOne({
-          //   where: { userId, contestId: exisitngContestId },
-          // });
-
-          // * Check if user has already joined the contest
-          // if (alreadyJoined) {
-          //   return res.status(400).json({
-          //     message: 'User has already joined the contest',
-          //   });
-          // }
 
           // * Check if there is an available slot to join
           const totalParticipants = await ContestParticipants.findAndCountAll({
@@ -237,7 +252,7 @@ export default {
           });
 
           if (newParticipant) {
-            // TODO: Create a Portfolio and add Stocks to PortfolioStocks OR Select a portfolio
+            // * Create a Portfolio and add Stocks to PortfolioStocks OR Select a portfolio
 
             const existingPortfolio = await Portfolio.findByPk(
               contestDetails?.portfolio?.id,

@@ -46,6 +46,7 @@ export default (sequelize, DataTypes) => {
           'Practice',
           'Head2Head',
           'Private',
+          'Mega',
         ]),
         allowNull: false,
       },
