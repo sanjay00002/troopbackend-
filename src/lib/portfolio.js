@@ -3,6 +3,11 @@ export function validatePortfolio(stocks) {
   // * Also check if both of the fields(captain & viceCaptain) are not set to true
   let isCaptain = false,
     isViceCaptain = false;
+
+  if (stocks.length > 5) {
+    throw Error('Can select only 5 stocks!');
+  }
+
   for (let i = 0; i < stocks.length; i++) {
     const stock = stocks[i];
     if (stock.captain === true && stock.viceCaptain === true) {
