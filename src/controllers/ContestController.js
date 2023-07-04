@@ -1,6 +1,7 @@
 import { Op, Sequelize } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
+import { validatePortfolio } from '../lib/portfolio';
 
 const {
   Contest,
@@ -180,7 +181,7 @@ export default {
 
   /**
    *
-   * @param id integer
+   * @param id contest id
    * @param portfolio id, name, stocks
    * @param portfolio.stocks stockId, action, captain, viceCaptain
    * @returns
@@ -197,12 +198,14 @@ export default {
      */
 
     try {
+      validatePortfolio(contestDetails?.portfolio?.stocks);
+
       if (contestDetails?.id) {
         const existingContest = await Contest.findByPk(contestDetails?.id);
 
         console.log('Existing Contest: ', existingContest);
 
-        // * Check if contest exists
+        // * Check if contest exists the contest has not started yet
         if (existingContest) {
           const exisitngContestId = await existingContest.get('id');
           // const alreadyJoined = await ContestParticipants.findOne({
