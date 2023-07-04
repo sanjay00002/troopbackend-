@@ -29,6 +29,8 @@ const io = new Server(httpServer, {
   },
 });
 
+// Connection between smart api and socket.io 
+// require('./Stock-socket/getStocks')(io);
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
