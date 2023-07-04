@@ -12,10 +12,13 @@ import subCategoriesRouter from './src/routes/subCategories';
 import stocksRouter from './src/routes/stocks';
 import walletRouter from './src/routes/wallet'
 
-// const createContest = require('./src/socketfiles/createContest');
-// const joinContest = require('./src/socketfiles/joinContest');
-// const currentUserCount = require('./src/socketfiles/currentUserCount');
-// const connectSmartApi = require('./src/socketfiles/connectStock').default;
+const findMatch = require('./src/socketfiles/findMatch');
+const joinLiveContest = require('./src/socketfiles/joinLiveContest');
+const createContest = require('./src/socketfiles/createContest');
+const joinContest = require('./src/socketfiles/joinContest');
+const currentUserCount = require('./src/socketfiles/currentUserCount');
+const connectSmartApi = require('./src/socketfiles/connectStock').default;
+
 const { createAdapter } = require('@socket.io/postgres-adapter');
 const { Pool } = require('pg');
 // require('dotenv').config({ path: './.env.local' });
@@ -65,13 +68,20 @@ const liveContest = io.of('/liveContest');
 
 liveContest.on('connection', (socket) => {
   // console.log("Live contest socket connected");
+  socket.emit('get-socket-id',socket.id)
+
   socket.on('payment-done',()=>{
     console.log("Payment Done waiting period starts ....");
   })
 
-  socket.on('contest-session-joined',()=>{
-    console.log("User joined the session");
+  socket.on('add-in-db',(user)=>{
+    joinLiveContest(socket,pool,user)
   })
+
+  socket.on('find-match',(user)=>{
+    findMatch(io,socket,pool,user)
+  })
+
 });
 
 const port = process.env.PORT || 5000;
