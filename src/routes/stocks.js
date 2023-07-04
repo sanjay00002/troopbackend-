@@ -6,4 +6,6 @@ const router = Router();
 
 router.route('/enter').post(validate, StockController.enterStockData);
 
+router.route('/enterBulk').post(validate, StockController.enterBulkStockData);
+
 module.exports = router;

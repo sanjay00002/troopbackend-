@@ -185,7 +185,30 @@ export default {
       }
     } catch (error) {
       return res.status(500).json({
-        error: 'Something went wrong while fetching contest by id',
+        error: 'Something went wrong while fetching contest by category',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  getContestsBySubCategory: async function (req, res) {
+    const { subCategoryId } = req.body;
+    try {
+      const contest = await Contest.findAll({
+        where: {
+          subCategoryId,
+        },
+      });
+
+      if (contest) {
+        return res.status(200).json(contest);
+      } else {
+        return res.status(404).json({ error: 'No contest found!' });
+      }
+    } catch (error) {
+      console.error('Error while fetching contest by sub category: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching contest by sub category',
         errorMessage: error.message,
       });
     }
@@ -242,6 +265,17 @@ export default {
           if (totalParticipants >= (await existingContest.get('slots'))) {
             return res.status(400).json({
               message: 'Slot are full, no more slots available!',
+            });
+          }
+
+          // * Check if he has participated 20 times in the same contest
+          const maxParticipation = await ContestParticipants.findAndCountAll({
+            where: { userId: userId, contestId: exisitngContestId },
+          });
+
+          if (maxParticipation.count >= 3) {
+            return res.status(403).json({
+              message: 'Player has reached the limit of maximum participation',
             });
           }
 
