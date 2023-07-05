@@ -36,12 +36,12 @@ export default (sequelize, DataTypes) => {
         uniqueKey: 'livecontest_stock2_fk_constraint',
       });
 
-      models.Users.hasMany(LiveContest, {
+      models.User.hasMany(LiveContest, {
         foreignKey: 'createdBy',
         sourceKey: 'id',
       });
 
-      LiveContest.belongsTo(models.Users, {
+      LiveContest.belongsTo(models.User, {
         foreignKey: 'createdBy',
         targetKey: 'id',
         constraints: true,
@@ -64,7 +64,7 @@ export default (sequelize, DataTypes) => {
     },
   );
   LiveContest.beforeValidate(async (contest, option) => {
-    if (LiveContest.isNewRecord) {
+    if (contest.isNewRecord) {
       const id = await nanoid(10);
       contest.id = id;
     }

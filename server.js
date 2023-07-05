@@ -10,7 +10,8 @@ import contestRouter from './src/routes/contest';
 import botRouter from './src/routes/bot';
 import subCategoriesRouter from './src/routes/subCategories';
 import stocksRouter from './src/routes/stocks';
-import walletRouter from './src/routes/wallet'
+import walletRouter from './src/routes/wallet';
+import liveContestRouter from './src/routes/liveContest';
 
 const findMatch = require('./src/socketfiles/findMatch');
 const joinLiveContest = require('./src/socketfiles/joinLiveContest');
@@ -107,6 +108,7 @@ app.use('/api/v1/bot', botRouter);
 app.use('/api/v1/sub-category', subCategoriesRouter);
 app.use('/api/v1/stocks', stocksRouter);
 app.use('/api/v1/wallet', walletRouter);
+app.use('/api/v1/live-contest',liveContestRouter)
 
 
 io.adapter(createAdapter(pool));
