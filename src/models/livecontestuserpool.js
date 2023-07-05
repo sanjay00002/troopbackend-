@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
         sourceKey: 'id',
       });
 
-      LiveContestUserPool.belongsTo(model.Contest, {
+      LiveContestUserPool.belongsTo(models.Contest, {
         foreignKey: 'contest_id',
         targetKey: 'id',
         constraints: true,
@@ -40,7 +40,7 @@ export default (sequelize, DataTypes) => {
         sourceKey: 'id',
       });
 
-      LiveContestUserPool.belongsTo(model.Stocks, {
+      LiveContestUserPool.belongsTo(models.Stocks, {
         foreignKey: 'stock_id',
         targetKey: 'id',
         constraints: true,
