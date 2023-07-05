@@ -15,6 +15,16 @@ export async function up(queryInterface, Sequelize) {
       table: 'Users',
     },
   });
+
+  await queryInterface.addConstraint('Portfolios', {
+    fields: ['subCategoryId'],
+    type: 'foreign key',
+    name: 'subcategories_portfolio_fk_constraint',
+    references: {
+      field: 'id',
+      table: 'SubCategories',
+    },
+  });
 }
 export async function down(queryInterface, Sequelize) {
   /**
@@ -26,5 +36,9 @@ export async function down(queryInterface, Sequelize) {
   await queryInterface.removeConstraint(
     'Portfolios',
     'user_portfolio_fk_constraint',
+  );
+  await queryInterface.removeConstraint(
+    'Portfolios',
+    'subcategories_portfolio_fk_constraint',
   );
 }

@@ -21,6 +21,19 @@ export default (sequelize, DataTypes) => {
         constraints: true,
         uniqueKey: 'user_portfolio_fk_constraint',
       });
+
+      models.SubCategories.hasMany(Portfolio, {
+        foreignKey: 'subCategoryId',
+        sourceKey: 'id',
+      });
+
+      Portfolio.belongsTo(models.SubCategories, {
+        foreignKey: 'subCategoryId',
+        targetKey: 'id',
+        keyType: DataTypes.INTEGER,
+        constraints: true,
+        uniqueKey: 'subcategories_portfolio_fk_constraint',
+      });
     }
   }
   Portfolio.init(

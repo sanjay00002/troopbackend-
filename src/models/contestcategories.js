@@ -15,8 +15,8 @@ export default (sequelize, DataTypes) => {
       name: { type: DataTypes.STRING, allowNull: false },
       image: { type: DataTypes.STRING, allowNull: true },
       description: { type: DataTypes.STRING, allowNull: true },
-      startTime: { type: DataTypes.DATE, allowNull: false },
-      endTime: { type: DataTypes.DATE, allowNull: false },
+      startTime: { type: DataTypes.TIME, allowNull: false },
+      endTime: { type: DataTypes.TIME, allowNull: false },
     },
     {
       sequelize,

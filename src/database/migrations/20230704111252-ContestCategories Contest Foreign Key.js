@@ -23,7 +23,7 @@ export async function down(queryInterface, Sequelize) {
    * Example:
    * await queryInterface.dropTable('users');
    */
-  await queryInterface.addConstraint(
+  await queryInterface.removeConstraint(
     'Contests',
     'contestcategories_contest_fk_constraint',
   );

@@ -33,17 +33,12 @@ export default {
         // * Check if the sub category provided exists
         if (subCategory) {
           const newContest = await Contest.create({
-            name: contest?.name,
-            image: contest?.image,
-            description: contest?.description,
             entryAmount: contest?.entryAmount,
-            category: contest?.category,
+            categoryId: contest?.categoryId,
             subCategoryId: subCategory.id,
             pricePool: contest?.pricePool,
             createdBy: userId,
             slots: contest?.slots,
-            startTime: contest?.startTime,
-            endTime: contest?.endTime,
           });
 
           const newContestId = await newContest.get('id');

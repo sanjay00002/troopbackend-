@@ -20,11 +20,11 @@ export async function up(queryInterface, Sequelize) {
       allowNull: true,
     },
     startTime: {
-      type: Sequelize.DATE,
+      type: Sequelize.TIME,
       allowNull: false,
     },
     endTime: {
-      type: Sequelize.DATE,
+      type: Sequelize.TIME,
       allowNull: false,
     },
     createdAt: {

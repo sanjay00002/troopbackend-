@@ -14,21 +14,9 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    image: {
-      type: Sequelize.STRING,
-      allowNull: true,
-    },
     entryAmount: {
       type: Sequelize.DOUBLE,
       allowNull: false,
-    },
-    description: {
-      type: Sequelize.STRING(512),
-      allowNull: true,
     },
     pricePool: {
       type: Sequelize.DOUBLE,
@@ -44,14 +32,6 @@ export async function up(queryInterface, Sequelize) {
     },
     slots: {
       type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    startTime: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
-    endTime: {
-      type: Sequelize.DATE,
       allowNull: false,
     },
     createdAt: {
