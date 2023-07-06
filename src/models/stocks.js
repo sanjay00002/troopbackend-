@@ -15,6 +15,10 @@ export default (sequelize, DataTypes) => {
       name: { type: DataTypes.STRING, allowNull: false },
       token: { type: DataTypes.STRING, allowNull: false },
       exchangeType: { type: DataTypes.INTEGER, allowNull: false },
+      status: {
+        type: DataTypes.ENUM(['active', 'inactive']),
+        defaultValue: 'active',
+      },
     },
     {
       name: {

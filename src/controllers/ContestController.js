@@ -1,6 +1,7 @@
-import { Op, Sequelize } from 'sequelize';
+import { Op, Sequelize, where } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
+import momentTimezone from 'moment-timezone';
 import { validatePortfolio } from '../lib/portfolio';
 
 const {
@@ -34,6 +35,7 @@ export default {
         // * Check if the sub category provided exists
         if (subCategory) {
           const newContest = await Contest.create({
+            date: contest?.date,
             entryAmount: contest?.entryAmount,
             categoryId: contest?.categoryId,
             subCategoryId: subCategory.id,
@@ -438,6 +440,59 @@ export default {
       return res.status(500).json({
         error:
           'Something went wrong while fetching the joined contests for sub category',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  fetchJoinedContestByStatus: async function (req, res) {
+    const userId = req.id;
+    const { status } = req.body;
+
+    /* 
+      TODO:
+     *  Get the contests that the user has participated from ContestParticipants
+     *  Get the contest details from the contest table
+     *  Get the category details from the categoryId
+     *  Get the Sub Category details from the subCategoryId
+     *  Get the portfolioIds from ContestPortfolios
+     *
+     *  Filter for status:
+     *    Compare the date of the contest with the current date (past date = completed, next date = upcoming)
+     *    If current date is found then:
+     *      Compare the timings from the category and place the contest in upcoming/live accordingly
+     *
+     */
+    try {
+      const participatedContests = await ContestParticipants.findAll({
+        attributes: [],
+        include: {
+          model: Contest,
+          required: true,
+          include: [
+            {
+              model: SubCategories,
+              required: true,
+            },
+            {
+              model: ContestCategories,
+              required: true,
+            },
+            {
+              model: ContestPortfolios,
+              required: true,
+            },
+          ],
+        },
+      });
+
+      console.log('Categories', participatedContests);
+
+      return res.status(200).json(participatedContests);
+    } catch (error) {
+      console.error('Error while fetching contest by status: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching contest by status',
         errorMessage: error.message,
       });
     }

@@ -14,11 +14,11 @@ router
   .get(validate, ContestCategoriesController.getContestCategories);
 
 router
-  .route('/contestByCategory')
+  .route('/contestsByCategory')
   .post(validate, ContestController.getContestsByCategory);
 
 router
-  .route('/contestBySubCategory')
+  .route('/contestsBySubCategory')
   .post(validate, ContestController.getContestsBySubCategory);
 
 router.route('/join').post(validate, ContestController.joinContestById);
@@ -26,5 +26,9 @@ router.route('/join').post(validate, ContestController.joinContestById);
 router
   .route('/joinedContests')
   .post(validate, ContestController.fetchJoinedContest);
+
+router
+  .route('/joinedContestsByStatus')
+  .post(validate, ContestController.fetchJoinedContestByStatus);
 
 module.exports = router;

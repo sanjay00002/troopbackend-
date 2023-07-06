@@ -14,6 +14,10 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    date: {
+      type: Sequelize.DATEONLY,
+      allowNull: false,
+    },
     entryAmount: {
       type: Sequelize.DOUBLE,
       allowNull: false,

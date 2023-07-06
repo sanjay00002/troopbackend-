@@ -72,6 +72,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      date: { type: DataTypes.DATEONLY, allowNull: false },
       entryAmount: { type: DataTypes.DOUBLE, allowNull: false },
       pricePool: { type: DataTypes.DOUBLE, allowNull: false },
       likes: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 0 },
@@ -79,6 +80,10 @@ export default (sequelize, DataTypes) => {
       createdBy: { type: DataTypes.STRING, allowNull: false },
     },
     {
+      name: {
+        singular: 'contest',
+        plural: 'contests',
+      },
       sequelize,
       modelName: 'Contest',
     },
