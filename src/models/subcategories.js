@@ -22,6 +22,10 @@ export default (sequelize, DataTypes) => {
       },
     },
     {
+      name: {
+        singular: 'subCategory',
+        plural: 'subCategories',
+      },
       sequelize,
       modelName: 'SubCategories',
     },

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { validatePortfolio } from '../lib/portfolio';
 
 const {
+  ContestCategories,
   Contest,
   ContestPriceDistribution,
   ContestWinners,
@@ -167,16 +168,29 @@ export default {
     const { category } = req.body;
 
     try {
-      const contest = await Contest.findAll({
-        where: {
-          category: category,
-        },
+      const existingCategory = await ContestCategories.findOne({
+        where: { name: category },
       });
 
-      if (contest) {
-        return res.status(200).json(contest);
+      if (existingCategory) {
+        const contest = await Contest.findAll({
+          where: {
+            categoryId: existingCategory.id,
+          },
+          include: {
+            model: SubCategories,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
+        });
+
+        if (contest) {
+          return res.status(200).json(contest);
+        } else {
+          return res.status(404).json({ error: 'No contest found!' });
+        }
       } else {
-        return res.status(404).json({ error: 'No contest found!' });
+        return res.status(404).json({ error: "Category doesn't exists!" });
       }
     } catch (error) {
       return res.status(500).json({

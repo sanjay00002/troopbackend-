@@ -1,12 +1,17 @@
 import { Router } from 'express';
 import validate from '../middleware/auth';
 import ContestController from '../controllers/ContestController';
+import ContestCategoriesController from '../controllers/ContestCategoriesController';
 
 const router = Router();
 
 router.route('/create').post(validate, ContestController.createContest);
 
 router.route('/contestById').post(validate, ContestController.getContestById);
+
+router
+  .route('/categories')
+  .get(validate, ContestCategoriesController.getContestCategories);
 
 router
   .route('/contestByCategory')
