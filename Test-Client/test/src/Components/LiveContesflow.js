@@ -30,13 +30,9 @@ export default function LiveContesflow() {
       setselectstockbool(true);
     });
 
-    socket.on('match-found', (matched_users) => {
+    socket.on('match-found', (apponent) => {
       setmatched(true);
-      if (inputValue === matched_users.user1) {
-        setapponent(matched_users.user2);
-      } else {
-        setapponent(matched_users.user1);
-      }
+      setapponent(apponent)
     });
 
     socket.on('get-socket-id', (id) => {
@@ -44,18 +40,20 @@ export default function LiveContesflow() {
     });
   });
 
-  const handleContestJoin = (userId, contesId) => {
+  const handleContestJoin = (userId, socketId, contesId) => {
     const user = {
       user_id: userId,
+      socket_id: socketId,
       contest_id: contesId,
     };
     socket.emit('add-in-db', user);
   };
 
-  const handleStockSelection = (userId, contestId, stockId) => {
+  const handleStockSelection = (userId, socketId, contestId, stockId) => {
     setfindMatch(true);
     const user = {
       user_id: userId,
+      socket_id: socketId,
       contest_id: contestId,
       stock_id: stockId,
     };
@@ -68,11 +66,10 @@ export default function LiveContesflow() {
         {/* Asssuming payment step is done */}
         <form onSubmit={handleSubmit}>
           <label>
-            Enter a test value:
+            Enter User Id:
             <input type="text" value={inputValue} onChange={handleChange} />
           </label>
-          <button type="submit">Submit</button>
-          <p>Submitted value: {inputValue}</p>
+          <p>User Id: {inputValue}</p>
         </form>
         <p>Session Id: {socketID}</p>
 
@@ -95,7 +92,7 @@ export default function LiveContesflow() {
                     <button
                       className="stocks"
                       onClick={(e) =>
-                        handleStockSelection(inputValue, 'contest1', 'stockId1')
+                        handleStockSelection(inputValue, socketID, 'tBVWaVw_u0', 1)
                       }
                     >
                       Stock 1
@@ -103,7 +100,7 @@ export default function LiveContesflow() {
                     <button
                       className="stocks"
                       onClick={(e) =>
-                        handleStockSelection(inputValue, 'contest1', 'stockId2')
+                        handleStockSelection(inputValue, socketID, 'tBVWaVw_u0', 2)
                       }
                     >
                       Stock 2
@@ -113,7 +110,7 @@ export default function LiveContesflow() {
               </div>
             </>
           ) : (
-            <button onClick={(e) => handleContestJoin(inputValue, 'contest1')}>
+            <button onClick={(e) => handleContestJoin(inputValue, socketID, 'tBVWaVw_u0')}>
               Join
             </button>
           )}

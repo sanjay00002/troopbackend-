@@ -54,7 +54,7 @@ module.exports = {
       type: 'foreign key',
       name: 'matchedlive_contest_fk_constraint',
       references: {
-        table: 'Contests',
+        table: 'LiveContests',
         field: 'id',
       },
     })
