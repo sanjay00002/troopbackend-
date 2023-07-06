@@ -379,4 +379,67 @@ export default {
       });
     }
   },
+
+  fetchJoinedContest: async function (req, res) {
+    const userId = req.id;
+    const { subCategoryId } = req.body;
+
+    try {
+      const contests = await Contest.findAll({
+        where: {
+          subCategoryId,
+        },
+        include: [
+          {
+            model: ContestPortfolios,
+            required: true,
+            include: {
+              model: Portfolio,
+              required: true,
+              where: { userId },
+              attributes: [],
+            },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
+          },
+          {
+            model: ContestParticipants,
+            required: true,
+            as: 'participants',
+            attributes: [],
+          },
+        ],
+        attributes: {
+          include: [
+            'id',
+            'categoryId',
+            'subCategoryId',
+            'entryAmount',
+            'pricePool',
+            'createdBy',
+            'slots',
+            [
+              Sequelize.fn('COUNT', Sequelize.col('participants.id')),
+              'participantsCount',
+            ],
+          ],
+        },
+        group: [
+          'Contest.id',
+          'contestPortfolios.id',
+          'contestPortfolios->portfolio.id',
+        ],
+      });
+
+      // console.log('Contests: ', contests);
+
+      return res.status(200).json(contests);
+    } catch (error) {
+      console.error('Error while joining the contest: ', error);
+      return res.status(500).json({
+        error:
+          'Something went wrong while fetching the joined contests for sub category',
+        errorMessage: error.message,
+      });
+    }
+  },
 };

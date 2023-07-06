@@ -44,6 +44,10 @@ export default (sequelize, DataTypes) => {
       subCategoryId: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
+      name: {
+        singular: 'portfolio',
+        plural: 'portfolios',
+      },
       sequelize,
       modelName: 'Portfolio',
     },

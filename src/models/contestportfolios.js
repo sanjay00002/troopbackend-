@@ -42,6 +42,10 @@ export default (sequelize, DataTypes) => {
       contestId: { type: DataTypes.STRING, allowNull: false },
     },
     {
+      name: {
+        singular: 'contestPortfolio',
+        plural: 'contestPortfolios',
+      },
       sequelize,
       modelName: 'ContestPortfolios',
     },
