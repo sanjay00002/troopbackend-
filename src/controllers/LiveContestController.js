@@ -2,11 +2,7 @@ import { Op, Sequelize } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
 
-const {
-  LiveContest,
-  User,
-  Stocks,
-} = model;
+const { LiveContest, User, Stocks, MatchedLiveUser } = model;
 
 export default {
   createLiveContest: async function (req, res) {
@@ -56,21 +52,19 @@ export default {
       if (contest) {
         // * Fetch the stocks related to the subCategory
 
-        const stock1 = await Stocks.findByPk(contest.stock1Id)
-        const stock2 = await Stocks.findByPk(contest.stock2Id)
-
+        const stock1 = await Stocks.findByPk(contest.stock1Id);
+        const stock2 = await Stocks.findByPk(contest.stock2Id);
 
         const stocksArr = {
-            company1 : stock1,
-            company2 : stock2,
-        }
+          company1: stock1,
+          company2: stock2,
+        };
 
         console.log('Stocks Arr: ', stocksArr);
 
         const result = {
           ...(await contest.get()),
           stocks: stocksArr,
-
         };
         return res.status(200).json(result);
       } else {
@@ -84,25 +78,50 @@ export default {
     }
   },
 
-  getLiveContests: async function (req,res){
-    const userId = req.id
-    try{
-        const user = await User.findByPk(userId);
-        if(user && !user?.isBot){
-            const contests = await LiveContest.findAll({
-              where: {
-                isLive: true
-              }
-            })
-            return res.status(200).json(contests);
-        }else{
+  getLiveContests: async function (req, res) {
+    const userId = req.id;
+    try {
+      const user = await User.findByPk(userId);
+      if (user && !user?.isBot) {
+        const contests = await LiveContest.findAll({
+          where: {
+            isLive: true,
+          },
+        });
+        return res.status(200).json(contests);
+      } else {
         return res.status(404).json({ error: 'No contest found!' });
-        }
-    }catch (error){
-        return res.status(500).json({
-            error: 'Something went wrong while fetching contests',
-            errorMessage: error.message,
-          });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        error: 'Something went wrong while fetching contests',
+        errorMessage: error.message,
+      });
     }
-  }
+  },
+
+  getLiveContestHistoryById: async function (req, res) {
+    const userId = req.id;
+    try {
+      const user = await User.findByPk(userId);
+      if(user && !user?.isBot){
+        const history = await MatchedLiveUser.findAll({
+          where:{
+            [Op.or]:[
+              { selfId : userId },
+              { apponentId: userId },
+            ]
+          }
+        })
+        return res.status(200).json(history);
+      }else{
+        return res.status(404).json({ error: 'No User found!' });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        error: 'Something went wrong while fetching live contest history',
+        errorMessage: error.message,
+      });
+    }
+  },
 };

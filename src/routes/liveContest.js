@@ -9,6 +9,8 @@ router.route('/create').post(validate, LiveContestController.createLiveContest);
 
 router.route('/contestById').post(validate, LiveContestController.getLiveContestById);
 
-router.route('/getContests').get(validate, LiveContestController.getLiveContests)
+router.route('/getContests').get(validate, LiveContestController.getLiveContests);
+
+router.route('/getHistory').get(validate, LiveContestController.getLiveContestHistoryById);
 
 module.exports = router;

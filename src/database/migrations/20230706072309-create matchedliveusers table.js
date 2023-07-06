@@ -40,7 +40,15 @@ module.exports = {
           'Self',
           'Apponent'
         ])
-      }
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
     })
   },
 

@@ -39,6 +39,15 @@ module.exports = function findMatch(io,socket,pool,user){
                                 }
                             })
 
+                            const deleteQuery = 'DELETE FROM public."LiveContestUserPool" WHERE matched = true';
+                            pool.query(deleteQuery,(error,result)=>{
+                                if(error) {
+                                    console.log("error in deleting", error);
+                                }else{
+                                    console.log("Deleted matched users");
+                                }
+                            })
+
                             socket.emit("match-found",matched_user.user_id)
                             socket.broadcast.to(matched_user.socket_id).emit("match-found",userId)
 
