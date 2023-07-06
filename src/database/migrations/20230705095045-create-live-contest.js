@@ -27,10 +27,23 @@ module.exports = {
         type: Sequelize.DOUBLE,
         allowNull: false,
       },
+      isLive: {
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:true
+      },
       createdBy:{
         type: Sequelize.STRING,
         allowNull: false,
-      }
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     })
   },
 

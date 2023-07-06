@@ -89,8 +89,11 @@ export default {
     try{
         const user = await User.findByPk(userId);
         if(user && !user?.isBot){
-            const contests = await LiveContest.all()
-            console.log(contests);
+            const contests = await LiveContest.findAll({
+              where: {
+                isLive: true
+              }
+            })
             return res.status(200).json(contests);
         }else{
         return res.status(404).json({ error: 'No contest found!' });
