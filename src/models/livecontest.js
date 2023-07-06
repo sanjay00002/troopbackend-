@@ -45,7 +45,7 @@ export default (sequelize, DataTypes) => {
         foreignKey: 'createdBy',
         targetKey: 'id',
         constraints: true,
-        keyType: DataTypes.INTEGER,
+        keyType: DataTypes.STRING,
         uniqueKey: 'livecontest_user_fk_constraint',
       });
 
