@@ -203,14 +203,28 @@ export default {
   getContestsBySubCategory: async function (req, res) {
     const { subCategoryId } = req.body;
     try {
-      const contest = await Contest.findAll({
+      const contests = await Contest.findAll({
         where: {
           subCategoryId,
         },
       });
 
-      if (contest) {
-        return res.status(200).json(contest);
+      if (contests) {
+        let contestWithParticipants = JSON.parse(JSON.stringify(contests));
+        for (let i = 0; i < contestWithParticipants.length; i++) {
+          const contest = contests[i];
+          const participants = await ContestParticipants.findAndCountAll({
+            where: { contestId: await contest.get('id') },
+          });
+
+          console.log('Participants: ', participants.count);
+
+          contestWithParticipants[i].participants = participants.count;
+        }
+
+        console.log('Contest with Participants: ', contestWithParticipants);
+
+        return res.status(200).json(contestWithParticipants);
       } else {
         return res.status(404).json({ error: 'No contest found!' });
       }
@@ -245,7 +259,13 @@ export default {
       validatePortfolio(contestDetails?.portfolio?.stocks);
 
       if (contestDetails?.id) {
-        const existingContest = await Contest.findByPk(contestDetails?.id);
+        const existingContest = await Contest.findByPk(contestDetails?.id, {
+          include: {
+            model: ContestCategories,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
+        });
 
         console.log('Existing Contest: ', existingContest);
 
@@ -253,8 +273,8 @@ export default {
         if (existingContest) {
           // * Check if the contest has not started yet
           if (
-            moment(existingContest?.startTime) > moment() &&
-            moment(existingContest.endTime) < moment()
+            moment(existingContest.category.startTime) > moment() &&
+            moment(existingContest.category.endTime) < moment()
           ) {
             return res.status(403).json({
               message: 'Contest is live! Cannot join!',
@@ -282,7 +302,7 @@ export default {
             where: { userId: userId, contestId: exisitngContestId },
           });
 
-          if (maxParticipation.count >= 3) {
+          if (maxParticipation.count >= 20) {
             return res.status(403).json({
               message: 'Player has reached the limit of maximum participation',
             });

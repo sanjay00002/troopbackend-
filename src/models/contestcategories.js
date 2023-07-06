@@ -19,6 +19,10 @@ export default (sequelize, DataTypes) => {
       endTime: { type: DataTypes.TIME, allowNull: false },
     },
     {
+      name: {
+        singular: 'category',
+        plural: 'categories',
+      },
       sequelize,
       modelName: 'ContestCategories',
     },
