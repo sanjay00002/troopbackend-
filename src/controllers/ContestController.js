@@ -1,8 +1,7 @@
-import { Op, Sequelize, where } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import model from '../models';
-import moment from 'moment';
-import momentTimezone from 'moment-timezone';
 import { validatePortfolio } from '../lib/portfolio';
+import { getContestStatus } from '../lib/contest';
 
 const {
   ContestCategories,
@@ -273,15 +272,14 @@ export default {
 
         // * Check if contest exists
         if (existingContest) {
+          const contestStatus = getContestStatus(existingContest);
+
           // * Check if the contest has not started yet
-          if (
-            moment(existingContest.category.startTime) > moment() &&
-            moment(existingContest.category.endTime) < moment()
-          ) {
+          if (contestStatus === 'live') {
             return res.status(403).json({
               message: 'Contest is live! Cannot join!',
             });
-          } else if (moment(existingContest.endTime) < moment()) {
+          } else if (contestStatus === 'completed') {
             return res.status(403).json({
               message: 'Contest has ended',
             });
@@ -447,10 +445,8 @@ export default {
 
   fetchJoinedContestByStatus: async function (req, res) {
     const userId = req.id;
-    const { status } = req.body;
 
-    /* 
-      TODO:
+    /*
      *  Get the contests that the user has participated from ContestParticipants
      *  Get the contest details from the contest table
      *  Get the category details from the categoryId
@@ -464,31 +460,86 @@ export default {
      *
      */
     try {
+      // const participatedContests = await ContestParticipants.findAll({
+      //   where: { userId },
+      //   attributes: [],
+      //   include: {
+      //     model: Contest,
+      //     required: false,
+      //     duplicating: false,
+      //     include: [
+      //       {
+      //         model: SubCategories,
+      //         required: true,
+      //       },
+      //       {
+      //         model: ContestCategories,
+      //         required: true,
+      //       },
+      //       {
+      //         model: ContestPortfolios,
+      //         required: true,
+      //       },
+      //     ],
+      //   },
+      // });
+
       const participatedContests = await ContestParticipants.findAll({
-        attributes: [],
+        where: { userId },
+        attributes: ['contestId'],
         include: {
           model: Contest,
           required: true,
-          include: [
-            {
-              model: SubCategories,
-              required: true,
-            },
-            {
-              model: ContestCategories,
-              required: true,
-            },
-            {
-              model: ContestPortfolios,
-              required: true,
-            },
-          ],
         },
       });
 
-      console.log('Categories', participatedContests);
+      const setOfContests = new Set(
+        participatedContests.map((contest) => contest.contestId),
+      );
 
-      return res.status(200).json(participatedContests);
+      const joinedContest = await Contest.findAll({
+        where: {
+          id: { [Op.in]: [...setOfContests] },
+        },
+        include: [
+          {
+            model: SubCategories,
+            required: true,
+          },
+          {
+            model: ContestCategories,
+            required: true,
+          },
+          {
+            model: ContestPortfolios,
+            required: true,
+          },
+        ],
+      });
+
+      const upcoming = [],
+        live = [],
+        completed = [];
+
+      joinedContest.forEach((element) => {
+        const contestStatus = getContestStatus(element);
+
+        switch (contestStatus) {
+          case 'upcoming':
+            upcoming.push(element);
+            break;
+          case 'live':
+            live.push(element);
+            break;
+          case 'completed':
+            completed.push(element);
+            break;
+          default:
+            break;
+        }
+      });
+
+      return res.status(200).json({ upcoming, live, completed });
     } catch (error) {
       console.error('Error while fetching contest by status: ', error);
       return res.status(500).json({
