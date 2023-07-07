@@ -35,6 +35,11 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
     },
+    points: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     referralCode: {
       type: Sequelize.STRING,
       allowNull: true,

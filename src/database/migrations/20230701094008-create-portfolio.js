@@ -1,40 +1,25 @@
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Contests', {
+  await queryInterface.createTable('Portfolios', {
     id: {
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
+      type: Sequelize.INTEGER,
+    },
+    name: {
       type: Sequelize.STRING,
+      allowNull: true,
     },
-    categoryId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    subCategoryId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    date: {
-      type: Sequelize.DATEONLY,
-      allowNull: false,
-    },
-    entryAmount: {
-      type: Sequelize.DOUBLE,
-      allowNull: false,
-    },
-    pricePool: {
-      type: Sequelize.DOUBLE,
-      allowNull: false,
-    },
-    createdBy: {
+    userId: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    likes: {
+    score: {
       type: Sequelize.INTEGER,
       defaultValue: 0,
     },
-    slots: {
+    subCategoryId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
@@ -49,5 +34,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Contests');
+  await queryInterface.dropTable('Portfolios');
 }

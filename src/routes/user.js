@@ -6,6 +6,6 @@ const router = Router();
 
 router.route('/').post(validate, UserController.getUserById);
 
-router.route('/').patch(validate, UserController.updateUserById);
+router.route('/').patch(validate, UserController.updateCurrentUser);
 
 module.exports = router;

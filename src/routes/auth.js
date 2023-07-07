@@ -11,7 +11,7 @@ router.route('/signInPhoneNumber').post(AuthController.signInWithPhoneNumber);
 
 router.route('/refresh').post(AuthController.refreshTokens);
 
-router.route('/generateOtp').post(AuthController.generteOtp);
+router.route('/generateOtp').post(AuthController.generateOtp);
 
 router.route('/verifyOtp').post(AuthController.verifyOtp);
 

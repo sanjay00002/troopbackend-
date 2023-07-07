@@ -11,7 +11,7 @@ export default function validate(req, res, next) {
       req.id = user.id;
       next();
     } else {
-      return res.status(403).json({ message: 'User Unauthorized!' });
+      return res.status(401).json({ message: 'User Unauthorized!' });
     }
   });
 }

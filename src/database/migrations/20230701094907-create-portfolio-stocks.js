@@ -1,41 +1,32 @@
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Contests', {
+  await queryInterface.createTable('PortfolioStocks', {
     id: {
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
     },
-    categoryId: {
+    portfolioId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    subCategoryId: {
+    stockId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    date: {
-      type: Sequelize.DATEONLY,
+    action: {
+      type: Sequelize.ENUM(['Buy', 'Sell', 'No Trade']),
       allowNull: false,
     },
-    entryAmount: {
-      type: Sequelize.DOUBLE,
+    captain: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
       allowNull: false,
     },
-    pricePool: {
-      type: Sequelize.DOUBLE,
-      allowNull: false,
-    },
-    createdBy: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    likes: {
-      type: Sequelize.INTEGER,
-      defaultValue: 0,
-    },
-    slots: {
-      type: Sequelize.INTEGER,
+    viceCaptain: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
       allowNull: false,
     },
     createdAt: {
@@ -49,5 +40,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Contests');
+  await queryInterface.dropTable('PortfolioStocks');
 }

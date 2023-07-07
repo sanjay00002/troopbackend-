@@ -11,7 +11,7 @@ import { generateOtp } from '../lib/verifyOtp';
 import model from '../models';
 import JWTController from './JWTController';
 
-const { User } = model;
+const { User, UserRole, Role, Wallet } = model;
 
 export default {
   signUp: async (req, res) => {
@@ -19,6 +19,7 @@ export default {
 
     try {
       let newUser;
+      let role;
 
       // Verified User i.e. signs up with phone number
       if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) {
@@ -47,10 +48,18 @@ export default {
           referrer: userDetails?.referrer,
           referredAt: userDetails?.referrer ? moment().toISOString() : null,
         });
+
+        role = await Role.findOne({
+          where: { role: 'user' },
+        });
       } else {
         // Unverified User i.e. Guest
         newUser = await User.create({
           username: 'Trooper',
+        });
+
+        role = await Role.findOne({
+          where: { role: 'guest' },
         });
       }
 
@@ -69,6 +78,18 @@ export default {
       newUser.loggedInAt = moment().toISOString();
 
       await newUser.save();
+
+      const roleId = await role?.get('id');
+
+      await UserRole.create({
+        userId: newUserId,
+        roleId: roleId,
+      });
+
+      // * Create a new wallet for the new user
+      await Wallet.create({
+        userId: newUserId,
+      });
 
       return res.status(200).json({
         id: newUserId,
@@ -213,66 +234,71 @@ export default {
 
           const foundUser = await User.findOne({ where: { id: decoded?.id } });
 
-          const refreshTokenDB = (await foundUser.get('isBot'))
-            ? await JWTController.hashToken(await foundUser.get('refreshToken'))
-            : await foundUser.get('refreshToken');
-          console.log('Refresh Token from Req: ', recievedRefreshTokenHash);
-          console.log('Refresh Token from DB: ', refreshTokenDB);
+          // * If user wasn't found
+          if (foundUser) {
+            const refreshTokenDB = (await foundUser.get('isBot'))
+              ? await JWTController.hashToken(
+                  await foundUser.get('refreshToken'),
+                )
+              : await foundUser.get('refreshToken');
+            console.log('Refresh Token from Req: ', recievedRefreshTokenHash);
+            console.log('Refresh Token from DB: ', refreshTokenDB);
 
-          const isValidRefreshToken =
-            refreshTokenDB === recievedRefreshTokenHash;
+            const isValidRefreshToken =
+              refreshTokenDB === recievedRefreshTokenHash;
 
-          console.log('Is Valid refresh token: ', isValidRefreshToken);
+            console.log('Is Valid refresh token: ', isValidRefreshToken);
 
-          if (isValidRefreshToken) {
-            const { newAccessToken, newRefreshToken } =
-              await JWTController.createToken(
-                { id: foundUser.get('id') },
-                true,
-              ).then((tokens) => ({
-                newAccessToken: tokens.accessToken,
-                newRefreshToken: tokens.refreshToken,
-              }));
+            if (isValidRefreshToken) {
+              const { newAccessToken, newRefreshToken } =
+                await JWTController.createToken(
+                  { id: foundUser.get('id') },
+                  true,
+                ).then((tokens) => ({
+                  newAccessToken: tokens.accessToken,
+                  newRefreshToken: tokens.refreshToken,
+                }));
 
-            console.log('New: ', newAccessToken, newRefreshToken);
+              console.log('New: ', newAccessToken, newRefreshToken);
 
-            const accessTokenHash = await JWTController.hashToken(
-              newAccessToken,
-            );
-            const refreshTokenHash = await JWTController.hashToken(
-              newRefreshToken,
-            );
+              const accessTokenHash = await JWTController.hashToken(
+                newAccessToken,
+              );
+              const refreshTokenHash = await JWTController.hashToken(
+                newRefreshToken,
+              );
 
-            if (await foundUser.get('isBot')) {
-              foundUser.update({
+              if (await foundUser.get('isBot')) {
+                foundUser.update({
+                  accessToken: newAccessToken,
+                  refreshToken: newRefreshToken,
+                });
+              } else {
+                await foundUser.update({
+                  accessToken: accessTokenHash,
+                  refreshToken: refreshTokenHash,
+                });
+              }
+
+              return res.status(200).json({
                 accessToken: newAccessToken,
-                refreshToken: newRefreshToken,
+                refershToken: newRefreshToken,
               });
             } else {
-              await foundUser.update({
-                accessToken: accessTokenHash,
-                refreshToken: refreshTokenHash,
-              });
-            }
+              // Refresh Token Reuse
+              // Hacked User
+              const hackedUser = await User.findByPk(decoded?.id);
 
-            return res.status(200).json({
-              accessToken: newAccessToken,
-              refershToken: newRefreshToken,
-            });
-          } else {
-            // Refresh Token Reuse
-            // Hacked User
-            const hackedUser = await User.findByPk(decoded?.id);
+              if (hackedUser) {
+                await hackedUser.update({
+                  accessToken: null,
+                  refreshToken: null,
+                });
 
-            if (hackedUser) {
-              await hackedUser.update({
-                accessToken: null,
-                refreshToken: null,
-              });
-
-              return res.status(403).json({ error: 'Permission Denied' });
-            } else {
-              return res.sendStatus(403);
+                return res.status(403).json({ error: 'Permission Denied' });
+              } else {
+                return res.sendStatus(403);
+              }
             }
           }
         } else {
@@ -288,7 +314,7 @@ export default {
     }
   },
 
-  generteOtp: async function (req, res) {
+  generateOtp: async function (req, res) {
     const { phoneNumber } = req.body;
     try {
       if (

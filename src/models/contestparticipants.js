@@ -1,6 +1,6 @@
 import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
-  class Participants extends Model {
+  class ContestParticipants extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -8,47 +8,43 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.User.hasMany(Participants, {
+      models.User.hasMany(ContestParticipants, {
         foreignKey: 'userId',
         sourceKey: 'id',
       });
-      Participants.belongsTo(models.User, {
+      ContestParticipants.belongsTo(models.User, {
         foreignKey: 'userId',
         targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: 'user_participants_fk_constraint',
+        uniqueKey: 'user_contestparticipants_fk_constraint',
       });
-      models.Contest.hasMany(Participants, {
+      models.Contest.hasMany(ContestParticipants, {
         foreignKey: 'contestId',
         sourceKey: 'id',
       });
-      Participants.belongsTo(models.Contest, {
+      ContestParticipants.belongsTo(models.Contest, {
         foreignKey: 'contestId',
         targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: 'contest_participants_fk_constraint',
+        uniqueKey: 'contest_contestparticipants_fk_constraint',
       });
     }
   }
-  Participants.init(
+  ContestParticipants.init(
     {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        primaryKey: true,
-      },
-      points: DataTypes.INTEGER,
-      selectedStocks: DataTypes.ARRAY(DataTypes.STRING),
-      rank: DataTypes.INTEGER,
-      joinedAt: DataTypes.DATE,
+      contestId: { type: DataTypes.STRING, allowNull: false },
+      userId: { type: DataTypes.STRING, allowNull: false },
     },
     {
+      name: {
+        singular: 'participant',
+        plural: 'participants',
+      },
       sequelize,
-      modelName: 'Participants',
+      modelName: 'ContestParticipants',
     },
   );
-  return Participants;
+  return ContestParticipants;
 };

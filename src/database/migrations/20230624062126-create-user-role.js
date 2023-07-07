@@ -1,35 +1,19 @@
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('Participants', {
+  await queryInterface.createTable('UserRoles', {
     id: {
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
+      autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.UUID,
+      type: Sequelize.INTEGER,
     },
     userId: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    contestId: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    points: {
+    roleId: {
       type: Sequelize.INTEGER,
-      allowNull: true,
-    },
-    selectedStocks: {
-      type: Sequelize.ARRAY(Sequelize.STRING),
       allowNull: false,
-    },
-    rank: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
-    joinedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
     },
     createdAt: {
       allowNull: false,
@@ -42,5 +26,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('Participants');
+  await queryInterface.dropTable('UserRoles');
 }
