@@ -7,11 +7,13 @@ const socket = io.connect('http://localhost:5000/liveContest');
 
 export default function LiveContesflow() {
   const [inputValue, setInputValue] = useState('');
-  const [socketID, setsocketID] = useState('')
+  const [socketID, setsocketID] = useState('');
   const [selectstockbool, setselectstockbool] = useState(false);
   const [findMatch, setfindMatch] = useState(false);
   const [apponent, setapponent] = useState('');
   const [matched, setmatched] = useState(false);
+  const [stock1datafeed, setstock1datafeed] = useState();
+  const [stock2datafeed, setstock2datafeed] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,6 +27,16 @@ export default function LiveContesflow() {
   };
 
   useEffect(() => {
+    const stock_token = ['19441', '8521'];
+    socket.emit('send-stock-tokens', stock_token);
+    socket.on('get-live-data', (data) => {
+      if(data.token === '"8521"'){
+        setstock1datafeed(data.last_traded_price)
+      }else{
+        setstock2datafeed(data.last_traded_price)
+      }
+    });
+
     socket.on('select-stock', () => {
       console.log('select-stock');
       setselectstockbool(true);
@@ -32,7 +44,7 @@ export default function LiveContesflow() {
 
     socket.on('match-found', (apponent) => {
       setmatched(true);
-      setapponent(apponent)
+      setapponent(apponent);
     });
 
     socket.on('get-socket-id', (id) => {
@@ -89,10 +101,16 @@ export default function LiveContesflow() {
                 ) : (
                   <>
                     <p>Select Stock</p>
+
                     <button
                       className="stocks"
                       onClick={(e) =>
-                        handleStockSelection(inputValue, socketID, 'E73-0iejpl', 1)
+                        handleStockSelection(
+                          inputValue,
+                          socketID,
+                          'E73-0iejpl',
+                          1,
+                        )
                       }
                     >
                       Stock 1
@@ -100,7 +118,12 @@ export default function LiveContesflow() {
                     <button
                       className="stocks"
                       onClick={(e) =>
-                        handleStockSelection(inputValue, socketID, 'E73-0iejpl', 2)
+                        handleStockSelection(
+                          inputValue,
+                          socketID,
+                          'E73-0iejpl',
+                          2,
+                        )
                       }
                     >
                       Stock 2
@@ -110,9 +133,17 @@ export default function LiveContesflow() {
               </div>
             </>
           ) : (
-            <button onClick={(e) => handleContestJoin(inputValue, socketID, 'E73-0iejpl')}>
-              Join
-            </button>
+            <>
+              <div>stock1 : {stock1datafeed}</div>
+              <div>Stock2 : {stock2datafeed}</div>
+              <button
+                onClick={(e) =>
+                  handleContestJoin(inputValue, socketID, 'E73-0iejpl')
+                }
+              >
+                Join
+              </button>
+            </>
           )}
         </div>
         {/* <div className='box'>Live Contest 2 

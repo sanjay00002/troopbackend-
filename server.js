@@ -19,6 +19,7 @@ const createContest = require('./src/socketfiles/createContest');
 const joinContest = require('./src/socketfiles/joinContest');
 const currentUserCount = require('./src/socketfiles/currentUserCount');
 const connectSmartApi = require('./src/socketfiles/connectStock').default;
+const getStock = require('./Stock-socket/getStocks');
 
 const { createAdapter } = require('@socket.io/postgres-adapter');
 const { Pool } = require('pg');
@@ -34,7 +35,7 @@ const io = new Server(httpServer, {
 });
 
 // Connection between smart api and socket.io 
-// require('./Stock-socket/getStocks')(io);
+
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
@@ -83,7 +84,15 @@ liveContest.on('connection', (socket) => {
     findMatch(io,socket,pool,user)
   })
 
+
+  // stock data socketing
+
+  socket.on('send-stock-tokens',(stock_token)=>{
+    getStock(io,socket,stock_token)
+  })
+
 });
+
 
 const port = process.env.PORT || 5000;
 

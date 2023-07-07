@@ -76,7 +76,7 @@ let WebSocketV2 = function (params) {
 					}, 5000);
 
 					ws.onerror = function (evt) {
-						if (evt.message.match(/\d{3}/)[0] == 401) {
+						if (evt.message.match(/\d{3}/) && evt.message.match(/\d{3}/)[0]  == 401){
 							throw new Error(evt.message);
 						}
 						try {
