@@ -92,7 +92,7 @@ export default function LiveContesflow() {
                     <button
                       className="stocks"
                       onClick={(e) =>
-                        handleStockSelection(inputValue, socketID, 'tBVWaVw_u0', 1)
+                        handleStockSelection(inputValue, socketID, 'E73-0iejpl', 1)
                       }
                     >
                       Stock 1
@@ -100,7 +100,7 @@ export default function LiveContesflow() {
                     <button
                       className="stocks"
                       onClick={(e) =>
-                        handleStockSelection(inputValue, socketID, 'tBVWaVw_u0', 2)
+                        handleStockSelection(inputValue, socketID, 'E73-0iejpl', 2)
                       }
                     >
                       Stock 2
@@ -110,7 +110,7 @@ export default function LiveContesflow() {
               </div>
             </>
           ) : (
-            <button onClick={(e) => handleContestJoin(inputValue, socketID, 'tBVWaVw_u0')}>
+            <button onClick={(e) => handleContestJoin(inputValue, socketID, 'E73-0iejpl')}>
               Join
             </button>
           )}

@@ -12,7 +12,7 @@ module.exports = {
     await queryInterface.addConstraint('LiveContestUserPool', {
       fields: ['user_id'],
       type: 'foreign key',
-      name: 'user_live_fk_constraint',
+      name: 'user_livecontest_fk_constraint',
       references: {
         table: 'Users',
         field: 'id',
@@ -50,7 +50,7 @@ module.exports = {
 
     await queryInterface.removeConstraint(
       'LiveContestUserPool',
-      'user_live_fk_constraint',
+      'user_livecontest_fk_constraint',
     );
 
     await queryInterface.removeConstraint(

@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
         targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: 'user_live_fk_constraint',
+        uniqueKey: 'user_livecontest_fk_constraint',
       });
 
       models.Contest.hasMany(LiveContestUserPool, {
