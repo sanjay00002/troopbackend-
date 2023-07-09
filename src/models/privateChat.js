@@ -38,7 +38,6 @@ export default (sequelize, DataTypes) => {
       roomID: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
     },
     {

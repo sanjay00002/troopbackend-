@@ -134,6 +134,7 @@ export default {
     const { phoneNumber } = req.body;
 
     try {
+      console.log("working till here")
       if (phoneNumber.includes('+')) {
         const user = await User.findOne({
           where: { phoneNumber },

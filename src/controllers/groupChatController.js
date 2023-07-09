@@ -1,15 +1,35 @@
 import { Op } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
-import groupChat from '../models/groupChat';
 
 const { GroupChat, User } = model;
 
 export default {
+
+  getAllGroups: async function (req, res) {
+    try {
+      const groups = await GroupChat.findAll({
+        attributes: { exclude: ['accessToken', 'refreshToken', 'loggedInAt'] },
+      });
+  
+      if (groups.length > 0) {
+        return res.status(200).json(groups);
+      } else {
+        return res.status(404).json({
+          error: 'No groups Found!',
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errorMessage: error.message,
+        error: 'Something went wrong while fetching the users!',
+      });
+    }
+  },
+
   createGroup: async function (req, res) {
     const group = req.body;
     const userId = req.id;
-
 
     try {
       const newGroup = await GroupChat.create({

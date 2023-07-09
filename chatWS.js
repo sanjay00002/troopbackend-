@@ -2,6 +2,7 @@ const chatWS = require('express')();
 const chatWSServer = require('http').createServer(chatWS);
 const socketIO = require('socket.io');
 import model from './src/models';
+import getAllMessages from './src/controllers/privateChatController.js';
 
 const { PrivateChat } = model;
 
@@ -9,7 +10,10 @@ const io = socketIO(chatWSServer, {
   cors: {
     origin: '*',
   },
+  transports: ['polling', 'websocket'],
 });
+
+
 
 const privateChatNamespace = io.of('/chat');
 const groupChatNamespace = io.of('/groupchat');
@@ -25,7 +29,15 @@ privateChatNamespace.on('connection', (socket) => {
     const roomId = generateRoomId(sender, receiver);
     socket.join(roomId);
 
-    privateChatNamespace.to(roomId).emit('chatInitiated', { room: roomId });
+    const messages = getAllMessages(roomId);
+
+
+    messages.then((messages) =>{
+      socket.emit('chatInitiated', { room: roomId, oldMessages: messages});
+    }).catch((error) => {
+      console.log(error);
+    })
+
   });
 
   // Listen for 'chat message' events from the client
@@ -34,6 +46,7 @@ privateChatNamespace.on('connection', (socket) => {
     console.log('Received message:', message.content);
 
     try {
+
       PrivateChat.create({
         content: message.content,
         senderID: message.sender,
@@ -41,8 +54,11 @@ privateChatNamespace.on('connection', (socket) => {
         roomID: roomId,
       });
 
-      privateChatNamespace.to(roomId).emit('chatMessage', message);
-      console.log('Message saved:');
+      privateChatNamespace.to(roomId).emit('chatMessage',{message: message});
+
+      console.log(message, "here is the saved message");
+
+
     } catch (error) {
       console.error('Error saving message:', error);
     }
