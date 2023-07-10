@@ -18,7 +18,6 @@ const joinLiveContest = require('./src/socketfiles/joinLiveContest');
 const createContest = require('./src/socketfiles/createContest');
 const joinContest = require('./src/socketfiles/joinContest');
 const currentUserCount = require('./src/socketfiles/currentUserCount');
-const connectSmartApi = require('./src/socketfiles/connectStock').default;
 const getStock = require('./Stock-socket/getStocks');
 
 const { createAdapter } = require('@socket.io/postgres-adapter');
@@ -34,7 +33,6 @@ const io = new Server(httpServer, {
   },
 });
 
-// Connection between smart api and socket.io 
 
 const pool = new Pool({
   user: process.env.PGUSER,
@@ -44,14 +42,15 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
+io.on('connection',(socket)=>{
+  socket.on('send-stock-tokens',(stock_token)=>{
+    getStock(io,socket,stock_token)
+  })
+})
+
 const normalContest = io.of('/normalContest');
 
 normalContest.on('connection', (socket) => {
-  // socket connection when from client side create contest is triggered
-  socket.on('create-contest', (response) => {
-    createContest(socket, response, pool);
-  });
-
   // socket connection when new users join the contest
   socket.on('join-contest', (response) => {
     joinContest(socket, pool, response);
@@ -62,6 +61,10 @@ normalContest.on('connection', (socket) => {
     currentUserCount(socket, pool, contests.contest1);
     currentUserCount(socket, pool, contests.contest2);
   });
+
+    // stock data socketing
+
+  
 });
 
 // Creating a namespace for handling all the socket connections for live econtests
@@ -85,11 +88,7 @@ liveContest.on('connection', (socket) => {
   })
 
 
-  // stock data socketing
-
-  socket.on('send-stock-tokens',(stock_token)=>{
-    getStock(io,socket,stock_token)
-  })
+ 
 
 });
 

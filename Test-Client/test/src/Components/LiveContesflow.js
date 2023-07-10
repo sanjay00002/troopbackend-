@@ -27,12 +27,14 @@ export default function LiveContesflow() {
   };
 
   useEffect(() => {
-    const stock_token = ['19441', '8521'];
-    socket.emit('send-stock-tokens', stock_token);
+
+    // socket connection for getting stock data, here stock token list will be the stock token list of a particular contest
+    
+    
     socket.on('get-live-data', (data) => {
-      if(data.token === '"8521"'){
+      if(data.token === '"99926029"'){
         setstock1datafeed(data.last_traded_price)
-      }else{
+      }if(data.token === '"99926023"'){
         setstock2datafeed(data.last_traded_price)
       }
     });
@@ -134,8 +136,8 @@ export default function LiveContesflow() {
             </>
           ) : (
             <>
-              <div>stock1 : {stock1datafeed}</div>
-              <div>Stock2 : {stock2datafeed}</div>
+              <div>Nifty Auto : {stock1datafeed}</div>
+              <div>Nifty Pharma : {stock2datafeed}</div>
               <button
                 onClick={(e) =>
                   handleContestJoin(inputValue, socketID, 'E73-0iejpl')

@@ -5,9 +5,6 @@ module.exports = function createContest(socket,response,pool){
     const endTime = response.data.endTime;
     const category = response.data.category;
     
-    if(category === 'Head2Head'){
-      
-    }
     const insertQuery = 'INSERT INTO public."contestInstances" (id, starttime, endtime) VALUES ($1, $2, $3)';
   
       pool.query(insertQuery, [id, startTime, endTime], (error, result) => {

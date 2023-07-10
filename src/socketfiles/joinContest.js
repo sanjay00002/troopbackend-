@@ -1,6 +1,6 @@
 module.exports = function joinContest(socket,pool,response){
     const roomId = response.data.contestId;
-    const query = `select usernumber from public."contestInstances" where id = '${roomId}'`;
+    const query = `select from public."Contests" where id = '${roomId}'`;
 
     pool.query(query)
     .then((res)=>{
