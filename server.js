@@ -15,8 +15,7 @@ import liveContestRouter from './src/routes/liveContest';
 
 const findMatch = require('./src/socketfiles/findMatch');
 const joinLiveContest = require('./src/socketfiles/joinLiveContest');
-const createContest = require('./src/socketfiles/createContest');
-const joinContest = require('./src/socketfiles/joinContest');
+
 const currentUserCount = require('./src/socketfiles/currentUserCount');
 const getStock = require('./Stock-socket/getStocks');
 
@@ -51,19 +50,14 @@ io.on('connection',(socket)=>{
 const normalContest = io.of('/normalContest');
 
 normalContest.on('connection', (socket) => {
-  // socket connection when new users join the contest
-  socket.on('join-contest', (response) => {
-    joinContest(socket, pool, response);
-  });
 
   // socket connection to show the live contest joined users
   socket.on('user-count', (contests) => {
-    currentUserCount(socket, pool, contests.contest1);
-    currentUserCount(socket, pool, contests.contest2);
+    // here the contest id list is fetched from the frontend
+    contests.forEach(contest => {
+      currentUserCount(io, socket, pool, contest);
+    });
   });
-
-    // stock data socketing
-
   
 });
 
@@ -75,10 +69,6 @@ liveContest.on('connection', (socket) => {
   // console.log("Live contest socket connected");
   socket.emit('get-socket-id',socket.id)
 
-  socket.on('payment-done',()=>{
-    console.log("Payment Done waiting period starts ....");
-  })
-
   socket.on('add-in-db',(user)=>{
     joinLiveContest(socket,pool,user)
   })
@@ -86,9 +76,6 @@ liveContest.on('connection', (socket) => {
   socket.on('find-match',(user)=>{
     findMatch(io,socket,pool,user)
   })
-
-
- 
 
 });
 

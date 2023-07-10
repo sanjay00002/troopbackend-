@@ -110,7 +110,7 @@ export default function LiveContesflow() {
                         handleStockSelection(
                           inputValue,
                           socketID,
-                          'E73-0iejpl',
+                          'kJuFoQ8D8H',
                           1,
                         )
                       }
@@ -123,7 +123,7 @@ export default function LiveContesflow() {
                         handleStockSelection(
                           inputValue,
                           socketID,
-                          'E73-0iejpl',
+                          'kJuFoQ8D8H',
                           2,
                         )
                       }
@@ -140,7 +140,7 @@ export default function LiveContesflow() {
               <div>Nifty Pharma : {stock2datafeed}</div>
               <button
                 onClick={(e) =>
-                  handleContestJoin(inputValue, socketID, 'E73-0iejpl')
+                  handleContestJoin(inputValue, socketID, 'kJuFoQ8D8H')
                 }
               >
                 Join
@@ -148,28 +148,7 @@ export default function LiveContesflow() {
             </>
           )}
         </div>
-        {/* <div className='box'>Live Contest 2 
-        {selectstockbool === true ? (
-          <p>Select Stock</p>
-        ):(
-          <button onClick={(e) => handleContestJoin(inputValue,"contest2")}>Join</button>          
-        )}
-        </div>
-        <div className='box'>Live Contest 3 
-        {selectstockbool === true ?(
-          <p>Select Stock</p>
-        ):(
-          <button onClick={(e) => handleContestJoin(inputValue,"contest3")}>Join</button>  
-        )}
-        </div>
-        <div className='box'>Live Contest 4 
-        {selectstockbool ===true ? (
-          <p>Select Stock</p>
-        ):(
-          <button onClick={(e) => handleContestJoin(inputValue,"contest4")}>Join</button>
 
-        )}
-        </div> */}
       </header>
     </div>
   );

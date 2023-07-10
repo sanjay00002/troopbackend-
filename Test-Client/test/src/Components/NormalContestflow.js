@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 const socket = io.connect('http://localhost:5000/normalContest');
 const authToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlRyb29wLVVGWlg4TGJvIiwiaWF0IjoxNjg3ODU4NjYxLCJleHAiOjE2ODc4NTkyNjF9.0PZShCGd68UjrVP5HzmD_RKuHvD3GO6kZtqU7kQ-Qos';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlRyb29wLUlkYktxcEdQIiwiaWF0IjoxNjg4OTg1MDI3LCJleHAiOjE2ODg5ODU2Mjd9.M_ttw2skeDNXmF9mKG9iwRIGyN0I8dEKgRbRQoMTU90';
 
 export default function NormalContestflow() {
 
@@ -28,8 +28,7 @@ export default function NormalContestflow() {
         },
       })
       .then((response) => {
-        // console.log(response);
-        socket.emit('join-contest', response);
+        console.log(response.status);        
       })
       .catch((error) => {
         console.error(error);
@@ -47,22 +46,24 @@ export default function NormalContestflow() {
       }
     });
 
-    // socket.on("user-count",(data)=>{
-    //   if(data.id  === 'zCl7cWMfOX'){
-    //     setroom1Users(data.count);
-    //   }
+    socket.on("user-count",(data)=>{
+      console.log(data);
 
-    //   if(data.id === 'VQJ7NhPhRr'){
-    //     setroom2Users(data.count);
-    //   }
-    // })
+      if(data.contest_id === 'a4T5w7PLMm'){
+        setroom1Users(data.count);
+      }
 
-    // const contests ={
-    //   contest1: 'zCl7cWMfOX',
-    //   contest2: 'VQJ7NhPhRr',
-    // }
+      if(data.contest_id === 'uegQVP2NXu'){
+        setroom2Users(data.count);
+      }
+    })
 
-    // socket.emit("user-count",contests)
+    const contests =[
+      'a4T5w7PLMm',
+      'uegQVP2NXu'
+    ]
+
+    socket.emit("user-count",contests)
   });
   return (
     <div className="App">
@@ -70,7 +71,7 @@ export default function NormalContestflow() {
         {/* <button onClick={handleCreateContest}>Create Contest</button> */}
         <div className="contest1">
           <p>Joined Player Count: {room1Users}</p>
-          <button onClick={(e) => handleContestJoin('3tfpoULllM')}>
+          <button onClick={(e) => handleContestJoin('a4T5w7PLMm')}>
             Join Contest 1
           </button>
           <p>Nifty Bank: {stock1datafeed}</p>
@@ -78,7 +79,7 @@ export default function NormalContestflow() {
 
         <div className="contest2">
           <p>Joined Player Count: {room2Users}</p>
-          <button onClick={(e) => handleContestJoin('Oun5jKivMo')}>
+          <button onClick={(e) => handleContestJoin('uegQVP2NXu')}>
             Join Contest 2
           </button>
           <p>Nifty IT: {stock2datafeed}</p>
