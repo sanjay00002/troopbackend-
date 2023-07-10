@@ -1,7 +1,7 @@
 import React from 'react';
-import io from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000/liveContest');
 // const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlRyb29wLXZhT0dCUm9jIiwiaWF0IjoxNjg3ODUzNDkzLCJleHAiOjE2ODc4NTQwOTN9.KEoAZQaWkWxBnoryHhssqLBs1krk7UFihMyJGONVtWA"
 
