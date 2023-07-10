@@ -9,6 +9,7 @@ import botRouter from './src/routes/bot';
 import subCategoriesRouter from './src/routes/subCategories';
 import stocksRouter from './src/routes/stocks';
 import walletRouter from './src/routes/wallet';
+import portfolioRouter from './src/routes/portfolio';
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
@@ -37,6 +38,7 @@ app.use('/api/v1/bot', botRouter);
 app.use('/api/v1/sub-category', subCategoriesRouter);
 app.use('/api/v1/stocks', stocksRouter);
 app.use('/api/v1/wallet', walletRouter);
+app.use('/api/v1/portfolio', portfolioRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

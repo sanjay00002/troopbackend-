@@ -53,6 +53,10 @@ export default (sequelize, DataTypes) => {
       },
     },
     {
+      name: {
+        singular: 'portfolioStock',
+        plural: 'portfolioStocks',
+      },
       sequelize,
       modelName: 'PortfolioStocks',
     },
