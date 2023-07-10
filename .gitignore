@@ -1,8 +1,10 @@
 node_modules
+<<<<<<<<< Temporary merge branch 1
+.env
+=========
 
 .env
 .env.local
 .env.dev
 src/config/config.json
-.env
-
+>>>>>>>>> Temporary merge branch 2
