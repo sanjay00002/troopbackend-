@@ -1,6 +1,6 @@
 import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
-  class Stocks extends Model {
+  class ContestCategories extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,24 +10,22 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Stocks.init(
+  ContestCategories.init(
     {
       name: { type: DataTypes.STRING, allowNull: false },
-      token: { type: DataTypes.STRING, allowNull: false },
-      exchangeType: { type: DataTypes.INTEGER, allowNull: false },
-      status: {
-        type: DataTypes.ENUM(['active', 'inactive']),
-        defaultValue: 'active',
-      },
+      image: { type: DataTypes.STRING, allowNull: true },
+      description: { type: DataTypes.STRING, allowNull: true },
+      startTime: { type: DataTypes.TIME, allowNull: false },
+      endTime: { type: DataTypes.TIME, allowNull: false },
     },
     {
       name: {
-        plural: 'stocks',
-        singular: 'stock',
+        singular: 'category',
+        plural: 'categories',
       },
       sequelize,
-      modelName: 'Stocks',
+      modelName: 'ContestCategories',
     },
   );
-  return Stocks;
+  return ContestCategories;
 };

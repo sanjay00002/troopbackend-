@@ -6,13 +6,13 @@ export async function up(queryInterface, Sequelize) {
    * Example:
    * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
    */
-  await queryInterface.addConstraint('Portfolios', {
-    fields: ['userId'],
+  await queryInterface.addConstraint('Contests', {
+    fields: ['categoryId'],
     type: 'foreign key',
-    name: 'user_portfolio_fk_constraint',
+    name: 'contestcategories_contest_fk_constraint',
     references: {
+      table: 'ContestCategories',
       field: 'id',
-      table: 'Users',
     },
   });
 }
@@ -24,7 +24,7 @@ export async function down(queryInterface, Sequelize) {
    * await queryInterface.dropTable('users');
    */
   await queryInterface.removeConstraint(
-    'Portfolios',
-    'user_portfolio_fk_constraint',
+    'Contests',
+    'contestcategories_contest_fk_constraint',
   );
 }

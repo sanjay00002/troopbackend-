@@ -38,6 +38,10 @@ export default (sequelize, DataTypes) => {
       userId: { type: DataTypes.STRING, allowNull: false },
     },
     {
+      name: {
+        singular: 'participant',
+        plural: 'participants',
+      },
       sequelize,
       modelName: 'ContestParticipants',
     },

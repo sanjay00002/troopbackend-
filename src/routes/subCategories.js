@@ -4,6 +4,6 @@ import SubCategories from '../controllers/SubCategoriesController';
 
 const router = Router();
 
-router.route('/').post(validate, SubCategories.getContestSubCategories);
+router.route('/').get(validate, SubCategories.getContestSubCategories);
 
 module.exports = router;

@@ -6,6 +6,7 @@ import { Op } from 'sequelize';
         'Nifty Bank',
         'Penny Stocks',
         'Giant Stocks',
+        'Mega'
 */
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
@@ -41,6 +42,11 @@ export async function up(queryInterface, Sequelize) {
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
     },
+    {
+      name: 'Mega',
+      createdAt: moment().toISOString(),
+      updatedAt: moment().toISOString(),
+    },
   ]);
 }
 export async function down(queryInterface, Sequelize) {
@@ -61,6 +67,7 @@ export async function down(queryInterface, Sequelize) {
           'Nifty Bank',
           'Penny Stocks',
           'Giant Stocks',
+          'Mega',
         ],
       },
     },

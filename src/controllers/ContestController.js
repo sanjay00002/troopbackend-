@@ -1,15 +1,21 @@
 import { Op, Sequelize } from 'sequelize';
 import model from '../models';
-import moment from 'moment';
+import { validatePortfolio } from '../lib/portfolio';
+import { getContestStatus } from '../lib/contest';
 
 const {
+  ContestCategories,
   Contest,
   ContestPriceDistribution,
   ContestWinners,
   ContestParticipants,
+  ContestPortfolios,
+  Portfolio,
+  PortfolioStocks,
   User,
   StocksSubCategories,
   Stocks,
+  SubCategories,
 } = model;
 
 export default {
@@ -21,43 +27,50 @@ export default {
       const user = await User.findByPk(userId);
 
       if (user && !user?.isBot) {
-        const newContest = await Contest.create({
-          name: contest?.name,
-          image: contest?.image,
-          description: contest?.description,
-          entryAmount: contest?.entryAmount,
-          category: contest?.category,
-          subCategoryId: contest?.subCategoryId,
-          pricePool: contest?.pricePool,
-          createdBy: userId,
-          slots: contest?.slots,
-          startTime: contest?.startTime,
-          endTime: contest?.endTime,
-        });
+        const subCategory = await SubCategories.findByPk(
+          contest?.subCategoryId,
+        );
 
-        const newContestId = await newContest.get('id');
-
-        if (newContestId) {
-          if (contest?.priceDistribution) {
-            for (let i = 0; i < contest?.priceDistribution?.length; i++) {
-              await ContestPriceDistribution.create({
-                contestId: newContestId,
-                rankStart: contest?.priceDistribution[i].rankStart,
-                rankEnd: contest?.priceDistribution[i].rankEnd,
-                priceAmount: contest?.priceDistribution[i].priceAmount,
-              });
-            }
-          }
-
-          const priceDistribution = await ContestPriceDistribution.findAll({
-            where: { contestId: newContestId },
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-            order: [['rankStart', 'ASC']],
+        // * Check if the sub category provided exists
+        if (subCategory) {
+          const newContest = await Contest.create({
+            date: contest?.date,
+            entryAmount: contest?.entryAmount,
+            categoryId: contest?.categoryId,
+            subCategoryId: subCategory.id,
+            pricePool: contest?.pricePool,
+            createdBy: userId,
+            slots: contest?.slots,
           });
 
-          return res.status(201).json({
-            ...(await newContest.get()),
-            priceDistribution: priceDistribution,
+          const newContestId = await newContest.get('id');
+
+          if (newContestId) {
+            if (contest?.priceDistribution) {
+              for (let i = 0; i < contest?.priceDistribution?.length; i++) {
+                await ContestPriceDistribution.create({
+                  contestId: newContestId,
+                  rankStart: contest?.priceDistribution[i].rankStart,
+                  rankEnd: contest?.priceDistribution[i].rankEnd,
+                  priceAmount: contest?.priceDistribution[i].priceAmount,
+                });
+              }
+            }
+
+            const priceDistribution = await ContestPriceDistribution.findAll({
+              where: { contestId: newContestId },
+              attributes: { exclude: ['createdAt', 'updatedAt'] },
+              order: [['rankStart', 'ASC']],
+            });
+
+            return res.status(201).json({
+              ...(await newContest.get()),
+              priceDistribution: priceDistribution,
+            });
+          }
+        } else {
+          return res.status(400).json({
+            message: 'Cannot create contest without non-existing sub-category!',
           });
         }
       } else {
@@ -156,55 +169,122 @@ export default {
     const { category } = req.body;
 
     try {
-      const contest = await Contest.findAll({
-        where: {
-          category: category,
-        },
+      const existingCategory = await ContestCategories.findOne({
+        where: { name: category },
       });
 
-      if (contest) {
-        return res.status(200).json(contest);
+      if (existingCategory) {
+        const contest = await Contest.findAll({
+          where: {
+            categoryId: existingCategory.id,
+          },
+          include: {
+            model: SubCategories,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
+        });
+
+        if (contest) {
+          return res.status(200).json(contest);
+        } else {
+          return res.status(404).json({ error: 'No contest found!' });
+        }
       } else {
-        return res.status(404).json({ error: 'No contest found!' });
+        return res.status(404).json({ error: "Category doesn't exists!" });
       }
     } catch (error) {
       return res.status(500).json({
-        error: 'Something went wrong while fetching contest by id',
+        error: 'Something went wrong while fetching contest by category',
         errorMessage: error.message,
       });
     }
   },
 
+  getContestsBySubCategory: async function (req, res) {
+    const { subCategoryId } = req.body;
+    try {
+      const contests = await Contest.findAll({
+        where: {
+          subCategoryId,
+        },
+      });
+
+      if (contests) {
+        let contestWithParticipants = JSON.parse(JSON.stringify(contests));
+        for (let i = 0; i < contestWithParticipants.length; i++) {
+          const contest = contests[i];
+          const participants = await ContestParticipants.findAndCountAll({
+            where: { contestId: await contest.get('id') },
+          });
+
+          console.log('Participants: ', participants.count);
+
+          contestWithParticipants[i].participants = participants.count;
+        }
+
+        console.log('Contest with Participants: ', contestWithParticipants);
+
+        return res.status(200).json(contestWithParticipants);
+      } else {
+        return res.status(404).json({ error: 'No contest found!' });
+      }
+    } catch (error) {
+      console.error('Error while fetching contest by sub category: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching contest by sub category',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  /**
+   *
+   * @param id contest id
+   * @param portfolio id, name, stocks
+   * @param portfolio.stocks stockId, action, captain, viceCaptain
+   * @returns
+   */
   joinContestById: async function (req, res) {
     const userId = req.id;
     const contestDetails = req.body;
 
     /*
      *  Check if there is any contest with the given id
-     *  Check if the user has already joined the contest by checking the userId and contestId in the Participants table
+    //  *  Check if the user has already joined the contest by checking the userId and contestId in the Participants table
      *  Check if there is an available slot to join
      *    Add User to the ContestParticipants Table
      */
 
     try {
+      validatePortfolio(contestDetails?.portfolio?.stocks);
+
       if (contestDetails?.id) {
-        const existingContest = await Contest.findByPk(contestDetails?.id);
+        const existingContest = await Contest.findByPk(contestDetails?.id, {
+          include: {
+            model: ContestCategories,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
+        });
 
         console.log('Existing Contest: ', existingContest);
 
         // * Check if contest exists
         if (existingContest) {
-          const exisitngContestId = await existingContest.get('id');
-          const alreadyJoined = await ContestParticipants.findOne({
-            where: { userId, contestId: exisitngContestId },
-          });
+          const contestStatus = getContestStatus(existingContest);
 
-          // * Check if user has already joined the contest
-          if (alreadyJoined) {
-            return res.status(400).json({
-              message: 'User has already joined the contest',
+          // * Check if the contest has not started yet
+          if (contestStatus === 'live') {
+            return res.status(403).json({
+              message: 'Contest is live! Cannot join!',
+            });
+          } else if (contestStatus === 'completed') {
+            return res.status(403).json({
+              message: 'Contest has ended',
             });
           }
+          const exisitngContestId = await existingContest.get('id');
 
           // * Check if there is an available slot to join
           const totalParticipants = await ContestParticipants.findAndCountAll({
@@ -217,6 +297,17 @@ export default {
             });
           }
 
+          // * Check if he has participated 20 times in the same contest
+          const maxParticipation = await ContestParticipants.findAndCountAll({
+            where: { userId: userId, contestId: exisitngContestId },
+          });
+
+          if (maxParticipation.count >= 20) {
+            return res.status(403).json({
+              message: 'Player has reached the limit of maximum participation',
+            });
+          }
+
           // * Add User to the ContestParticipants Table
           const newParticipant = await ContestParticipants.create({
             userId,
@@ -224,9 +315,51 @@ export default {
           });
 
           if (newParticipant) {
-            // TODO: Think on what to return
+            // * Create a Portfolio and add Stocks to PortfolioStocks OR Select a portfolio
 
-            return res.status(201);
+            const existingPortfolio = await Portfolio.findByPk(
+              contestDetails?.portfolio?.id,
+            );
+
+            if (existingPortfolio?.id) {
+              // * Insert Contest id and portfolio id into ContestPortfolios Table if portfolio selected already exists
+              await ContestPortfolios.create({
+                contestId: exisitngContestId,
+                portfolioId: existingPortfolio.id,
+              });
+            } else {
+              // * Create new portfolio for the user with the stocks selected
+              // * Will recieve a list of object of stocks containing the stockId, action, and captain and viceCaptian fields
+              const portfolio = await Portfolio.create({
+                name: contestDetails?.portfolio?.name ?? null,
+                userId: userId,
+                subCategoryId: await existingContest.get('subCategoryId'),
+              });
+
+              for (
+                let i = 0;
+                i < contestDetails?.portfolio?.stocks.length;
+                i++
+              ) {
+                const stock = contestDetails?.portfolio?.stocks[i];
+                await PortfolioStocks.create({
+                  portfolioId: await portfolio.get('id'),
+                  stockId: stock?.stockId,
+                  action: stock?.action,
+                  captain: stock?.captain,
+                  viceCaptain: stock?.viceCaptain,
+                });
+              }
+
+              await ContestPortfolios.create({
+                contestId: exisitngContestId,
+                portfolioId: await portfolio.get('id'),
+              });
+            }
+
+            return res.status(200).json({
+              message: 'Join Contest Successful',
+            });
           }
         } else {
           return res.status(404).json({
@@ -242,6 +375,175 @@ export default {
       console.error('Error while joining the contest: ', error);
       return res.status(500).json({
         error: 'Something went wrong while joining the contest by id',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  fetchJoinedContest: async function (req, res) {
+    const userId = req.id;
+    const { subCategoryId } = req.body;
+
+    try {
+      const contests = await Contest.findAll({
+        where: {
+          subCategoryId,
+        },
+        include: [
+          {
+            model: ContestPortfolios,
+            required: true,
+            include: {
+              model: Portfolio,
+              required: true,
+              where: { userId },
+              attributes: [],
+            },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
+          },
+          {
+            model: ContestParticipants,
+            required: true,
+            as: 'participants',
+            attributes: [],
+          },
+        ],
+        attributes: {
+          include: [
+            'id',
+            'categoryId',
+            'subCategoryId',
+            'entryAmount',
+            'pricePool',
+            'createdBy',
+            'slots',
+            [
+              Sequelize.fn('COUNT', Sequelize.col('participants.id')),
+              'participantsCount',
+            ],
+          ],
+        },
+        group: [
+          'Contest.id',
+          'contestPortfolios.id',
+          'contestPortfolios->portfolio.id',
+        ],
+      });
+
+      // console.log('Contests: ', contests);
+
+      return res.status(200).json(contests);
+    } catch (error) {
+      console.error('Error while joining the contest: ', error);
+      return res.status(500).json({
+        error:
+          'Something went wrong while fetching the joined contests for sub category',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  fetchJoinedContestByStatus: async function (req, res) {
+    const userId = req.id;
+
+    /*
+     *  Get the contests that the user has participated from ContestParticipants
+     *  Get the contest details from the contest table
+     *  Get the category details from the categoryId
+     *  Get the Sub Category details from the subCategoryId
+     *  Get the portfolioIds from ContestPortfolios
+     *
+     *  Filter for status:
+     *    Compare the date of the contest with the current date (past date = completed, next date = upcoming)
+     *    If current date is found then:
+     *      Compare the timings from the category and place the contest in upcoming/live accordingly
+     *
+     */
+    try {
+      // const participatedContests = await ContestParticipants.findAll({
+      //   where: { userId },
+      //   attributes: [],
+      //   include: {
+      //     model: Contest,
+      //     required: false,
+      //     duplicating: false,
+      //     include: [
+      //       {
+      //         model: SubCategories,
+      //         required: true,
+      //       },
+      //       {
+      //         model: ContestCategories,
+      //         required: true,
+      //       },
+      //       {
+      //         model: ContestPortfolios,
+      //         required: true,
+      //       },
+      //     ],
+      //   },
+      // });
+
+      const participatedContests = await ContestParticipants.findAll({
+        where: { userId },
+        attributes: ['contestId'],
+        include: {
+          model: Contest,
+          required: true,
+        },
+      });
+
+      const setOfContests = new Set(
+        participatedContests.map((contest) => contest.contestId),
+      );
+
+      const joinedContest = await Contest.findAll({
+        where: {
+          id: { [Op.in]: [...setOfContests] },
+        },
+        include: [
+          {
+            model: SubCategories,
+            required: true,
+          },
+          {
+            model: ContestCategories,
+            required: true,
+          },
+          {
+            model: ContestPortfolios,
+            required: true,
+          },
+        ],
+      });
+
+      const upcoming = [],
+        live = [],
+        completed = [];
+
+      joinedContest.forEach((element) => {
+        const contestStatus = getContestStatus(element);
+
+        switch (contestStatus) {
+          case 'upcoming':
+            upcoming.push(element);
+            break;
+          case 'live':
+            live.push(element);
+            break;
+          case 'completed':
+            completed.push(element);
+            break;
+          default:
+            break;
+        }
+      });
+
+      return res.status(200).json({ upcoming, live, completed });
+    } catch (error) {
+      console.error('Error while fetching contest by status: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching contest by status',
         errorMessage: error.message,
       });
     }

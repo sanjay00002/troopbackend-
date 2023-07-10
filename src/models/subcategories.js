@@ -16,8 +16,16 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
+      name: {
+        singular: 'subCategory',
+        plural: 'subCategories',
+      },
       sequelize,
       modelName: 'SubCategories',
     },

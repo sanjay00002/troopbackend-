@@ -6,22 +6,23 @@ export async function up(queryInterface, Sequelize) {
    * Example:
    * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
    */
-  await queryInterface.addConstraint('Participants', {
+  await queryInterface.addConstraint('Portfolios', {
     fields: ['userId'],
     type: 'foreign key',
-    name: 'user_participants_fk_constraint',
+    name: 'user_portfolio_fk_constraint',
     references: {
-      table: 'Users',
       field: 'id',
+      table: 'Users',
     },
   });
-  await queryInterface.addConstraint('Participants', {
-    fields: ['contestId'],
+
+  await queryInterface.addConstraint('Portfolios', {
+    fields: ['subCategoryId'],
     type: 'foreign key',
-    name: 'contest_participants_fk_constraint',
+    name: 'subcategories_portfolio_fk_constraint',
     references: {
-      table: 'Contests',
       field: 'id',
+      table: 'SubCategories',
     },
   });
 }
@@ -33,11 +34,11 @@ export async function down(queryInterface, Sequelize) {
    * await queryInterface.dropTable('users');
    */
   await queryInterface.removeConstraint(
-    'Participants',
-    'user_participants_fk_constraint',
+    'Portfolios',
+    'user_portfolio_fk_constraint',
   );
   await queryInterface.removeConstraint(
-    'Participants',
-    'contest_participants_fk_constraint',
+    'Portfolios',
+    'subcategories_portfolio_fk_constraint',
   );
 }

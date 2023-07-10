@@ -19,6 +19,10 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    status: {
+      type: Sequelize.ENUM(['active', 'inactive']),
+      defaultValue: 'active',
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

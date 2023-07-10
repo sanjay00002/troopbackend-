@@ -1,27 +1,19 @@
 /** @type {import('sequelize-cli').Migration} */
-/**     'Nifty 50',
-        'Nifty IT',
-        'Nifty Auto',
-        'Nifty Bank',
-        'Penny Stocks',
-        'Giant Stocks',
-        'Practice',
-*/
 export async function up(queryInterface, Sequelize) {
-  await queryInterface.createTable('SubCategories', {
+  await queryInterface.createTable('ContestPortfolios', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    name: {
-      type: Sequelize.STRING,
+    portfolioId: {
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
-    image: {
+    contestId: {
       type: Sequelize.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,
@@ -34,5 +26,5 @@ export async function up(queryInterface, Sequelize) {
   });
 }
 export async function down(queryInterface, Sequelize) {
-  await queryInterface.dropTable('SubCategories');
+  await queryInterface.dropTable('ContestPortfolios');
 }
