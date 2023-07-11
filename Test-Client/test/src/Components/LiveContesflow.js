@@ -28,6 +28,7 @@ export default function LiveContesflow() {
 
   useEffect(() => {
     // socket connection for getting stock data, here stock token list will be the stock token list of a particular contest
+    
 
     socket.on('get-live-data', (data) => {
       if (data.token === '"99926029"') {
@@ -46,13 +47,13 @@ export default function LiveContesflow() {
     socket.on('match-found', (apponent) => {
       setmatched(true);
       setapponent(apponent);
-      socket.emit('decide-winner')
     });
 
-    socket.on('get-socket-id', (id) => {
-      setsocketID(id);
-    });
-  });
+    socket.on('get-socket-id',(socket_id)=>{
+      setsocketID(socket_id)
+    })
+    
+  },[]);
 
   const handleContestJoin = (userId, socketId, contesId) => {
     const user = {
@@ -65,11 +66,23 @@ export default function LiveContesflow() {
 
   const handleStockSelection = (userId, socketId, contestId, stockId) => {
     setfindMatch(true);
-    const user = {
+
+    var curr_value=0;
+    if(stockId  === 1){
+      curr_value = stock1datafeed
+    }else{
+      curr_value = stock2datafeed
+    }
+    var user = {
       user_id: userId,
       socket_id: socketId,
       contest_id: contestId,
       stock_id: stockId,
+      stock_value: curr_value,
+      stockFlow: {
+        stock1: [1,stock1datafeed],
+        stock2: [2,stock2datafeed]
+      }
     };
     socket.emit('find-match', user);
   };

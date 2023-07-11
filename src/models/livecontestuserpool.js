@@ -55,6 +55,7 @@ export default (sequelize, DataTypes) => {
       user_id: { type: DataTypes.STRING, allowNull: false },
       socket_id: { type: DataTypes.STRING, allowNull: false },
       stock_id: { type: DataTypes.INTEGER, allowNull: true },
+      stock_value: { type: DataTypes.INTEGER, allowNull: true },
       matched: { type: DataTypes.BOOLEAN, allowNull: true },
     },
     {

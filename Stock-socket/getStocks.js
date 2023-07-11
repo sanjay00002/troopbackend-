@@ -5,9 +5,9 @@ module.exports = async function(io,socket,stock_token) {
 
 	const web_socket = new WebSocketV2({
 		clientcode: 'P51775178',
-		jwttoken: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsInJvbGVzIjowLCJ1c2VydHlwZSI6IlVTRVIiLCJpYXQiOjE2ODg5NjM5MTAsImV4cCI6MTY4OTA1MDMxMH0.fFh7W0kOyNrpls3fD-ejGMPDX0mgutfTpdqSYuDaCdKQ64t1zWRiC5KDMhmWGtqeTMkaV6RYdpmIqbU673Iw7g',
+		jwttoken: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsInJvbGVzIjowLCJ1c2VydHlwZSI6IlVTRVIiLCJpYXQiOjE2ODkwNTkwMDQsImV4cCI6MTY4OTE0NTQwNH0.x32HElQiPVGpsumjzX4rPQQXep1YpGxLmonazUXIOEPmQPnfWnWWAZUAE60JF5fGA2nyeWk8j-R36VWOTfk8gg',
 		apikey: 'lLDi3XyK',
-		feedtype: 'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsImlhdCI6MTY4ODk2MzkxMCwiZXhwIjoxNjg5MDUwMzEwfQ.IQHHfRHf230ZBdaV_8rwieNFusyDtUGmQWrIRqCoZ3iwg5a-ZaAjBWCSkx6L54yKg3NCKTMBmpuzeeNfaCw8aA',
+		feedtype: 'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsImlhdCI6MTY4OTA1OTAwNCwiZXhwIjoxNjg5MTQ1NDA0fQ.XVJRLv_gzN7E39hml-ZzvW7jiYqwGbv6tXLCKScJZt63BA0fOCOBXNm8yRH87xkTcuqqfMyGdUBQJGQw50ENBg',
 	});
 
 	

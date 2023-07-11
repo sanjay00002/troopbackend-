@@ -25,6 +25,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      stock_value:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       matched: {
         type: Sequelize.BOOLEAN,
         allowNull:true,

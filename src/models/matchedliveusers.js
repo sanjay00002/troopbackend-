@@ -82,7 +82,11 @@ export default (sequelize, DataTypes) => {
       selfId: { type: DataTypes.STRING, allowNull: false },
       apponentId: { type: DataTypes.STRING, allowNull: false },
       selfSelectedStockId: { type: DataTypes.INTEGER, allowNull: false},
+      selfStockOpenValue: { type: DataTypes.INTEGER, allowNull: true},
+      selfStockCloseValue: { type: DataTypes.INTEGER, allowNull: true},
       apponnetSelectedStockId: { type: DataTypes.INTEGER, allowNull: false },
+      apponentStockOpenValue: { type: DataTypes.INTEGER, allowNull: true},
+      apponentStockCloseValue: { type: DataTypes.INTEGER, allowNull: true},
       contestId: { type: DataTypes.STRING, allowNull: false },
       winner: {
         type: DataTypes.ENUM([

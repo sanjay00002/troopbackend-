@@ -27,9 +27,25 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      selfStockOpenValue: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      selfStockCloseValue: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       apponnetSelectedStockId:{
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      apponentStockOpenValue: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      apponentStockCloseValue: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
       contestId:{
         type: Sequelize.STRING,
