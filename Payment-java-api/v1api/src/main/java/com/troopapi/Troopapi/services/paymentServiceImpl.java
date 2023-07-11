@@ -28,15 +28,15 @@ public class paymentServiceImpl implements paymentService{
     @Autowired
     private paymentDao payDao;
 
-    @Override
-    public List<payment> getPayments() {
-        return this.payDao.findAll();
-    }
+    // @Override
+    // public List<payment> getPayments() {
+    //     return this.payDao.findAll();
+    // }
 
-    @Override
-    public Optional<payment> getPayment(int payId) {
-        return this.payDao.findById(payId);
-    }
+    // @Override
+    // public Optional<payment> getPayment(String payId) {
+    //     return this.payDao.findById(payId);
+    // }
 
     @Override
     public String getLink(payment pay) throws IOException, JSONException {

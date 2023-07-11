@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface paymentService {
-    public List<payment> getPayments();
+    // public List<payment> getPayments();
 
-    public Optional<payment> getPayment(int payId);
+    // public Optional<payment> getPayment(String payId);
 
     public String getLink(payment pay) throws IOException, JSONException;
 }

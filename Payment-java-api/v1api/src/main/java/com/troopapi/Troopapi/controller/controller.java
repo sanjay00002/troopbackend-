@@ -18,20 +18,20 @@ public class controller {
     @Autowired
     private paymentService paymentService;
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home(){
-        return "Hello World 2";
+        return "Hello Troop";
     }
 
-    @GetMapping("/payments")
-    public List<payment> getPayments(){
-        return  this.paymentService.getPayments();
-    }
+    // @GetMapping("/payments")
+    // public List<payment> getPayments(){
+    //     return  this.paymentService.getPayments();
+    // }
 
-    @GetMapping("/payments/{payId}")
-    public Optional<payment> getPayment(@PathVariable String payId){
-        return this.paymentService.getPayment(Integer.parseInt(payId));
-    }
+    // @GetMapping("/payments/{payId}")
+    // public Optional<payment> getPayment(@PathVariable String payId){
+    //     return this.paymentService.getPayment(payId);
+    // }
 
 
     @PostMapping("/getLink")
