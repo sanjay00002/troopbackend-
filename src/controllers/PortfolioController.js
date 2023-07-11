@@ -1,5 +1,6 @@
 import { Op } from 'sequelize';
 import model from '../models';
+import { validatePortfolio } from '../lib/portfolio';
 
 const { Portfolio, PortfolioStocks } = model;
 
@@ -43,16 +44,34 @@ export default {
   },
 
   updatePortfolioById: async function (req, res) {
-    const userId = req.id;
     const { id, name, stocks } = req.body;
 
     try {
+      validatePortfolio(stocks);
+
       console.log('Id', id);
       const portfolio = await Portfolio.findByPk(id, {
         include: {
           model: PortfolioStocks,
           require: true,
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
         },
+      });
+
+      const portfolioStocks = await portfolio.get('portfolioStocks');
+
+      for (let index = 0; index < portfolioStocks.length; index++) {
+        const currentPortfolioStocks = portfolioStocks[index];
+        const newPortfolioStocks = stocks[index];
+        currentPortfolioStocks.stockId = newPortfolioStocks.stockId;
+        currentPortfolioStocks.action = newPortfolioStocks.action;
+        currentPortfolioStocks.captain = newPortfolioStocks.captain;
+        currentPortfolioStocks.viceCaptain = newPortfolioStocks.viceCaptain;
+      }
+
+      await portfolio.update({
+        name,
+        portfolioStocks,
       });
 
       return res.status(200).json(portfolio);
