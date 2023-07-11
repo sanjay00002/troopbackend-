@@ -41,6 +41,9 @@ export default {
         newUser = await User.create({
           username: userDetails?.username ?? username,
           phoneNumber: userDetails?.phoneNumber,
+          email: userDetails?.email,
+          gender: userDetails?.gender,
+          dob: userDetails?.dob,
           firstName: userDetails?.firstName,
           lastName: userDetails?.lastName,
           profileImage: userDetails?.profileImage,
