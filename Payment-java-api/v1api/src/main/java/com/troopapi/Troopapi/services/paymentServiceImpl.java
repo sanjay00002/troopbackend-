@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.troopapi.Troopapi.paymentMethods.*;
+
 
 import java.io.IOException;
 import java.util.List;
@@ -51,7 +51,8 @@ public class paymentServiceImpl implements paymentService{
         String linkId = UUID.randomUUID().toString();
         int linkAmount = (int) pay.getAmount();
         String linkCurrency = "INR";
-        String linkPurpose = "1888838888883";
+        String linkPurpose = "1888838888883";        
+        String returnUrl  = "http://localhost:5000/api/v1/wallet/update?link_id=" + linkId + "&wallet_id=" + pay.getId();
         boolean linkAutoReminders = true;
         boolean linkPartialPayments = true;
         int linkMinimumPartialAmount = 25;
@@ -72,7 +73,7 @@ public class paymentServiceImpl implements paymentService{
                         "    \"link_meta\": {\n" +
                         "        \"notify_url\": \"\",\n" +
                         "        \"upi_intent\": false,\n" +
-                        "        \"return_url\": \"https://0ea6-103-5-134-18.ngrok-free.app/order?link_id={link_id}\"\n" +
+                        "        \"return_url\": \"%s\"\n" +
                         "    },\n" +
                         "    \"link_id\": \"%s\",\n" +
                         "    \"link_amount\": \"%d\",\n" +
@@ -82,7 +83,7 @@ public class paymentServiceImpl implements paymentService{
                         "    \"link_partial_payments\": %b,\n" +
                         "    \"link_minimum_partial_amount\": %d\n" +
                         "}",
-                customerPhone, customerName, customerEmail, linkId, linkAmount, linkCurrency,
+                customerPhone, customerName, customerEmail, returnUrl, linkId, linkAmount, linkCurrency,
                 linkPurpose, linkAutoReminders, linkPartialPayments, linkMinimumPartialAmount);
 
 

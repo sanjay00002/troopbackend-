@@ -6,12 +6,12 @@ import jakarta.persistence.Id;
 @Entity
 public class payment {
     @Id
-    private int id;
+    private String id;
     private double amount;
     private String phone_number;
 
 
-    public payment(int id, double amount, String phone_number){
+    public payment(String id, double amount, String phone_number){
         super();
         this.id = id;
         this.amount = amount;
@@ -31,11 +31,11 @@ public class payment {
         this.amount = amount;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
