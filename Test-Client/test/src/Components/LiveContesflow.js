@@ -27,15 +27,14 @@ export default function LiveContesflow() {
   };
 
   useEffect(() => {
-
     // socket connection for getting stock data, here stock token list will be the stock token list of a particular contest
-    
-    
+
     socket.on('get-live-data', (data) => {
-      if(data.token === '"99926029"'){
-        setstock1datafeed(data.last_traded_price)
-      }if(data.token === '"99926023"'){
-        setstock2datafeed(data.last_traded_price)
+      if (data.token === '"99926029"') {
+        setstock1datafeed(data.last_traded_price);
+      }
+      if (data.token === '"99926023"') {
+        setstock2datafeed(data.last_traded_price);
       }
     });
 
@@ -47,6 +46,7 @@ export default function LiveContesflow() {
     socket.on('match-found', (apponent) => {
       setmatched(true);
       setapponent(apponent);
+      socket.emit('decide-winner')
     });
 
     socket.on('get-socket-id', (id) => {
@@ -148,7 +148,6 @@ export default function LiveContesflow() {
             </>
           )}
         </div>
-
       </header>
     </div>
   );
