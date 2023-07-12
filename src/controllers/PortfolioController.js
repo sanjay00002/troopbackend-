@@ -57,39 +57,47 @@ export default {
         },
       });
 
-      const portfolioStocks = await portfolio.get('portfolioStocks');
+      if (portfolio) {
+        const portfolioStocks = await portfolio.get('portfolioStocks');
 
-      for (let index = 0; index < portfolioStocks.length; index++) {
-        const newPortfolioStocks = stocks[index];
-        portfolioStocks[index].stockId = newPortfolioStocks.stockId;
-        portfolioStocks[index].action = newPortfolioStocks.action;
-        portfolioStocks[index].captain = newPortfolioStocks.captain;
-        portfolioStocks[index].viceCaptain = newPortfolioStocks.viceCaptain;
-      }
+        for (let index = 0; index < portfolioStocks.length; index++) {
+          const newPortfolioStocks = stocks[index];
+          portfolioStocks[index].stockId = newPortfolioStocks.stockId;
+          portfolioStocks[index].action = newPortfolioStocks.action;
+          portfolioStocks[index].captain = newPortfolioStocks.captain;
+          portfolioStocks[index].viceCaptain = newPortfolioStocks.viceCaptain;
+        }
 
-      for (let index = 0; index < portfolioStocks.length; index++) {
-        const portfolioStock = portfolioStocks[index];
-        await PortfolioStocks.update(
-          {
-            stockId: portfolioStock.stockId,
-            action: portfolioStock.action,
-            captain: portfolioStock.captain,
-            viceCaptain: portfolioStock.viceCaptain,
-          },
-          {
-            where: {
-              id: portfolioStock.id,
-              portfolioId: portfolioStock.portfolioId,
+        for (let index = 0; index < portfolioStocks.length; index++) {
+          const portfolioStock = portfolioStocks[index];
+          await PortfolioStocks.update(
+            {
+              stockId: portfolioStock.stockId,
+              action: portfolioStock.action,
+              captain: portfolioStock.captain,
+              viceCaptain: portfolioStock.viceCaptain,
             },
-          },
-        );
+            {
+              where: {
+                id: portfolioStock.id,
+                portfolioId: portfolioStock.portfolioId,
+              },
+            },
+          );
+        }
+
+        await portfolio.update({
+          name,
+        });
+
+        return res.status(204).json({
+          message: 'Portfolio Updated Successfully!',
+        });
+      } else {
+        return res.status(404).json({
+          message: 'Provided a bad portfolio id!',
+        });
       }
-
-      await portfolio.update({
-        name,
-      });
-
-      return res.status(200).json(portfolio);
     } catch (error) {
       console.error('Error while updating portfolio by id: ', error);
       return res.status(500).json({
