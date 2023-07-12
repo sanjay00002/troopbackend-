@@ -14,6 +14,8 @@ export default function LiveContesflow() {
   const [matched, setmatched] = useState(false);
   const [stock1datafeed, setstock1datafeed] = useState();
   const [stock2datafeed, setstock2datafeed] = useState();
+  const [isEnd, setisEnd] = useState(false)
+  const [winner, setwinner] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,12 +50,34 @@ export default function LiveContesflow() {
       setmatched(true);
       setapponent(apponent);
     });
+    var stockFlow= {
+      stock1: [1,stock1datafeed],
+      stock2: [2,stock2datafeed]
+    }
+    
+    socket.emit('send-stock-value',stockFlow)
 
     socket.on('get-socket-id',(socket_id)=>{
       setsocketID(socket_id)
     })
+
     
-  },[]);
+
+    socket.on('set-winner',(winner)=>{
+      console.log(winner);
+      if(winner === "Self"){
+        setisEnd(true);
+        setwinner("You Won")
+      }else if(winner === "Apponent"){
+        setisEnd(true);
+        setwinner("You Lost")
+      }else{
+        setisEnd(true);
+        setwinner("It's a tie")
+      }
+    })
+    
+  },[stock1datafeed, stock2datafeed]);
 
   const handleContestJoin = (userId, socketId, contesId) => {
     const user = {
@@ -85,12 +109,19 @@ export default function LiveContesflow() {
       }
     };
     socket.emit('find-match', user);
+    
   };
 
   return (
     <div className="App">
       <header className="App-header">
         {/* Asssuming payment step is done */}
+      {isEnd === true ? (
+        <p>{winner}</p>
+      ):(
+        <p>Contest is Live !!</p>
+      )}
+
         <form onSubmit={handleSubmit}>
           <label>
             Enter User Id:
