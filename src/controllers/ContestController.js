@@ -95,13 +95,13 @@ export default {
         include: [
           {
             model: ContestPriceDistribution,
-            require: true,
+            required: true,
             attributes: { exclude: ['createdAt', 'updatedAt'] },
             order: [['rankStart', 'ASC']],
           },
           {
             model: ContestWinners,
-            require: true,
+            required: true,
             attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
           },
         ],

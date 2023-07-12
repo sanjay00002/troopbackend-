@@ -49,11 +49,10 @@ export default {
     try {
       validatePortfolio(stocks);
 
-      console.log('Id', id);
       const portfolio = await Portfolio.findByPk(id, {
         include: {
           model: PortfolioStocks,
-          require: true,
+          required: true,
           attributes: { exclude: ['createdAt', 'updatedAt'] },
         },
       });
@@ -61,17 +60,33 @@ export default {
       const portfolioStocks = await portfolio.get('portfolioStocks');
 
       for (let index = 0; index < portfolioStocks.length; index++) {
-        const currentPortfolioStocks = portfolioStocks[index];
         const newPortfolioStocks = stocks[index];
-        currentPortfolioStocks.stockId = newPortfolioStocks.stockId;
-        currentPortfolioStocks.action = newPortfolioStocks.action;
-        currentPortfolioStocks.captain = newPortfolioStocks.captain;
-        currentPortfolioStocks.viceCaptain = newPortfolioStocks.viceCaptain;
+        portfolioStocks[index].stockId = newPortfolioStocks.stockId;
+        portfolioStocks[index].action = newPortfolioStocks.action;
+        portfolioStocks[index].captain = newPortfolioStocks.captain;
+        portfolioStocks[index].viceCaptain = newPortfolioStocks.viceCaptain;
+      }
+
+      for (let index = 0; index < portfolioStocks.length; index++) {
+        const portfolioStock = portfolioStocks[index];
+        await PortfolioStocks.update(
+          {
+            stockId: portfolioStock.stockId,
+            action: portfolioStock.action,
+            captain: portfolioStock.captain,
+            viceCaptain: portfolioStock.viceCaptain,
+          },
+          {
+            where: {
+              id: portfolioStock.id,
+              portfolioId: portfolioStock.portfolioId,
+            },
+          },
+        );
       }
 
       await portfolio.update({
         name,
-        portfolioStocks,
       });
 
       return res.status(200).json(portfolio);
