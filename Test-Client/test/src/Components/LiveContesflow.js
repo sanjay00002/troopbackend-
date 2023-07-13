@@ -14,8 +14,8 @@ export default function LiveContesflow() {
   const [matched, setmatched] = useState(false);
   const [stock1datafeed, setstock1datafeed] = useState();
   const [stock2datafeed, setstock2datafeed] = useState();
-  const [isEnd, setisEnd] = useState(false)
-  const [winner, setwinner] = useState('')
+  const [isEnd, setisEnd] = useState(false);
+  const [winner, setwinner] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +30,6 @@ export default function LiveContesflow() {
 
   useEffect(() => {
     // socket connection for getting stock data, here stock token list will be the stock token list of a particular contest
-    
 
     socket.on('get-live-data', (data) => {
       if (data.token === '"99926029"') {
@@ -50,34 +49,31 @@ export default function LiveContesflow() {
       setmatched(true);
       setapponent(apponent);
     });
-    var stockFlow= {
-      stock1: [1,stock1datafeed],
-      stock2: [2,stock2datafeed]
-    }
-    
-    socket.emit('send-stock-value',stockFlow)
+    var stockFlow = {
+      stock1: [1, stock1datafeed],
+      stock2: [2, stock2datafeed],
+    };
 
-    socket.on('get-socket-id',(socket_id)=>{
-      setsocketID(socket_id)
-    })
+    socket.emit('send-stock-value', stockFlow);
 
-    
+    socket.on('get-socket-id', (socket_id) => {
+      setsocketID(socket_id);
+    });
 
-    socket.on('set-winner',(winner)=>{
+    socket.on('set-winner', (winner) => {
       console.log(winner);
-      if(winner === "Self"){
+      if (winner === 'Self') {
         setisEnd(true);
-        setwinner("You Won")
-      }else if(winner === "Apponent"){
+        setwinner('You Won');
+      } else if (winner === 'Apponent') {
         setisEnd(true);
-        setwinner("You Lost")
-      }else{
+        setwinner('You Lost');
+      } else {
         setisEnd(true);
-        setwinner("It's a tie")
+        setwinner("It's a tie");
       }
-    })
-    
-  },[stock1datafeed, stock2datafeed]);
+    });
+  }, [stock1datafeed, stock2datafeed]);
 
   const handleContestJoin = (userId, socketId, contesId) => {
     const user = {
@@ -91,11 +87,11 @@ export default function LiveContesflow() {
   const handleStockSelection = (userId, socketId, contestId, stockId) => {
     setfindMatch(true);
 
-    var curr_value=0;
-    if(stockId  === 1){
-      curr_value = stock1datafeed
-    }else{
-      curr_value = stock2datafeed
+    var curr_value = 0;
+    if (stockId === 1) {
+      curr_value = stock1datafeed;
+    } else {
+      curr_value = stock2datafeed;
     }
     var user = {
       user_id: userId,
@@ -104,23 +100,18 @@ export default function LiveContesflow() {
       stock_id: stockId,
       stock_value: curr_value,
       stockFlow: {
-        stock1: [1,stock1datafeed],
-        stock2: [2,stock2datafeed]
-      }
+        stock1: [1, stock1datafeed],
+        stock2: [2, stock2datafeed],
+      },
     };
     socket.emit('find-match', user);
-    
   };
 
   return (
     <div className="App">
       <header className="App-header">
         {/* Asssuming payment step is done */}
-      {isEnd === true ? (
-        <p>{winner}</p>
-      ):(
-        <p>Contest is Live !!</p>
-      )}
+        {isEnd === true ? <p>{winner}</p> : <p>Contest is Live !!</p>}
 
         <form onSubmit={handleSubmit}>
           <label>
