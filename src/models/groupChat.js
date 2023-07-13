@@ -40,11 +40,14 @@ export default (sequelize, DataTypes) => {
       modelName: 'GroupChat',
     },
   );
+
+
   GroupChat.beforeValidate(async (GroupChat, option) => {
     if (GroupChat.isNewRecord) {
       const id = uuidv4().slice(0,8);
       GroupChat.id = id;
     }
   });
+  
   return GroupChat;
 };

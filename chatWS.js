@@ -3,8 +3,9 @@ const chatWSServer = require('http').createServer(chatWS);
 const socketIO = require('socket.io');
 import model from './src/models';
 import getAllMessages from './src/controllers/privateChatController.js';
+import groupChatController from './src/controllers/groupChatController.js';
 
-const { PrivateChat } = model;
+const { PrivateChat, GroupChatMessage } = model;
 
 const io = socketIO(chatWSServer, {
   cors: {
@@ -13,14 +14,41 @@ const io = socketIO(chatWSServer, {
   transports: ['polling', 'websocket'],
 });
 
-
-
 const privateChatNamespace = io.of('/chat');
 const groupChatNamespace = io.of('/groupchat');
 
 privateChatNamespace.on('connection', (socket) => {
   const userId = socket.handshake.query.userId;
   console.log('A user connected with user ID', userId);
+
+  socket.on('getAllMessages', (data) => {
+    const sender = data.senderId;
+    const receiver = data.receiverIds;
+
+    const messages = [];
+
+    async function fetchMessages() {
+      for (let i = 0; i < receiver.length; i++) {
+        const roomId = generateRoomId(sender, receiver[i]);
+        try {
+          const message = await getAllMessages(roomId);
+          messages.push({ roomId: roomId, messages: message });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    // Call the fetchMessages function
+    fetchMessages()
+      .then(() => {
+        // console.log(messages);
+        socket.emit('sendAllMessages', { oldMessages: messages });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   socket.on('initiateChat', (data) => {
     const sender = data.senderId;
@@ -31,13 +59,13 @@ privateChatNamespace.on('connection', (socket) => {
 
     const messages = getAllMessages(roomId);
 
-
-    messages.then((messages) =>{
-      socket.emit('chatInitiated', { room: roomId, oldMessages: messages});
-    }).catch((error) => {
-      console.log(error);
-    })
-
+    messages
+      .then((messages) => {
+        socket.emit('chatInitiated', { room: roomId, oldMessages: messages });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   });
 
   // Listen for 'chat message' events from the client
@@ -45,25 +73,30 @@ privateChatNamespace.on('connection', (socket) => {
     const { roomId, message } = data;
     console.log('Received message:', message.content);
 
-    try {
+    var storedMessage = {};
 
-      PrivateChat.create({
-        content: message.content,
-        senderID: message.sender,
-        receiverID: message.receiver,
-        roomID: roomId,
-      });
-
-      privateChatNamespace.to(roomId).emit('chatMessage',{message: message});
-
-      console.log(message, "here is the saved message");
-
-
-    } catch (error) {
-      console.error('Error saving message:', error);
+    async function storeMessage() {
+      try {
+        storedMessage = await PrivateChat.create({
+          content: message.content,
+          senderID: message.sender,
+          receiverID: message.receiver,
+          roomID: roomId,
+        });
+        console.log(storedMessage);
+      } catch (error) {
+        console.error('Error saving message:', error);
+      }
     }
 
-  
+    storeMessage()
+      .then(() => {
+        privateChatNamespace.to(roomId).emit('chatMessage', { message: storedMessage });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
   });
 
   // Listen for 'disconnect' events from clients
@@ -73,10 +106,50 @@ privateChatNamespace.on('connection', (socket) => {
 });
 
 groupChatNamespace.on('connection', (socket) => {
+  const userId = socket.handshake.query.userId;
+  console.log('A user connected with user ID', userId);
 
+  socket.on('initiateChat', (data) => {
+    const roomId = data.roomId;
+
+    socket.join(roomId);
+
+    const messages = groupChatController.getAllGroupMessages(roomId);
+
+    console.log(messages);
+
+    messages
+      .then((messages) => {
+        socket.emit('chatInitiated', { oldMessages: messages });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  // Listen for 'chat message' events from the client
+  socket.on('chatMessage', (data) => {
+    const { roomId, message } = data;
+    console.log('Received message:', message.content);
+
+    try {
+      GroupChatMessage.create({
+        content: message.content,
+        senderId: message.sender,
+        roomId: roomId,
+      });
+
+      groupChatNamespace.to(roomId).emit('chatMessage', { message: message });
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+  });
+
+  // Listen for 'disconnect' events from clients
+  socket.on('disconnect', () => {
+    console.log('A user disconnected with user ID', userId);
+  });
 });
-
-
 
 function generateRoomId(senderId, receiverId) {
   const separator = '_';
