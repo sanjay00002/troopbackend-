@@ -8,4 +8,6 @@ router.route('/').post(validate, UserController.getUserById);
 
 router.route('/').patch(validate, UserController.updateCurrentUser);
 
+router.route('/all').get(validate, UserController.getAllUsers);
+
 module.exports = router;

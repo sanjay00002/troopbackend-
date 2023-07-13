@@ -4,6 +4,7 @@ import { SECRET } from '../utils/settings';
 export default function validate(req, res, next) {
   let token = req.headers['authorization'];
 
+
   const accessToken = token?.split(' ')[1];
 
   jwt.verify(accessToken, SECRET, (error, user) => {

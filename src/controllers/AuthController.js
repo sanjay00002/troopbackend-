@@ -17,6 +17,8 @@ export default {
   signUp: async (req, res) => {
     const userDetails = req.body;
 
+    console.log(userDetails)
+
     try {
       let newUser;
       let role;
@@ -153,6 +155,7 @@ export default {
     const { phoneNumber } = req.body;
 
     try {
+      console.log("working till here")
       if (phoneNumber.includes('+')) {
         const user = await User.findOne({
           where: { phoneNumber },

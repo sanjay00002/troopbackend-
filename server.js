@@ -1,6 +1,7 @@
 import express, { json } from 'express';
 import cors from 'cors';
 import { Sequelize } from 'sequelize';
+const http = require('http');
 
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
@@ -9,12 +10,14 @@ import botRouter from './src/routes/bot';
 import subCategoriesRouter from './src/routes/subCategories';
 import stocksRouter from './src/routes/stocks';
 import walletRouter from './src/routes/wallet';
+import groupchatRouter from './src/routes/groupchatRouter';
+const chatWSServer = require('./chatWS');
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
-
 const app = express();
-const port = process.env.PORT || 5000;
+
+const port = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(json());
@@ -37,7 +40,12 @@ app.use('/api/v1/bot', botRouter);
 app.use('/api/v1/sub-category', subCategoriesRouter);
 app.use('/api/v1/stocks', stocksRouter);
 app.use('/api/v1/wallet', walletRouter);
+app.use('/api/v1/groupchat', groupchatRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
 });
+
+chatWSServer.listen("5002", () => {
+  console.log('chat ws server listening on 5002')
+})
