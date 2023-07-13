@@ -5,10 +5,10 @@ export default (sequelize, DataTypes) => {
   class GroupChatMessage extends Model {
     static associate(models) {
       // Define associations here
-    //   GroupChatMessage.belongsTo(models.GroupChat, {
-    //     foreignKey: 'roomId',
-    //     as: 'groupId',
-    //   });
+      //   GroupChatMessage.belongsTo(models.GroupChat, {
+      //     foreignKey: 'roomId',
+      //     as: 'groupId',
+      //   });
     }
   }
 
@@ -35,7 +35,7 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'GroupChatMessage',
-    }
+    },
   );
 
   GroupChatMessage.beforeValidate(async (GroupChatMessage, options) => {

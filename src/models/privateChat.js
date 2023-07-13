@@ -4,13 +4,25 @@ export default (sequelize, DataTypes) => {
   class PrivateChat extends Model {
     static associate(models) {
       // Define associations here
+      models.User.hasOne(PrivateChat, {
+        foreignKey: 'senderID',
+        sourceKey: 'id',
+      });
+
       PrivateChat.belongsTo(models.User, {
         foreignKey: 'senderID',
+        targetKey: 'id',
         as: 'sender',
+      });
+
+      models.User.hasOne(PrivateChat, {
+        foreignKey: 'receiverID',
+        sourceKey: 'id',
       });
 
       PrivateChat.belongsTo(models.User, {
         foreignKey: 'receiverID',
+        targetKey: 'id',
         as: 'receiver',
       });
     }
@@ -18,11 +30,11 @@ export default (sequelize, DataTypes) => {
 
   PrivateChat.init(
     {
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true
-          },
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
       content: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -43,7 +55,7 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'PrivateChat',
-    }
+    },
   );
 
   return PrivateChat;
