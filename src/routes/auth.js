@@ -11,8 +11,10 @@ router.route('/signInPhoneNumber').post(AuthController.signInWithPhoneNumber);
 
 router.route('/refresh').post(AuthController.refreshTokens);
 
-router.route('/generateOtp').post(AuthController.generateOtp);
+router.route('/otp/mobile').post(AuthController.generateMobileOtp);
 
-router.route('/verifyOtp').post(AuthController.verifyOtp);
+router.route('/otp/email').post(AuthController.generateEmailOtp);
+
+router.route('/otp/verify').post(AuthController.verifyOtp);
 
 module.exports = router;

@@ -10,14 +10,23 @@ const verifySid = process.env.TWILIO_VERIFY_SID;
 
 const client = require('twilio')(accountSid, authToken);
 
-export async function generateOtp(phoneNumber) {
-  return await client.verify.v2
-    .services(verifySid)
-    .verifications.create({ to: phoneNumber, channel: 'sms' });
+export async function generateOtp(credential, channel) {
+  switch (channel) {
+    case 'email':
+      return await client.verify.v2
+        .services(verifySid)
+        .verifications.create({ to: credential, channel: 'email' });
+    case 'sms':
+      return await client.verify.v2
+        .services(verifySid)
+        .verifications.create({ to: credential, channel: 'sms' });
+    default:
+      break;
+  }
 }
 
-export async function verifyOTP(phoneNumber, otpCode) {
+export async function verifyOTP(credential, otpCode) {
   return await client.verify.v2
     .services(verifySid)
-    .verificationChecks.create({ to: phoneNumber, code: otpCode });
+    .verificationChecks.create({ to: credential, code: otpCode });
 }

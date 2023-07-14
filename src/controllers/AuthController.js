@@ -5,8 +5,7 @@ import { faker } from '@faker-js/faker/locale/en_IN';
 import { REFRESH_SECRET } from '../utils/settings';
 import { generateReferralCode } from '../lib/referralCode';
 
-import { verifyOTP } from '../lib/verifyOtp';
-import { generateOtp } from '../lib/verifyOtp';
+import { generateOtp, verifyOTP } from '../lib/verifyOtp';
 
 import model from '../models';
 import JWTController from './JWTController';
@@ -317,7 +316,7 @@ export default {
     }
   },
 
-  generateOtp: async function (req, res) {
+  generateMobileOtp: async function (req, res) {
     const { phoneNumber } = req.body;
     try {
       if (
@@ -325,7 +324,7 @@ export default {
         phoneNumber?.includes('+') &&
         phoneNumber?.length > 10
       ) {
-        const twilioResp = await generateOtp(phoneNumber);
+        const twilioResp = await generateOtp(phoneNumber, 'sms');
 
         console.log('Twilio Response: ', twilioResp);
 
@@ -353,18 +352,52 @@ export default {
         });
       }
     } catch (error) {
-      console.error('Error while generating OTP: ', error);
+      console.error('Error while generating mobile OTP: ', error);
       return res.status(500).json({
         errorMessage: error?.message,
-        error: 'Something went wrong while generating the OTP',
+        error: 'Something went wrong while generating the mobile OTP',
+      });
+    }
+  },
+
+  generateEmailOtp: async function (req, res) {
+    const { email } = req.body;
+    try {
+      if (email && email?.includes('@')) {
+        const twilioResp = await generateOtp(email, 'email');
+
+        console.log('Twilio Response: ', twilioResp);
+
+        if (
+          twilioResp?.status === 'pending' &&
+          twilioResp?.sendCodeAttempts?.length >= 1
+        ) {
+          return res.status(200).json({
+            message: 'OTP Successfully Sent!',
+          });
+        } else {
+          return res
+            .status(500)
+            .json({ message: 'Something bad happened while generating OTP' });
+        }
+      } else {
+        return res.status(422).status.json({
+          error: 'Provided a bad phone number!',
+        });
+      }
+    } catch (error) {
+      console.error('Error while generating email OTP: ', error);
+      return res.status(500).json({
+        errorMessage: error?.message,
+        error: 'Something went wrong while generating the email OTP',
       });
     }
   },
 
   verifyOtp: async function (req, res) {
-    const { phoneNumber, code } = req.body;
+    const { credential, code } = req.body;
     try {
-      const twilioResp = await verifyOTP(phoneNumber, code);
+      const twilioResp = await verifyOTP(credential, code);
       console.log('Verify Twilio Response: ', twilioResp);
 
       if (twilioResp?.valid && twilioResp?.status === 'approved') {
