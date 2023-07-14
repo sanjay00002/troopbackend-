@@ -13,6 +13,16 @@ export async function up(queryInterface, Sequelize) {
       defaultValue: 'Trooper',
       unique: false,
     },
+    email: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      unique: true,
+      validate: {
+        isEmail: {
+          msg: 'Must be a valid email address!',
+        },
+      },
+    },
     phoneNumber: {
       type: Sequelize.STRING,
       allowNull: true,
@@ -24,6 +34,14 @@ export async function up(queryInterface, Sequelize) {
     },
     lastName: {
       type: Sequelize.STRING,
+      allowNull: true,
+    },
+    gender: {
+      type: Sequelize.ENUM(['Male', 'Female', 'Other']),
+      allowNull: true,
+    },
+    dob: {
+      type: Sequelize.DATEONLY,
       allowNull: true,
     },
     isBot: {

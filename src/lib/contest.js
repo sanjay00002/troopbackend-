@@ -28,6 +28,9 @@ export function getContestStatus(contest) {
       // * Live
       return 'live';
     }
+    if (endTime.isBefore(currentDate)) {
+      return 'completed';
+    }
   } else if (currentDate.isBefore(contestDate)) {
     // * Upcoming contest
     return 'upcoming';

@@ -1,0 +1,92 @@
+[
+  {
+    "name": "TIINDIA-EQ",
+    "token": "312",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "TVSMOTOR-EQ",
+    "token": "8479",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "TATAMOTORS-EQ",
+    "token": "3456",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "SONACOMS-EQ",
+    "token": "4684",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "EICHERMOT-EQ",
+    "token": "910",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "BALKRISIND-EQ",
+    "token": "335",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "ASHOKLEY-EQ",
+    "token": "212",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "HEROMOTOCO-EQ",
+    "token": "1348",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "MARUTI-EQ",
+    "token": "10999",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "BAJAJ-AUTO-EQ",
+    "token": "16669",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "BHARATFORG-EQ",
+    "token": "422",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "MRF-EQ",
+    "token": "2277",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "M&M-EQ",
+    "token": "2031",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "MOTHERSON-EQ",
+    "token": "4204",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  },
+  {
+    "name": "BOSCHLTD-EQ",
+    "token": "2181",
+    "exchangeType": 1,
+    "subCategory": "Nifty Auto"
+  }
+]

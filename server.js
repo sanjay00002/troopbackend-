@@ -11,6 +11,7 @@ import stocksRouter from './src/routes/stocks';
 import walletRouter from './src/routes/wallet';
 import groupchatRouter from './src/routes/groupchatRouter';
 const chatWSServer = require('./chatWS');
+import portfolioRouter from './src/routes/portfolio';
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
@@ -40,6 +41,7 @@ app.use('/api/v1/sub-category', subCategoriesRouter);
 app.use('/api/v1/stocks', stocksRouter);
 app.use('/api/v1/wallet', walletRouter);
 app.use('/api/v1/groupchat', groupchatRouter);
+app.use('/api/v1/portfolio', portfolioRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);

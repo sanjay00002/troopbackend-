@@ -28,6 +28,11 @@ export async function up(queryInterface, Sequelize) {
       updatedAt: moment().toISOString(),
     },
     {
+      name: 'Nifty Auto',
+      createdAt: moment().toISOString(),
+      updatedAt: moment().toISOString(),
+    },
+    {
       name: 'Nifty Bank',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),

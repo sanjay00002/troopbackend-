@@ -95,13 +95,13 @@ export default {
         include: [
           {
             model: ContestPriceDistribution,
-            require: true,
+            required: true,
             attributes: { exclude: ['createdAt', 'updatedAt'] },
             order: [['rankStart', 'ASC']],
           },
           {
             model: ContestWinners,
-            require: true,
+            required: true,
             attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
           },
         ],
@@ -544,6 +544,85 @@ export default {
       console.error('Error while fetching contest by status: ', error);
       return res.status(500).json({
         error: 'Something went wrong while fetching contest by status',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  getStockStats: async function (req, res) {
+    const { contestId, stockId } = req.body;
+
+    try {
+      const subQuery = await ContestPortfolios.findAll({
+        attributes: ['portfolioId'],
+        where: {
+          contestId,
+        },
+        include: {
+          model: Contest,
+          required: true,
+        },
+      });
+
+      const portfolioIds = subQuery.map((row) => row.portfolioId);
+
+      const stockActionCount = await PortfolioStocks.findAll({
+        attributes: [
+          [Sequelize.fn('COUNT', Sequelize.col('*')), 'actionCount'],
+          'stockId',
+          'action',
+        ],
+        where: {
+          portfolioId: { [Op.in]: portfolioIds },
+          stockId: stockId,
+        },
+        group: ['stockId', 'action'],
+      });
+
+      console.log('Stock Action: ', stockActionCount);
+
+      const participants = await ContestParticipants.findAndCountAll({
+        where: { contestId },
+      });
+
+      const totalParticipants = participants.count;
+
+      console.log('Total Participants: ', totalParticipants);
+
+      const percentage = {
+        buy: 0,
+        sell: 0,
+        noTrade: 0,
+      };
+
+      for (let index = 0; index < stockActionCount.length; index++) {
+        const stock = stockActionCount[index];
+        const actionCount = Number(await stock.get('actionCount'));
+        switch (stock.action) {
+          case 'Buy':
+            percentage.buy = Number(
+              ((actionCount / totalParticipants) * 100).toFixed(2),
+            );
+            break;
+          case 'Sell':
+            percentage.sell = Number(
+              ((actionCount / totalParticipants) * 100).toFixed(2),
+            );
+            break;
+          default:
+            break;
+        }
+
+        percentage.noTrade = 100 - (percentage.buy + percentage.sell);
+      }
+
+      console.log('Percentage: ', percentage);
+
+      return res.status(200).json(percentage);
+    } catch (error) {
+      console.error('Error while fetching live stocks stats: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching live stocks stats',
         errorMessage: error.message,
       });
     }
