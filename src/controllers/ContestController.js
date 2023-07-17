@@ -548,4 +548,14 @@ export default {
       });
     }
   },
+  getWinner: async function(req,res){
+    const portfolios = await Portfolio.findAll();
+    const portfolioStocks = await PortfolioStocks.findAll({
+      where: {
+        portfolioId : portfolios[0].id
+      }
+    }
+    )
+    return res.status(200).json(portfolioStocks)
+  }
 };
