@@ -6,7 +6,7 @@ export async function up(queryInterface, Sequelize) {
    * Example:
    * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
    */
-  queryInterface.addConstraint('Coupons', {
+  await queryInterface.addConstraint('Coupons', {
     fields: ['userId'],
     type: 'foreign key',
     name: 'user_coupons_fk_constraint',
@@ -23,5 +23,8 @@ export async function down(queryInterface, Sequelize) {
    * Example:
    * await queryInterface.dropTable('users');
    */
-  queryInterface.removeConstraint('user_coupons_fk_constraint');
+  await queryInterface.removeConstraint(
+    'Coupons',
+    'user_coupons_fk_constraint',
+  );
 }

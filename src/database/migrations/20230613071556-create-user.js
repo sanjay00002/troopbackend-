@@ -11,7 +11,7 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: 'Trooper',
-      unique: false,
+      unique: true,
     },
     email: {
       type: Sequelize.STRING,

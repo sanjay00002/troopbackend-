@@ -10,8 +10,15 @@ import subCategoriesRouter from './src/routes/subCategories';
 import stocksRouter from './src/routes/stocks';
 import walletRouter from './src/routes/wallet';
 import groupchatRouter from './src/routes/groupchatRouter';
-const chatWSServer = require('./chatWS');
 import portfolioRouter from './src/routes/portfolio';
+
+const chatWSServer = require('./chatWS');
+
+import model from './src/models';
+
+import { generateReferralCode } from './src/lib/referralCode';
+
+const { User, UserRole, Role, Wallet } = model;
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
@@ -45,6 +52,65 @@ app.use('/api/v1/portfolio', portfolioRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
+  (async () => {
+    try {
+      const referralCode = await generateReferralCode();
+
+      const userDetails = {
+        firstName: process.env.ADMIN_FIRSTNAME,
+        lastName: process.env.ADMIN_LASTNAME,
+        username: process.env.ADMIN_USERNAME,
+        phoneNumber: process.env.ADMIN_PHONE_NUMBER,
+        email: process.env.ADMIN_EMAIL,
+        referralCode,
+      };
+
+      const existingUser = await User.findOne({
+        where: {
+          username: process.env.ADMIN_USERNAME,
+        },
+      });
+
+      if (existingUser === null) {
+        const newUser = await User.create({
+          username: userDetails?.username ?? username,
+          phoneNumber: userDetails?.phoneNumber,
+          email: userDetails?.email,
+          firstName: userDetails?.firstName,
+          lastName: userDetails?.lastName,
+          referralCode: referralCode,
+          referrer: userDetails?.referrer,
+        });
+
+        const role = await Role.findOne({
+          where: { role: process.env.ADMIN_ROLE },
+        });
+
+        if (role) {
+          const newUserId = await newUser?.get('id');
+
+          const roleId = await role?.get('id');
+
+          await UserRole.create({
+            userId: newUserId,
+            roleId: roleId,
+          });
+
+          await Wallet.create({
+            userId: newUserId,
+          });
+
+          console.log('Admin user created successfully');
+        } else {
+          throw Error("Given role doesn't exist!");
+        }
+      } else {
+        throw Error('Exists a user with the given username');
+      }
+    } catch (error) {
+      console.error('Error creating admin user: ', error);
+    }
+  })();
 });
 
 chatWSServer.listen('5002', () => {
