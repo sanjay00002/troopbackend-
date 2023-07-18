@@ -12,6 +12,8 @@ import walletRouter from './src/routes/wallet';
 import groupchatRouter from './src/routes/groupchatRouter';
 import portfolioRouter from './src/routes/portfolio';
 
+import createContestsCronJobs from './src/cron/createContests';
+
 const chatWSServer = require('./chatWS');
 
 import model from './src/models';
@@ -111,6 +113,8 @@ app.listen(port, () => {
       console.error('Error creating admin user: ', error);
     }
   })();
+
+  createContestsCronJobs();
 });
 
 chatWSServer.listen('5002', () => {
