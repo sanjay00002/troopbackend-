@@ -15,6 +15,8 @@ export default (sequelize, DataTypes) => {
       name: { type: DataTypes.STRING, allowNull: false },
       token: { type: DataTypes.STRING, allowNull: false },
       exchangeType: { type: DataTypes.INTEGER, allowNull: false },
+      open_price: { type: DataTypes.DOUBLE, allowNull: true, defaultValue: 0},
+      close_price: { type: DataTypes.DOUBLE, allowNull: true, defaultValue: 0},
       status: {
         type: DataTypes.ENUM(['active', 'inactive']),
         defaultValue: 'active',
