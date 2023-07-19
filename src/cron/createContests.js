@@ -32,17 +32,137 @@ module.exports = () => {
 
         const adminId = await adminUser.get('userId');
 
-        const contestDate = momentTimezone.tz(moment(), 'Asia/Kolkata');
+        const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
 
-        // * Creates a Practice Contest in Nifty IT
+        // * Create 2 Practice Contest in Nifty 50
         await CronJobController.createContest(adminId, {
           categoryId: 5,
-          subCategoryId: 2,
-          date: contestDate.format('YYYY-MM-DD'),
+          subCategoryId: 1,
+          date: today.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 450,
           priceDistribution: [],
+        });
+
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 1,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        // * Creates 2 Practice Contest in Nifty IT
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        // * Create 2 Practice Contest in Nifty Auto
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        // * Create 2 Practice Contest for Nifty Bank
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 450,
+          priceDistribution: [],
+        });
+
+        // * Create a Mega Contest
+        await CronJobController.createContest(adminId, {
+          categoryId: 1,
+          subCategoryId: 7,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 10,
+          pricePool: 4500,
+          slots: 450,
+          priceDistribution: [
+            {
+              rankStart: 1,
+              rankEnd: 1,
+              priceAmount: 3000,
+            },
+            {
+              rankStart: 2,
+              rankEnd: 2,
+              priceAmount: 1500,
+            },
+            {
+              rankStart: 3,
+              rankEnd: 3,
+              priceAmount: 750,
+            },
+            {
+              rankStart: 4,
+              rankEnd: 10,
+              priceAmount: 375,
+            },
+            {
+              rankStart: 11,
+              rankEnd: 50,
+              priceAmount: 187.5,
+            },
+            {
+              rankStart: 51,
+              rankEnd: 100,
+              priceAmount: 93.75,
+            },
+            {
+              rankStart: 101,
+              rankEnd: 1000,
+              priceAmount: 46.875,
+            },
+          ],
         });
       }
 
@@ -50,18 +170,6 @@ module.exports = () => {
     },
     {
       name: 'Create-Normal-Contest',
-      ...scheduleOptions,
-    },
-  );
-
-  cron.schedule(
-    '0 30 15 * * *',
-    () => {
-      // * Close Contest
-      // * Declare Winners
-    },
-    {
-      name: 'Close-Contests',
       ...scheduleOptions,
     },
   );
@@ -74,17 +182,6 @@ module.exports = () => {
     },
     {
       name: 'Create-Live-Contest',
-      ...scheduleOptions,
-    },
-  );
-
-  cron.schedule(
-    '0 55 14 * * *',
-    () => {
-      // * Close Live Contest
-    },
-    {
-      name: 'Close-Live-Contest',
       ...scheduleOptions,
     },
   );
