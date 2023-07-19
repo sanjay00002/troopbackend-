@@ -53,7 +53,12 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
       allowNull: true,
     },
-    points: {
+    score: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    tickets: {
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: 0,
