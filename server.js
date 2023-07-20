@@ -13,6 +13,8 @@ import groupchatRouter from './src/routes/groupchatRouter';
 import portfolioRouter from './src/routes/portfolio';
 
 import createContestsCronJobs from './src/cron/createContests';
+import declareWinnersCronJobs from './src/cron/declareWinners';
+import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 
 const chatWSServer = require('./chatWS');
 
@@ -20,7 +22,7 @@ import model from './src/models';
 
 import { generateReferralCode } from './src/lib/referralCode';
 
-const { User, UserRole, Role, Wallet } = model;
+const { User, UserRole, Role, Wallet, CommonWallet } = model;
 
 // require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' });
@@ -114,7 +116,27 @@ app.listen(port, () => {
     }
   })();
 
+  // * Common Wallet for Bots
+  (async () => {
+    try {
+      const existingWallet = await CommonWallet.findOne({
+        where: { purpose: 'bots' },
+      });
+      if (existingWallet === null) {
+        const newCommonWallet = await CommonWallet.create({
+          purpose: 'bots',
+        });
+      } else {
+        throw new Error('Common wallet already exists');
+      }
+    } catch (error) {
+      console.error('Error creating common wallet for bots: ', error);
+    }
+  })();
+
   createContestsCronJobs();
+  declareWinnersCronJobs();
+  botsJoinContestsCronJobs();
 });
 
 chatWSServer.listen('5002', () => {
