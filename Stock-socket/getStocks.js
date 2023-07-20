@@ -2,7 +2,6 @@
 const { WebSocketV2 } = require('./smartapi-javascript-main/lib');
 
 module.exports = async function(io,socket,stock_token) {
-
 	const web_socket = new WebSocketV2({
 		clientcode: 'P51775178',
 		jwttoken: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsInJvbGVzIjowLCJ1c2VydHlwZSI6IlVTRVIiLCJpYXQiOjE2ODk1ODY3NzEsImV4cCI6MTY4OTY3MzE3MX0.Y5cQsO6NpxG4dAB-T5xiBC3Lh0MX-TXGA9sy2o1G8DAeco0uu-XrI1hO7cLvLtsAKGzU0lGP-kH394NOs_ZePQ',
@@ -12,6 +11,7 @@ module.exports = async function(io,socket,stock_token) {
 
 	
 	if(stock_token[0]){
+
 		try {
 			await web_socket.connect().then(() => {
 				const json_req = {
@@ -28,7 +28,9 @@ module.exports = async function(io,socket,stock_token) {
 		
 				// console.log(socket.nsp.name);
 				function receiveTick(data) {
-					// console.log('receiveTick:::::', data);
+					// console.log("socket file");
+					console.log('receiveTick:::::', data);
+
 					io.of("/liveContest").emit('get-live-data',data)
 					io.of("/normalContest").emit('get-live-data',data)
 				}
