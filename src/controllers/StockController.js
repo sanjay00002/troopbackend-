@@ -1,6 +1,8 @@
 import model from '../models';
 
-const { Stocks, StocksSubCategories, SubCategories } = model;
+const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks } = model;
+
+const getStock = require('../../Stock-socket/getStocks');
 
 export default {
   enterStockData: async function (req, res) {
@@ -82,6 +84,74 @@ export default {
         errorMessage: error.message,
         error: 'Something went wrong while entering stock data!',
       });
+    }
+  },
+  updatePrices: async function (req, res) {
+    const token_list = [];
+    const stocks = await Stocks.findAll();
+
+    stocks.forEach((stock) => {
+      token_list.push(stock.token);
+    });
+
+    try {
+      const stock_data = await getStock('io', 'socket', token_list, false);
+
+      for (const stock of stock_data) {
+        const stockrow = await Stocks.findOne({
+          where: { token: stock.token.replace(/\D/g, '') },
+        });
+        if (stockrow) {
+          await stockrow.update({
+            open_price: stock.open_price_day,
+            close_price: stock.close_price, 
+          });
+        }
+      }
+
+      const portfs = await Portfolio.findAll()
+      for(const port of portfs){
+        const portStocks = await PortfolioStocks.findAll({
+          where: {portfolioId: port.id}
+        })
+
+        var score = 0;
+        for(const portStock of portStocks){
+          const stock = await Stocks.findOne({
+            where:{ id: portStock.stockId}
+          })
+
+          var stock_value = stock.close_price - stock.open_price
+          if(stock_value > 0){
+            if(portStock.action === 'Buy'){
+              score += stock_value/stock.open_price;
+            }
+
+            if(portStock.action === 'Sell'){
+              score -= stock_value/stock.open_price;
+            }
+          }else{
+            if(portStock.action === 'Buy'){
+              score -= stock_value/stock.open_price;
+            }
+
+            if(portStock.action === 'Sell'){
+              score += stock_value/stock.open_price;
+            }
+          }
+        }
+        score = score*100/portStocks.length
+
+        await port.update({
+          score: score
+        })
+      }
+
+      return res.status(200).json({
+        message: 'Stock Data Updated and scores calculated Successfully',
+      });
+    } catch (error) {
+      console.error('Error while fetching stock data:', error);
     }
   },
 };

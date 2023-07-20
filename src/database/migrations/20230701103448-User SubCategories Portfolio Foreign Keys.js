@@ -9,7 +9,7 @@ export async function up(queryInterface, Sequelize) {
   await queryInterface.addConstraint('Portfolios', {
     fields: ['userId'],
     type: 'foreign key',
-    name: 'user_portfolio_fk_constraint',
+    name: 'users_portfolio_fk_constraint',
     references: {
       field: 'id',
       table: 'Users',
