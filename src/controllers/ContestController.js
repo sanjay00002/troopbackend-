@@ -548,14 +548,15 @@ export default {
       });
     }
   },
-  getWinner: async function(req,res){
-    const portfolios = await Portfolio.findAll();
-    const portfolioStocks = await PortfolioStocks.findAll({
-      where: {
-        portfolioId : portfolios[0].id
-      }
-    }
-    )
-    return res.status(200).json(portfolioStocks)
+  getWinnerbyContestId: async function(req,res){
+    const contestId = req.body.contestId
+    console.log(contestId);
+    const contestPorts = await ContestPortfolios.findAll({
+      where: { contestId: contestId }
+    })
+
+    
+
+    return res.status(200).json(contestPorts)
   }
 };

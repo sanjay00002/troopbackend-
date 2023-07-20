@@ -123,20 +123,44 @@ export default {
 
           var stock_value = stock.close_price - stock.open_price
           if(stock_value > 0){
-            if(portStock.action === 'Buy'){
-              score += stock_value/stock.open_price;
+            if(portStock.action === 'Buy'){        
+              if(portStock.captain){
+                score += 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score += 1.5*stock_value/stock.open_price;
+              }else{
+                score += stock_value/stock.open_price;
+              }      
             }
 
             if(portStock.action === 'Sell'){
-              score -= stock_value/stock.open_price;
+              if(portStock.captain){
+                score -= 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score -= 1.5*stock_value/stock.open_price;
+              }else{
+                score -= stock_value/stock.open_price;
+              }      
             }
           }else{
             if(portStock.action === 'Buy'){
-              score -= stock_value/stock.open_price;
+              if(portStock.captain){
+                score -= 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score -= 1.5*stock_value/stock.open_price;
+              }else{
+                score -= stock_value/stock.open_price;
+              }      
             }
 
             if(portStock.action === 'Sell'){
-              score += stock_value/stock.open_price;
+              if(portStock.captain){
+                score += 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score += 1.5*stock_value/stock.open_price;
+              }else{
+                score += stock_value/stock.open_price;
+              }      
             }
           }
         }
