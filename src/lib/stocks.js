@@ -1,10 +1,16 @@
 const https = require('https');
 const fs = require('fs');
 
-const subCategories = ['Nifty 50', 'Nifty IT', 'Nifty Auto', 'Nifty Bank'];
+const subCategories = [
+  'Mega',
+  'Nifty IT',
+  'Nifty Auto',
+  'Nifty Bank',
+  'Giant Stocks',
+];
 
 // Array of Nifty 50 stocks' symbols
-const nifty50Stocks = [
+const megaContestStocks = [
   'RELIANCE-EQ',
   'TATASTEEL-EQ',
   'JSWSTEEL-EQ',
@@ -26,7 +32,7 @@ const nifty50Stocks = [
   'ASIANPAINT-EQ',
   'COALINDIA-EQ',
   'EICHERMOT-EQ',
-  'HDFC-EQ',
+  'LTIM-EQ',
   'GRASIM-EQ',
   'SBIN-EQ',
   'HDFCBANK-EQ',
@@ -105,6 +111,24 @@ const niftyBankStocks = [
   'BANKBARODA-EQ',
 ];
 
+const giantStocks = [
+  'WENDT-EQ',
+  'ZFCVINDIA-EQ',
+  'LAXMIMACH-EQ',
+  'TASTYBITE-EQ',
+  'PGHH-EQ',
+  'BOSCHLTD-EQ',
+  'NESTLEIND-EQ',
+  'SHREECEM-EQ',
+  'ABBOTINDIA-EQ',
+  '3MINDIA-EQ',
+  'PAGEIND-EQ',
+  'HONAUT-EQ',
+  'MRF-EQ',
+];
+
+console.log('Mega Contest Length: ', megaContestStocks.length);
+
 // API endpoint URL
 const url =
   'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json';
@@ -164,7 +188,7 @@ function fetchData(niftyStocks, subCategory) {
 }
 
 // Fetch Nifty 50 data
-fetchData(nifty50Stocks, subCategories[0])
+fetchData(megaContestStocks, subCategories[0])
   .then((data) => {
     console.log(
       `Filtered Nifty 50 data: ${JSON.stringify(data.formattedData)}`,
@@ -255,6 +279,31 @@ fetchData(niftyBankStocks, subCategories[3])
           console.error('Error writing to JSON file:', err);
         } else {
           console.log('Nifty Bank data saved to niftyBank_data.json');
+        }
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('An error occurred:', error);
+  });
+
+// Fetch Giant Stocks data
+fetchData(giantStocks, subCategories[4])
+  .then((data) => {
+    console.log(
+      `Filtered Giant Stocks data: ${JSON.stringify(data.formattedData)}`,
+    );
+    console.log(`Input array length: ${data.inputLength}`);
+    console.log(`Filtered Array length: ${data.filteredLength}`);
+    console.log(`Missing stocks: ${JSON.stringify(data.missingStocks)}`);
+
+    if (data.missingStocks.length === 0) {
+      const jsonData = JSON.stringify(data.formattedData, null, 2);
+      fs.writeFile('./data/json/giantStocks_data.json', jsonData, (err) => {
+        if (err) {
+          console.error('Error writing to JSON file:', err);
+        } else {
+          console.log('Giant Stocks data saved to giantStocks_data.json');
         }
       });
     }

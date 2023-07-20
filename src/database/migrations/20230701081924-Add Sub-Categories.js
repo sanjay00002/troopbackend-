@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Op } from 'sequelize';
-/**     'Nifty 50',
+/** Nifty 50 -> 'Mega',
         'Nifty IT',
         'Nifty Auto',
         'Nifty Bank',
@@ -18,7 +18,7 @@ export async function up(queryInterface, Sequelize) {
    */
   await queryInterface.bulkInsert('SubCategories', [
     {
-      name: 'Nifty 50',
+      name: 'Mega',
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
     },
@@ -47,11 +47,6 @@ export async function up(queryInterface, Sequelize) {
       createdAt: moment().toISOString(),
       updatedAt: moment().toISOString(),
     },
-    {
-      name: 'Mega',
-      createdAt: moment().toISOString(),
-      updatedAt: moment().toISOString(),
-    },
   ]);
 }
 export async function down(queryInterface, Sequelize) {
@@ -66,13 +61,12 @@ export async function down(queryInterface, Sequelize) {
     {
       name: {
         [Op.in]: [
-          'Nifty 50',
+          'Mega',
           'Nifty IT',
           'Nifty Auto',
           'Nifty Bank',
           'Penny Stocks',
           'Giant Stocks',
-          'Mega',
         ],
       },
     },

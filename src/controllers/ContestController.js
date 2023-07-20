@@ -91,21 +91,24 @@ export default {
 
     try {
       // * Fetch the contest and the prize distribution
-      const contest = await Contest.findByPk(id, {
-        include: [
-          {
-            model: ContestPriceDistribution,
-            required: true,
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-            order: [['rankStart', 'ASC']],
-          },
-          {
-            model: ContestWinners,
-            required: true,
-            attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
-          },
-        ],
-      });
+      const contest = await Contest.findOne(
+        { where: { id } },
+        {
+          include: [
+            {
+              model: ContestPriceDistribution,
+              required: true,
+              attributes: { exclude: ['createdAt', 'updatedAt'] },
+              order: [['rankStart', 'ASC']],
+            },
+            {
+              model: ContestWinners,
+              required: true,
+              attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
+            },
+          ],
+        },
+      );
 
       console.log('Constest: ', contest);
 
@@ -174,7 +177,7 @@ export default {
       });
 
       if (existingCategory) {
-        const contest = await Contest.findAll({
+        const contests = await Contest.findAll({
           where: {
             categoryId: existingCategory.id,
           },
@@ -185,8 +188,49 @@ export default {
           },
         });
 
-        if (contest) {
-          return res.status(200).json(contest);
+        if (contests) {
+          let contestWithParticipants = JSON.parse(JSON.stringify(contests));
+          for (let i = 0; i < contestWithParticipants.length; i++) {
+            const contest = contests[i];
+            const participants = await ContestParticipants.findAndCountAll({
+              where: { contestId: await contest.get('id') },
+            });
+
+            console.log('Participants: ', participants.count);
+
+            const stocks = await StocksSubCategories.findAll({
+              where: {
+                subCategoryId: await contest.get('subCategoryId'),
+              },
+              attributes: {
+                exclude: [
+                  'createdAt',
+                  'updatedAt',
+                  'stockId',
+                  'subCategoryId',
+                  'id',
+                ],
+              },
+              include: {
+                model: Stocks,
+                required: true,
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+              },
+            });
+
+            console.log('Stocks: ', stocks);
+
+            const stocksArr = await Promise.all(
+              stocks?.map(async (stock) => await stock.get('stock').get()),
+            );
+
+            contestWithParticipants[i].participants = participants.count;
+            contestWithParticipants[i].stocks = stocksArr;
+          }
+
+          console.log('Contest with Participants: ', contestWithParticipants);
+
+          return res.status(200).json(contestWithParticipants);
         } else {
           return res.status(404).json({ error: 'No contest found!' });
         }

@@ -59,9 +59,7 @@ export default {
       const response = botsCreated.map((element) => element.dataValues);
 
       console.log('Response: ', response);
-      return res.status(201).json({
-        data: response,
-      });
+      return res.status(201).json(response);
     } catch (error) {
       console.error('Error while bulk creating bots:', error);
       return res.status(500).json({
