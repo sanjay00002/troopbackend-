@@ -68,4 +68,6 @@ export default {
       });
     }
   },
+
+  createPortfolioForBot: async function (subCategoryId, contestId) {},
 };

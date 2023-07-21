@@ -48,3 +48,5 @@ export async function* generateNBotDetails() {
 
 // generatorFn.next().then((value, done) => console.log(value.value));
 // generatorFn.next().then((value, done) => console.log(value));
+
+export function createPortfolioForBot(subCategoryId, contestId) {}
