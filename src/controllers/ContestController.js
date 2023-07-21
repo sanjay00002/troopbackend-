@@ -551,12 +551,40 @@ export default {
   getWinnerbyContestId: async function(req,res){
     const contestId = req.body.contestId
     console.log(contestId);
-    const contestPorts = await ContestPortfolios.findAll({
-      where: { contestId: contestId }
-    })
-
     
-
-    return res.status(200).json(contestPorts)
+    try {
+      const portfolios = await ContestPortfolios.findAll({
+        where: {
+          contestId: contestId
+        },
+        include: {
+          model: Portfolio,
+          required: true
+        },
+        order: [[Portfolio, 'score', 'DESC']]
+      })
+      
+      var rank = 1;
+      for(const portfolio of portfolios){
+        await ContestWinners.create({
+          contestId: portfolio.contestId,
+          userId: portfolio.portfolio.userId,
+          rank: rank
+        })
+        rank += 1;
+      }
+  
+      const winners = await ContestWinners.findAll({
+        where:{contestId: contestId}
+      });
+  
+      return res.status(200).json(winners)
+    } catch (error) {
+      console.error('Error while fetching winner by contest Id: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while winner by contest Id',
+        errorMessage: error.message,
+      });
+    }
   }
 };

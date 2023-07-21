@@ -32,6 +32,6 @@ router
   .post(validate, ContestController.fetchJoinedContestByStatus);
 
 
-router.route('/getWinnerbyContestId').post(ContestController.getWinnerbyContestId)
+router.route('/getWinnerbyContestId').post(validate, ContestController.getWinnerbyContestId)
   
 module.exports = router;

@@ -1,6 +1,7 @@
+import { Op } from 'sequelize';
 import model from '../models';
 
-const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks } = model;
+const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks, ContestPortfolios, Contest } = model;
 
 const getStock = require('../../Stock-socket/getStocks');
 
@@ -87,6 +88,14 @@ export default {
     }
   },
   updatePrices: async function (req, res) {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+
     const token_list = [];
     const stocks = await Stocks.findAll();
 
@@ -109,17 +118,37 @@ export default {
         }
       }
 
-      const portfs = await Portfolio.findAll()
-      for(const port of portfs){
+      const contestPorts = await ContestPortfolios.findAll({
+        include:[
+          {
+            model: Contest,
+            required:true,
+            where:{
+              date: {
+                [Op.eq]: formattedDate
+              }
+            }
+          },
+          {
+            model: Portfolio,
+            required:true
+          }
+        ] 
+      })
+
+      
+      for(const port of contestPorts){
         const portStocks = await PortfolioStocks.findAll({
-          where: {portfolioId: port.id}
+          where: {portfolioId: port.portfolio.id},
+          include: {
+            model: Stocks,
+            required:true
+          }
         })
 
         var score = 0;
         for(const portStock of portStocks){
-          const stock = await Stocks.findOne({
-            where:{ id: portStock.stockId}
-          })
+          const stock = portStock.stock
 
           var stock_value = stock.close_price - stock.open_price
           if(stock_value > 0){
@@ -166,14 +195,16 @@ export default {
         }
         score = score*100/portStocks.length
 
-        await port.update({
+        await port.portfolio.update({
           score: score
         })
       }
-
+      
+      
       return res.status(200).json({
         message: 'Stock Data Updated and scores calculated Successfully',
       });
+
     } catch (error) {
       console.error('Error while fetching stock data:', error);
     }
