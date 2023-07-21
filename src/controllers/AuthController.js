@@ -16,8 +16,6 @@ export default {
   signUp: async (req, res) => {
     const userDetails = req.body;
 
-    console.log(userDetails)
-
     try {
       let newUser;
       let role;
@@ -31,16 +29,9 @@ export default {
             .status(400)
             .json({ message: 'Please provide first & last name!' });
         }
-        const username =
-          userDetails?.firstName || userDetails?.lastName
-            ? faker.internet.userName({
-                firstName: userDetails?.firstName,
-                lastName: userDetails?.lastName,
-              })
-            : 'Trooper';
 
         newUser = await User.create({
-          username: userDetails?.username ?? username,
+          username: userDetails?.username,
           phoneNumber: userDetails?.phoneNumber,
           email: userDetails?.email,
           gender: userDetails?.gender,
@@ -58,9 +49,7 @@ export default {
         });
       } else {
         // Unverified User i.e. Guest
-        newUser = await User.create({
-          username: 'Trooper',
-        });
+        newUser = await User.create();
 
         role = await Role.findOne({
           where: { role: 'guest' },
@@ -103,7 +92,7 @@ export default {
     } catch (error) {
       console.error('Some error: ', error);
       return res.status(500).json({
-        errorMessage: error?.message,
+        errorMessage: error?.errors?.map((error) => error.message),
         error: 'Something went wrong while signing up the user',
       });
     }
@@ -157,7 +146,6 @@ export default {
     const { phoneNumber } = req.body;
 
     try {
-      console.log("working till here")
       if (phoneNumber.includes('+')) {
         const user = await User.findOne({
           where: { phoneNumber },

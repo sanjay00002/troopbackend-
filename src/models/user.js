@@ -19,7 +19,6 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        defaultValue: 'Trooper',
       },
       email: { type: DataTypes.STRING, allowNull: true, unique: true },
       phoneNumber: { type: DataTypes.STRING, allowNull: true, unique: true },
@@ -65,6 +64,19 @@ export default (sequelize, DataTypes) => {
       user.firstName = firstName;
       user.lastName = lastName;
       user.username = username;
+    } else {
+      console.log('First and last name: ', user?.firstName, user?.lastName);
+      if (!!user?.firstName === false && !!user?.lastName === false) {
+        user.username = 'Trooper-' + user?.id.split('-')[1];
+      }
+      if (user?.firstName && user?.lastName) {
+        const username = faker.internet.userName({
+          firstName: user.firstName,
+          lastName: user.lastName,
+        });
+
+        user.username = username;
+      }
     }
   });
   return User;

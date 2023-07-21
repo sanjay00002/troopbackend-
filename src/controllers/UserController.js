@@ -135,19 +135,18 @@ export default {
     } catch (error) {
       console.error('Error while updating every user', error);
       return res.status(500).json({
-        errorMessage: error.message,
+        errorMessage: error.errors?.map((error) => error.message),
         error: 'Something went wrong while updating the user by ID!',
       });
     }
   },
-
 
   getAllUsers: async function (req, res) {
     try {
       const users = await User.findAll({
         attributes: { exclude: ['accessToken', 'refreshToken', 'loggedInAt'] },
       });
-  
+
       if (users.length > 0) {
         return res.status(200).json(users);
       } else {
@@ -162,6 +161,4 @@ export default {
       });
     }
   },
-
-
 };
