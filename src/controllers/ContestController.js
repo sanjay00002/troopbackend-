@@ -548,37 +548,49 @@ export default {
       });
     }
   },
-  getWinnerbyContestId: async function(req,res){
-    const contestId = req.body.contestId
+  getWinnerbyContestId: async function (req, res) {
+    const contestId = req.body.contestId;
     console.log(contestId);
-    
+
     try {
       const portfolios = await ContestPortfolios.findAll({
         where: {
-          contestId: contestId
+          contestId: contestId,
         },
         include: {
           model: Portfolio,
-          required: true
+          required: true,
         },
-        order: [[Portfolio, 'score', 'DESC']]
-      })
-      
-      var rank = 1;
-      for(const portfolio of portfolios){
-        await ContestWinners.create({
-          contestId: portfolio.contestId,
-          userId: portfolio.portfolio.userId,
-          rank: rank
-        })
-        rank += 1;
-      }
-  
-      const winners = await ContestWinners.findAll({
-        where:{contestId: contestId}
+        order: [[Portfolio, 'score', 'DESC']],
       });
-  
-      return res.status(200).json(winners)
+
+      try {
+        const contestWinnersExist = await ContestWinners.findAll({
+          where: { contestId: contestId },
+        });
+
+        if (contestWinnersExist) {
+          return res.status(401).json({
+            message: 'Contest Winners already calculated',
+          });
+        }
+      } catch (err) {
+        var rank = 1;
+        for (const portfolio of portfolios) {
+          await ContestWinners.create({
+            contestId: portfolio.contestId,
+            userId: portfolio.portfolio.userId,
+            rank: rank,
+          });
+          rank += 1;
+        }
+
+        const winners = await ContestWinners.findAll({
+          where: { contestId: contestId },
+        });
+
+        return res.status(200).json(winners);
+      }
     } catch (error) {
       console.error('Error while fetching winner by contest Id: ', error);
       return res.status(500).json({
@@ -586,5 +598,5 @@ export default {
         errorMessage: error.message,
       });
     }
-  }
+  },
 };
