@@ -1,6 +1,9 @@
+import { Op } from 'sequelize';
 import model from '../models';
 
-const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks } = model;
+const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks, ContestPortfolios, Contest } = model;
+
+const getStock = require('../../Stock-socket/getStocks');
 
 export default {
   enterStockData: async function (req, res) {
@@ -84,62 +87,126 @@ export default {
       });
     }
   },
-  updateStockPrices: async function(req,res){
-    const token_list = []
-    const stocks = await Stocks.findAll()
-    stocks.forEach(stock => {
-      token_list.push(stock.token)
+  updatePrices: async function (req, res) {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+
+    const token_list = [];
+    const stocks = await Stocks.findAll();
+
+    stocks.forEach((stock) => {
+      token_list.push(stock.token);
     });
 
-    // Assuming here we make the function call and for each token we get open and close price
-    const stockData = [];
     try {
-      const client = await pool.connect();
-  
-      // Construct the bulk update query with the CASE expression
-      let updateQuery = `
-        UPDATE stock_table
-        SET
-          open_price = (CASE token_number
-                        ${Object.entries(stockData).map(([token, [openPrice]]) => `WHEN ${token} THEN ${openPrice}`).join('\n')}
-                       END),
-          close_price = (CASE token_number
-                         ${Object.entries(stockData).map(([token, [closePrice]]) => `WHEN ${token} THEN ${closePrice}`).join('\n')}
-                        END)
-        WHERE token_number IN (${Object.keys(stockData).join(',')});
-      `;
-  
-      await client.query(updateQuery);
-  
-      // Release the client back to the pool
-      client.release();
-      
-      const portfolios = await Portfolio.findAll()
-      try {
-        const promises = portfolios.map(async (portfolio) => {
-          const portfolioStocks = await PortfolioStocks.findAll({
-            /* Your query options here */
-            where:{}
-          });
-    
-          // Process portfolioStocks or perform any other tasks related to each portfolio
-          // ...
-    
-          return portfolioStocks;
+      const stock_data = await getStock('io', 'socket', token_list, false);
+
+      for (const stock of stock_data) {
+        const stockrow = await Stocks.findOne({
+          where: { token: stock.token.replace(/\D/g, '') },
         });
-    
-        // Wait for all the promises to resolve using Promise.all
-        const results = await Promise.all(promises);
-    
-        // You can access the results here, which will be an array of results for each portfolio
-        console.log(results);
-      } catch (error) {
-        console.error("Error occurred during processing portfolios:", error);
+        if (stockrow) {
+          await stockrow.update({
+            open_price: stock.open_price_day,
+            close_price: stock.close_price, 
+          });
+        }
       }
 
-    } catch (err) {
-      console.error('Error during bulk update:', err);
+      const contestPorts = await ContestPortfolios.findAll({
+        include:[
+          {
+            model: Contest,
+            required:true,
+            where:{
+              date: {
+                [Op.eq]: formattedDate
+              }
+            }
+          },
+          {
+            model: Portfolio,
+            required:true
+          }
+        ] 
+      })
+
+      
+      for(const port of contestPorts){
+        const portStocks = await PortfolioStocks.findAll({
+          where: {portfolioId: port.portfolio.id},
+          include: {
+            model: Stocks,
+            required:true
+          }
+        })
+
+        var score = 0;
+        for(const portStock of portStocks){
+          const stock = portStock.stock
+
+          var stock_value = stock.close_price - stock.open_price
+          if(stock_value > 0){
+            if(portStock.action === 'Buy'){        
+              if(portStock.captain){
+                score += 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score += 1.5*stock_value/stock.open_price;
+              }else{
+                score += stock_value/stock.open_price;
+              }      
+            }
+
+            if(portStock.action === 'Sell'){
+              if(portStock.captain){
+                score -= 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score -= 1.5*stock_value/stock.open_price;
+              }else{
+                score -= stock_value/stock.open_price;
+              }      
+            }
+          }else{
+            if(portStock.action === 'Buy'){
+              if(portStock.captain){
+                score -= 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score -= 1.5*stock_value/stock.open_price;
+              }else{
+                score -= stock_value/stock.open_price;
+              }      
+            }
+
+            if(portStock.action === 'Sell'){
+              if(portStock.captain){
+                score += 2*stock_value/stock.open_price;
+              }else if(portStock.viceCaptain){
+                score += 1.5*stock_value/stock.open_price;
+              }else{
+                score += stock_value/stock.open_price;
+              }      
+            }
+          }
+        }
+        score = score*100/portStocks.length
+
+        await port.portfolio.update({
+          score: score
+        })
+      }
+      
+      
+      return res.status(200).json({
+        message: 'Stock Data Updated and scores calculated Successfully',
+      });
+
+    } catch (error) {
+      console.error('Error while fetching stock data:', error);
     }
-    return res.status(201).json(token_list)
-  }
+  },
 };
