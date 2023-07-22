@@ -14,6 +14,8 @@ export async function up(queryInterface, Sequelize) {
       field: 'id',
       table: 'Users',
     },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 }
 export async function down(queryInterface, Sequelize) {

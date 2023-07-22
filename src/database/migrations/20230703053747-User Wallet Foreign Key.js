@@ -14,6 +14,8 @@ export async function up(queryInterface, Sequelize) {
       field: 'id',
     },
     name: 'user_wallet_fk_constraint',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 }
 export async function down(queryInterface, Sequelize) {

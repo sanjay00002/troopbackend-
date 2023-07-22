@@ -17,6 +17,8 @@ module.exports = {
         table: 'Contests',
         field: 'id',
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     });
   },
 

@@ -14,6 +14,8 @@ export async function up(queryInterface, Sequelize) {
       table: 'Roles',
       field: 'id',
     },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 
   await queryInterface.addConstraint('UserRoles', {
@@ -24,6 +26,8 @@ export async function up(queryInterface, Sequelize) {
       table: 'Users',
       field: 'id',
     },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 }
 export async function down(queryInterface, Sequelize) {

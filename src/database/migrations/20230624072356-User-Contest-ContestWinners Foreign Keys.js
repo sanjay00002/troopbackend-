@@ -17,6 +17,8 @@ module.exports = {
         table: 'Users',
         field: 'id',
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     });
 
     await queryInterface.addConstraint('ContestWinners', {
@@ -27,6 +29,8 @@ module.exports = {
         table: 'Contests',
         field: 'id',
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     });
   },
 

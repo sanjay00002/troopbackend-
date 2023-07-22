@@ -14,6 +14,8 @@ export async function up(queryInterface, Sequelize) {
       table: 'ContestCategories',
       field: 'id',
     },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 }
 export async function down(queryInterface, Sequelize) {

@@ -14,6 +14,8 @@ export async function up(queryInterface, Sequelize) {
       field: 'id',
       table: 'Users',
     },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 
   await queryInterface.addConstraint('UserCrates', {
@@ -24,6 +26,8 @@ export async function up(queryInterface, Sequelize) {
       field: 'id',
       table: 'CrateCategories',
     },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   });
 }
 export async function down(queryInterface, Sequelize) {

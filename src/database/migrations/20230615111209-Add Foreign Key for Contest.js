@@ -18,6 +18,8 @@ module.exports = {
         table: 'Users',
         field: 'id',
       },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     });
   },
 

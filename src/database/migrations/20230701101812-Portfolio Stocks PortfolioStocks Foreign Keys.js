@@ -14,6 +14,8 @@ export async function up(queryInterface, Sequelize) {
       table: 'Portfolios',
       field: 'id',
     },
+    onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
   });
 
   await queryInterface.addConstraint('PortfolioStocks', {
@@ -24,6 +26,8 @@ export async function up(queryInterface, Sequelize) {
       table: 'Stocks',
       field: 'id',
     },
+    onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
   });
 
   await queryInterface.addConstraint('PortfolioStocks', {
