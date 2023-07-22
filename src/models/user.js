@@ -58,7 +58,11 @@ export default (sequelize, DataTypes) => {
         ) {
           user.username = 'Trooper-' + user?.id.split('-')[1];
         }
-        if (user?.dataValues.firstName && user?.dataValues.lastName) {
+        if (
+          user?.dataValues.firstName &&
+          user?.dataValues.lastName &&
+          !!user?.dataValues.username === false
+        ) {
           const username = faker.internet.userName({
             firstName: user.dataValues.firstName,
             lastName: user.dataValues.lastName,
@@ -67,20 +71,20 @@ export default (sequelize, DataTypes) => {
           user.username = username;
         }
       }
-    }
-  });
-  User.beforeCreate(async (user, options) => {
-    if (user.isBot) {
-      const firstName = faker.person.firstName();
-      const lastName = faker.person.lastName();
-      const username = faker.internet.userName({
-        firstName: firstName,
-        lastName: lastName,
-      });
 
-      user.firstName = firstName;
-      user.lastName = lastName;
-      user.username = username;
+      // * Added this here because of unique validation of username field
+      if (user?.dataValues?.isBot === true) {
+        const firstName = faker.person.firstName();
+        const lastName = faker.person.lastName();
+        const username = faker.internet.userName({
+          firstName: firstName,
+          lastName: lastName,
+        });
+
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.username = username;
+      }
     }
   });
   return User;

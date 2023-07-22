@@ -10,7 +10,6 @@ export async function up(queryInterface, Sequelize) {
     username: {
       type: Sequelize.STRING,
       allowNull: true,
-      defaultValue: 'Trooper',
       unique: true,
     },
     email: {
