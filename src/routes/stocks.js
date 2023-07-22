@@ -8,4 +8,6 @@ router.route('/enter').post(validate, StockController.enterStockData);
 
 router.route('/enterBulk').post(validate, StockController.enterBulkStockData);
 
+router.route('/updatePrices').get(validate, StockController.updateStockPrices);
+
 module.exports = router;

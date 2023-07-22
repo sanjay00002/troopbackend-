@@ -1,6 +1,6 @@
 import model from '../models';
 
-const { Stocks, StocksSubCategories, SubCategories } = model;
+const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks } = model;
 
 export default {
   enterStockData: async function (req, res) {
@@ -84,4 +84,62 @@ export default {
       });
     }
   },
+  updateStockPrices: async function(req,res){
+    const token_list = []
+    const stocks = await Stocks.findAll()
+    stocks.forEach(stock => {
+      token_list.push(stock.token)
+    });
+
+    // Assuming here we make the function call and for each token we get open and close price
+    const stockData = [];
+    try {
+      const client = await pool.connect();
+  
+      // Construct the bulk update query with the CASE expression
+      let updateQuery = `
+        UPDATE stock_table
+        SET
+          open_price = (CASE token_number
+                        ${Object.entries(stockData).map(([token, [openPrice]]) => `WHEN ${token} THEN ${openPrice}`).join('\n')}
+                       END),
+          close_price = (CASE token_number
+                         ${Object.entries(stockData).map(([token, [closePrice]]) => `WHEN ${token} THEN ${closePrice}`).join('\n')}
+                        END)
+        WHERE token_number IN (${Object.keys(stockData).join(',')});
+      `;
+  
+      await client.query(updateQuery);
+  
+      // Release the client back to the pool
+      client.release();
+      
+      const portfolios = await Portfolio.findAll()
+      try {
+        const promises = portfolios.map(async (portfolio) => {
+          const portfolioStocks = await PortfolioStocks.findAll({
+            /* Your query options here */
+            where:{}
+          });
+    
+          // Process portfolioStocks or perform any other tasks related to each portfolio
+          // ...
+    
+          return portfolioStocks;
+        });
+    
+        // Wait for all the promises to resolve using Promise.all
+        const results = await Promise.all(promises);
+    
+        // You can access the results here, which will be an array of results for each portfolio
+        console.log(results);
+      } catch (error) {
+        console.error("Error occurred during processing portfolios:", error);
+      }
+
+    } catch (err) {
+      console.error('Error during bulk update:', err);
+    }
+    return res.status(201).json(token_list)
+  }
 };
