@@ -7,7 +7,7 @@ import CronJobController from '../../controllers/CronJobController';
 import client from '../../api/client';
 import { createPortfolioForBot } from '../../lib/bot';
 
-const { StocksSubCategories } = models;
+const { User, StocksSubCategories } = models;
 
 const scheduleOptions = {
   scheduled: true,
@@ -89,7 +89,7 @@ module.exports = () => {
                               async (stock) => await stock.get('stockId'),
                             ),
                           );
-                          console.log('StockIdList: ', stockIdList);
+                          // console.log('StockIdList: ', stockIdList);
 
                           const stocks = await createPortfolioForBot(
                             stockIdList,
@@ -107,7 +107,7 @@ module.exports = () => {
                                 Authorization: 'Bearer ' + bot.accessToken,
                               },
                             })
-                            .then((response) => console.log(response.data))
+                            // .then((response) => console.log(response.data))
                             .catch((error) => {
                               throw new Error(error.response);
                             });
@@ -116,6 +116,11 @@ module.exports = () => {
                   });
               });
             }
+
+            // * Delete the dummy bot
+            await User.destroy({
+              where: { id: bot.id },
+            });
           }
         } catch (error) {
           console.error(
