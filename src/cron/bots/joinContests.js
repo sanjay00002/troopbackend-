@@ -50,71 +50,77 @@ module.exports = () => {
               });
 
             if (categories?.data?.length) {
-              categories.data.forEach(async (category) => {
-                const contests = await client
-                  .post('/contest/contestsByCategory', {
-                    category: category.name,
-                  })
-                  .then((response) => response.data)
-                  .catch((error) => {
-                    throw new Error(error.response);
-                  });
+              // * Restrict Bots to join the Private Contests
+              categories.data
+                .filter((category) => category.name !== 'Private')
+                .forEach(async (category) => {
+                  const contests = await client
+                    .post('/contest/contestsByCategory', {
+                      category: category.name,
+                    })
+                    .then((response) => response.data)
+                    .catch((error) => {
+                      throw new Error(error.response);
+                    });
 
-                contests?.length &&
-                  contests.forEach(async (contest) => {
-                    const nonParticipantCount =
-                      contest.slots - Number(contest.participants);
+                  contests?.length &&
+                    contests.forEach(async (contest) => {
+                      const nonParticipantCount =
+                        contest.slots - Number(contest.participants);
 
-                    if (nonParticipantCount > 0) {
-                      const bulkBots = await client
-                        .post('/bot/bulkCreate', { limit: nonParticipantCount })
-                        .then((response) => response.data)
-                        .catch((error) => {
-                          throw new Error(error.response);
-                        });
-
-                      bulkBots?.length > 0 &&
-                        bulkBots.forEach(async (bot) => {
-                          // * Join the contest with a random portfolio
-
-                          const stocksList = await StocksSubCategories.findAll({
-                            where: {
-                              subCategoryId: contest.subCategoryId,
-                            },
-                            attributes: { include: ['stockId'] },
+                      if (nonParticipantCount > 0) {
+                        const bulkBots = await client
+                          .post('/bot/bulkCreate', {
+                            limit: nonParticipantCount,
+                          })
+                          .then((response) => response.data)
+                          .catch((error) => {
+                            throw new Error(error.response);
                           });
 
-                          const stockIdList = await Promise.all(
-                            stocksList?.map(
-                              async (stock) => await stock.get('stockId'),
-                            ),
-                          );
-                          // console.log('StockIdList: ', stockIdList);
+                        bulkBots?.length > 0 &&
+                          bulkBots.forEach(async (bot) => {
+                            // * Join the contest with a random portfolio
 
-                          const stocks = await createPortfolioForBot(
-                            stockIdList,
-                          );
+                            const stocksList =
+                              await StocksSubCategories.findAll({
+                                where: {
+                                  subCategoryId: contest.subCategoryId,
+                                },
+                                attributes: { include: ['stockId'] },
+                              });
 
-                          const joinContestObj = {
-                            id: contest.id,
-                            portfolio: { stocks },
-                          };
-                          // console.log('Join Contest: ', joinContestObj);
+                            const stockIdList = await Promise.all(
+                              stocksList?.map(
+                                async (stock) => await stock.get('stockId'),
+                              ),
+                            );
+                            // console.log('StockIdList: ', stockIdList);
 
-                          await client
-                            .post('/contest/join', joinContestObj, {
-                              headers: {
-                                Authorization: 'Bearer ' + bot.accessToken,
-                              },
-                            })
-                            // .then((response) => console.log(response.data))
-                            .catch((error) => {
-                              throw new Error(error.response);
-                            });
-                        });
-                    }
-                  });
-              });
+                            const stocks = await createPortfolioForBot(
+                              stockIdList,
+                            );
+
+                            const joinContestObj = {
+                              id: contest.id,
+                              portfolio: { stocks },
+                            };
+                            // console.log('Join Contest: ', joinContestObj);
+
+                            await client
+                              .post('/contest/join', joinContestObj, {
+                                headers: {
+                                  Authorization: 'Bearer ' + bot.accessToken,
+                                },
+                              })
+                              // .then((response) => console.log(response.data))
+                              .catch((error) => {
+                                throw new Error(error.response);
+                              });
+                          });
+                      }
+                    });
+                });
             }
 
             // * Delete the dummy bot
