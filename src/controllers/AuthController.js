@@ -275,7 +275,7 @@ export default {
 
               return res.status(200).json({
                 accessToken: newAccessToken,
-                refershToken: newRefreshToken,
+                refreshToken: newRefreshToken,
               });
             } else {
               // Refresh Token Reuse
