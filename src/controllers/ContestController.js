@@ -691,4 +691,52 @@ export default {
       });
     }
   },
+
+  getPrivateContests: async function (req, res) {
+    const userId = req.id;
+
+    try {
+      const existingUser = await User.findByPk(userId);
+      if (existingUser) {
+        const privateContestCategoryId = await ContestCategories.findOne({
+          where: {
+            name: 'Private',
+          },
+        });
+
+        if (privateContestCategoryId) {
+          const contests = await Contest.findAll({
+            where: {
+              categoryId: await privateContestCategoryId.get('id'),
+              createdBy: userId,
+            },
+          });
+
+          const contestArr = await Promise.all([
+            ...contests.map(async (contest) => await contest.get()),
+          ]);
+
+          return res.status(200).json(contestArr);
+        } else {
+          return res.status(404).json({
+            message: 'Private Contest category was not found!',
+          });
+        }
+      } else {
+        return res.status(404).json({
+          message: 'User not found!',
+        });
+      }
+    } catch (error) {
+      console.error(
+        'Error while fetching private contest for the user: ',
+        error,
+      );
+      return res.status(500).json({
+        error:
+          'Something went wrong while fetching private contest for the user',
+        errorMessage: error.message,
+      });
+    }
+  },
 };

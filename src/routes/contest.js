@@ -37,4 +37,8 @@ router
   .route('/getPriceDistribution')
   .post(validate, ContestController.privateContestPriceDistribution);
 
+router
+  .route('/getPrivateContests')
+  .post(validate, ContestController.getPrivateContests);
+
 module.exports = router;
