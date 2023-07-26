@@ -33,4 +33,8 @@ router
 
 router.route('/stockStats').post(validate, ContestController.getStockStats);
 
+router
+  .route('/getPriceDistribution')
+  .post(validate, ContestController.privateContestPriceDistribution);
+
 module.exports = router;

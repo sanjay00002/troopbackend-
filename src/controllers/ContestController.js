@@ -2,6 +2,7 @@ import { Op, Sequelize } from 'sequelize';
 import model from '../models';
 import { validatePortfolio } from '../lib/portfolio';
 import { getContestStatus } from '../lib/contest';
+import calculatePayout, { calculatePrivatePayout } from './../lib/payout';
 
 const {
   ContestCategories,
@@ -667,6 +668,25 @@ export default {
       console.error('Error while fetching live stocks stats: ', error);
       return res.status(500).json({
         error: 'Something went wrong while fetching live stocks stats',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  privateContestPriceDistribution: async function (req, res) {
+    const { entryAmount, noOfWinners, totalPlayers } = req.body;
+    try {
+      const priceDistribution = calculatePayout(noOfWinners, entryAmount, 0.7);
+
+      return res.status(200).json(priceDistribution);
+    } catch (error) {
+      console.error(
+        'Error while calculating price distribution for private contest: ',
+        error,
+      );
+      return res.status(500).json({
+        error:
+          'Something went wrong while calculating price distribution for private contest',
         errorMessage: error.message,
       });
     }
