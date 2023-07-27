@@ -262,7 +262,7 @@ export default {
               );
 
               if (await foundUser.get('isBot')) {
-                foundUser.update({
+                await foundUser.update({
                   accessToken: newAccessToken,
                   refreshToken: newRefreshToken,
                 });

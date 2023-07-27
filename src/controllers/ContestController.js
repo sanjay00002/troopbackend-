@@ -739,4 +739,74 @@ export default {
       });
     }
   },
+
+  updatePrivateContestDetails: async function (req, res) {
+    const { id, name, entryAmount, slots, priceDistribution } = req.body;
+
+    try {
+      const existingContest = await Contest.findByPk(id);
+
+      if (existingContest) {
+        const contestStatus = getContestStatus(existingContest);
+
+        // * Check if the contest has not started yet
+        if (contestStatus === 'live') {
+          return res.status(403).json({
+            message: 'Contest is live! Cannot join!',
+          });
+        } else if (contestStatus === 'completed') {
+          return res.status(403).json({
+            message: 'Contest has ended',
+          });
+        }
+
+        const exisitngContestId = await existingContest.get('id');
+
+        const deletedPriceDistributionRows =
+          await ContestPriceDistribution.destroy({
+            where: {
+              contestId: exisitngContestId,
+            },
+            cascade: true,
+          });
+
+        console.log('Deleted Rows: ', deletedPriceDistributionRows);
+
+        if (deletedPriceDistributionRows) {
+          for (let i = 0; i < priceDistribution?.length; i++) {
+            await ContestPriceDistribution.create({
+              contestId: exisitngContestId,
+              rankStart: priceDistribution[i].rankStart,
+              rankEnd: priceDistribution[i].rankEnd,
+              priceAmount: priceDistribution[i].priceAmount,
+            });
+          }
+
+          await existingContest.update(
+            {
+              name,
+              entryAmount,
+              slots,
+              pricePool: priceDistribution[0]?.priceAmount ?? null,
+            },
+            { fields: ['name', 'entryAmount', 'slots', 'pricePool'] },
+          );
+
+          return res.status(200).json({
+            message: 'Contest Updated Successfully!',
+          });
+        }
+      }
+    } catch (error) {
+      console.error(
+        'Error while updating private contest details for the user: ',
+        error,
+      );
+      return res.status(500).json({
+        error:
+          'Something went wrong while updating private contest details for the user',
+        errorMessage: error.message,
+      });
+    }
+  },
 };

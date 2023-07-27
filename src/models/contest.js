@@ -64,6 +64,7 @@ export default (sequelize, DataTypes) => {
   }
   Contest.init(
     {
+      name: { type: DataTypes.STRING, allowNull: true },
       categoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,

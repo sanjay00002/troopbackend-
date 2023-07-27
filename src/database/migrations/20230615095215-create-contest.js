@@ -6,6 +6,10 @@ export async function up(queryInterface, Sequelize) {
       primaryKey: true,
       type: Sequelize.STRING,
     },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     categoryId: {
       type: Sequelize.INTEGER,
       allowNull: false,

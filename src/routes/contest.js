@@ -34,11 +34,15 @@ router
 router.route('/stockStats').post(validate, ContestController.getStockStats);
 
 router
-  .route('/getPriceDistribution')
+  .route('/private/getPriceDistribution')
   .post(validate, ContestController.privateContestPriceDistribution);
 
 router
-  .route('/getPrivateContests')
+  .route('/private/getContests')
   .post(validate, ContestController.getPrivateContests);
+
+router
+  .route('/private/update')
+  .patch(validate, ContestController.updatePrivateContestDetails);
 
 module.exports = router;
