@@ -569,27 +569,42 @@ export default {
           where: { contestId: contestId },
         });
 
-        if (contestWinnersExist) {
+        if (contestWinnersExist.length > 0){
           return res.status(401).json({
             message: 'Contest Winners already calculated',
           });
+        }else{
+          var total_users = portfolios.length
+          var rank = 1;
+          for (const portfolio of portfolios) {
+            // Rank updation takes here 
+            await ContestWinners.create({
+              contestId: portfolio.contestId,
+              userId: portfolio.portfolio.userId,
+              rank: rank,
+            });
+            // ticket count updates here
+            if((rank/total_users) <= 0.75){
+              const top_user = await User.findByPk(portfolio.portfolio.userId)
+              await top_user.update({
+                ticketCount: (top_user.ticketCount + 1)
+              })
+            }
+            rank += 1;
+          }
+  
+          const winners = await ContestWinners.findAll({
+            where: { contestId: contestId },
+          });
+  
+          return res.status(200).json(winners);
         }
       } catch (err) {
-        var rank = 1;
-        for (const portfolio of portfolios) {
-          await ContestWinners.create({
-            contestId: portfolio.contestId,
-            userId: portfolio.portfolio.userId,
-            rank: rank,
-          });
-          rank += 1;
-        }
-
-        const winners = await ContestWinners.findAll({
-          where: { contestId: contestId },
+        console.error('Error while fetching winner by contest Id: ', err);
+        return res.status(500).json({
+          error: 'Something went wrong while winner by contest Id',
+          errorMessage: error.message,
         });
-
-        return res.status(200).json(winners);
       }
     } catch (error) {
       console.error('Error while fetching winner by contest Id: ', error);

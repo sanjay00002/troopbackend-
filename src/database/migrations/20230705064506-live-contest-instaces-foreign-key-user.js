@@ -12,7 +12,7 @@ module.exports = {
     await queryInterface.addConstraint('LiveContestUserPool', {
       fields: ['user_id'],
       type: 'foreign key',
-      name: 'users_lives_fk_constraint',
+      name: 'users_lives1_fk_constraint',
       references: {
         table: 'Users',
         field: 'id',
@@ -22,7 +22,7 @@ module.exports = {
     await queryInterface.addConstraint('LiveContestUserPool',{
       fields: ['contest_id'],
       type: 'foreign key',
-      name: 'contests_lives_fk_constraint',
+      name: 'contests_lives1_fk_constraint',
       references:{
         table: 'LiveContests',
         field: 'id',
@@ -32,7 +32,7 @@ module.exports = {
     await queryInterface.addConstraint('LiveContestUserPool',{
       fields: ['stock_id'],
       type: 'foreign key',
-      name: 'stocks_lives_fk_constraint',
+      name: 'stocks_lives1_fk_constraint',
       references:{
         table: 'Stocks',
         field: 'id',
@@ -50,17 +50,17 @@ module.exports = {
 
     await queryInterface.removeConstraint(
       'LiveContestUserPool',
-      'users_lives_fk_constraint',
+      'users_lives1_fk_constraint',
     );
 
     await queryInterface.removeConstraint(
       'LiveContestUserPool',
-      'contests_lives_fk_constraint',
+      'contests_lives1_fk_constraint',
     );
 
     await queryInterface.removeConstraint(
       'LiveContestUserPool',
-      'stocks_lives_fk_constraint',
+      'stocks_lives1_fk_constraint',
     );
   },
 };
