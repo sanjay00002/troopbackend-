@@ -575,9 +575,14 @@ export default {
           });
         }else{
           var total_users = portfolios.length
-          var rank = 1;
+          var rank = 0;
+          var prev_score = -1;
           for (const portfolio of portfolios) {
             // Rank updation takes here 
+            if(prev_score !== portfolio.portfolio.score){
+              prev_score = portfolio.portfolio.score;
+              rank += 1;
+            }
             await ContestWinners.create({
               contestId: portfolio.contestId,
               userId: portfolio.portfolio.userId,
@@ -590,7 +595,6 @@ export default {
                 ticketCount: (top_user.ticketCount + 1)
               })
             }
-            rank += 1;
           }
   
           const winners = await ContestWinners.findAll({
