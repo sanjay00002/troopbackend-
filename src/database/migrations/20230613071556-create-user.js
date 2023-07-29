@@ -57,7 +57,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
       defaultValue: 0,
     },
-    ticketCount: {
+    tickets: {
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: 0,
