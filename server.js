@@ -13,7 +13,7 @@ import stocksRouter from './src/routes/stocks';
 import walletRouter from './src/routes/wallet';
 import liveContestRouter from './src/routes/liveContest';
 import bankDetailRouter from './src/routes/bankDetail';
-import faqRouter from './src/routes/faq'
+import faqRouter from './src/routes/faq';
 
 const findMatch = require('./src/socketfiles/findMatch');
 const joinLiveContest = require('./src/socketfiles/joinLiveContest');
@@ -34,7 +34,6 @@ const io = new Server(httpServer, {
   },
 });
 
-
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
@@ -43,24 +42,22 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
-io.on('connection',(socket)=>{
-  socket.on('send-stock-tokens',(stock_token)=>{
-    getStock(io,socket,stock_token,true)
-  })
-})
+io.on('connection', (socket) => {
+  socket.on('send-stock-tokens', (stock_token) => {
+    getStock(io, socket, stock_token, true);
+  });
+});
 
 const normalContest = io.of('/normalContest');
 
 normalContest.on('connection', (socket) => {
-
   // socket connection to show the live contest joined users
   socket.on('user-count', (contests) => {
     // here the contest id list is fetched from the frontend
-    contests.forEach(contest => {
+    contests.forEach((contest) => {
       currentUserCount(io, socket, pool, contest);
     });
   });
-  
 });
 
 // Creating a namespace for handling all the socket connections for live econtests
@@ -69,18 +66,24 @@ const liveContest = io.of('/liveContest');
 
 liveContest.on('connection', (socket) => {
   // console.log("Live contest socket connected");
-  socket.emit('get-socket-id',socket.id)
+  socket.emit('get-socket-id', socket.id);
 
-  socket.on('add-in-db',(user)=>{
-    joinLiveContest(socket,pool,user)
-  })
+  socket.on('add-in-db', (user) => {
+    joinLiveContest(socket, pool, user);
+  });
 
-  socket.on('find-match',(user)=>{
-    findMatch(io,socket,pool,user)
-  })
-
+  socket.on('find-match', (user) => {
+    findMatch(io, socket, pool, user);
+  });
 });
 
+const slotMachine = io.of('/slotMachine');
+
+slotMachine.on('connection', (socket) => {
+  socket.on('triggered',()=>{
+    console.log('Slot Machine triggered');
+  })
+});
 
 const port = process.env.PORT || 5000;
 
@@ -105,10 +108,9 @@ app.use('/api/v1/bot', botRouter);
 app.use('/api/v1/sub-category', subCategoriesRouter);
 app.use('/api/v1/stocks', stocksRouter);
 app.use('/api/v1/wallet', walletRouter);
-app.use('/api/v1/live-contest',liveContestRouter)
-app.use('/api/v1/bank-detail',bankDetailRouter)
-app.use('/api/v1/faq',faqRouter)
-
+app.use('/api/v1/live-contest', liveContestRouter);
+app.use('/api/v1/bank-detail', bankDetailRouter);
+app.use('/api/v1/faq', faqRouter);
 
 io.adapter(createAdapter(pool));
 // server started using socket rather than express

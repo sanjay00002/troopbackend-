@@ -5,6 +5,7 @@ import Home from './Components/Home';
 import NormalContestflow from './Components/NormalContestflow';
 import LiveContesflow from './Components/LiveContesflow';
 import Stock from './Components/Stock';
+import SlotMachine from './Components/SlotMachine';
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
         <Route path='/normalContestJoin' element={<NormalContestflow/>}/>
         <Route path='/liveContestJoin' element={<LiveContesflow/>}/>
         <Route path='/stockTesting' element={<Stock/>}/>
-
+        <Route path='/slotMachine' element={<SlotMachine/>} />
       </Routes>
     </BrowserRouter>
   );
