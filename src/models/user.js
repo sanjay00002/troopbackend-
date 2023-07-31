@@ -32,7 +32,7 @@ export default (sequelize, DataTypes) => {
       isBot: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       profileImage: { type: DataTypes.STRING, allowNull: true },
       score: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
-      ticketCount: {
+      tickets: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,

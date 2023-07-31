@@ -69,7 +69,7 @@ export default {
           isBot: await user.get('isBot'),
           profileImage: await user.get('profileImage'),
           points: await user.get('points'),
-          ticketCount: await user.get('ticketCount'),
+          tickets: await user.get('tickets'),
           referralCode: await user.get('referralCode'),
           referrer: await user.get('referrer'),
           referredAt: await user.get('referredAt'),

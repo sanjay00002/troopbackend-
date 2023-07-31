@@ -742,7 +742,7 @@ export default {
             if((rank/total_users) <= 0.75){
               const top_user = await User.findByPk(portfolio.portfolio.userId)
               await top_user.update({
-                ticketCount: (top_user.ticketCount + 1)
+                tickets: (top_user.tickets + 1)
               })
             }
           }
