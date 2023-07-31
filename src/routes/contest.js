@@ -33,4 +33,8 @@ router
 
 router.route('/stockStats').post(validate, ContestController.getStockStats);
 
+router
+  .route('/getWinnerbyContestId')
+  .post(validate, ContestController.getWinnerbyContestId);
+
 module.exports = router;

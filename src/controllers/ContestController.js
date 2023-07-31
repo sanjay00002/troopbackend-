@@ -698,4 +698,74 @@ export default {
       });
     }
   },
+  getWinnerbyContestId: async function (req, res) {
+    const contestId = req.body.contestId;
+    console.log(contestId);
+
+    try {
+      const portfolios = await ContestPortfolios.findAll({
+        where: {
+          contestId: contestId,
+        },
+        include: {
+          model: Portfolio,
+          required: true,
+        },
+        order: [[Portfolio, 'score', 'DESC']],
+      });
+
+      try {
+        const contestWinnersExist = await ContestWinners.findAll({
+          where: { contestId: contestId },
+        });
+
+        if (contestWinnersExist.length > 0){
+          return res.status(401).json({
+            message: 'Contest Winners already calculated',
+          });
+        }else{
+          var total_users = portfolios.length
+          var rank = 0;
+          var prev_score = -1;
+          for (const portfolio of portfolios) {
+            // Rank updation takes here 
+            if(prev_score !== portfolio.portfolio.score){
+              prev_score = portfolio.portfolio.score;
+              rank += 1;
+            }
+            await ContestWinners.create({
+              contestId: portfolio.contestId,
+              userId: portfolio.portfolio.userId,
+              rank: rank,
+            });
+            // ticket count updates here
+            if((rank/total_users) <= 0.75){
+              const top_user = await User.findByPk(portfolio.portfolio.userId)
+              await top_user.update({
+                ticketCount: (top_user.ticketCount + 1)
+              })
+            }
+          }
+  
+          const winners = await ContestWinners.findAll({
+            where: { contestId: contestId },
+          });
+  
+          return res.status(200).json(winners);
+        }
+      } catch (err) {
+        console.error('Error while fetching winner by contest Id: ', err);
+        return res.status(500).json({
+          error: 'Something went wrong while winner by contest Id',
+          errorMessage: error.message,
+        });
+      }
+    } catch (error) {
+      console.error('Error while fetching winner by contest Id: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while winner by contest Id',
+        errorMessage: error.message,
+      });
+    }
+  },
 };

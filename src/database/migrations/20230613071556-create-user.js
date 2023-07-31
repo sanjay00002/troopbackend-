@@ -58,6 +58,11 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
       defaultValue: 0,
     },
+    tickets: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     referralCode: {
       type: Sequelize.STRING,
       allowNull: true,
