@@ -1,0 +1,146 @@
+[
+    {
+      "coupon_id": "2273",
+      "merchant_id": "cpd_1004",
+      "network_id": null,
+      "title": "Up To 70% OFF on Home & Kitchen from Amazon",
+      "description": "Amazon extending Up To 70% Off on Home & Kitchen. Max cashback Rs. 200 per user. Get 15% Cashback​​​​​​​ up to Rs 200 on a minimum purchase of Rs 1 via the given code for new users Applicable Products - Home, Kitchen, Sports, Auto, Industrial tools & safety supplies, Furniture, Home Improvement, and Lawn & Garden orders. ​​​​​​​The applicable cash back under your offer will be credited to the eligible user’s Amazon account as shipping. Note - Buy products from Home & Kitchen (only) and apply the coupon on that payment page to avail of the offer. This Coupon is valid for new users. Click to GET CODE to copy the coupon and apply at cart checkout. Enjoy the Coupon before expiry!",
+      "discount": "Up To 70% Off",
+      "coupon_code": "HOM15",
+      "plain_link": "https://www.amazon.in/Home-Kitchen/b?node=976442031",
+      "applicable_on": "Home & Kitchen",
+      "not_applicable_on": null,
+      "min_purchase": null,
+      "max_discount": "Rs. 200",
+      "brands": [],
+      "terms": "Get 15% Cashback​​​​​​​ up to Rs 200 on a minimum purchase of Rs 1 via the given code for new users\r\nApplicable Products - Home, Kitchen, Sports, Auto, Industrial tools & safety supplies, Furniture, Home Improvement, and Lawn & Garden orders.\r\n​​​​​​​The applicable cash back under your offer will be credited to the eligible user’s Amazon account as shipping.\r\nNote - Buy products from Home & Kitchen (only) and apply the coupon on that payment page to avail of the offer.",
+      "user_type": "new",
+      "exclusive": "0",
+      "start_date": null,
+      "end_date": null,
+      "verified_at": "28-07-2023",
+      "created_at": "01-06-2023",
+      "updated_at": "28-07-2023",
+      "category_names": [
+        "Kitchen Appliances",
+        "Decor and Furniture",
+        "Home Furniture",
+        "Garden and Outdoor",
+        "Home Appliances"
+      ],
+      "category_ids": [
+        1011,
+        1800,
+        1801,
+        1802,
+        1010
+      ],
+      "category_names_list": "Kitchen Appliances|Decor and Furniture|Home Furniture|Garden and Outdoor|Home Appliances",
+      "tag_names": [
+        "Payment Wallets",
+        "Amazon Pay"
+      ],
+      "tag_ids": [
+        "12000",
+        "12003"
+      ],
+      "brand_names": [],
+      "brand_ids": [],
+      "payment_mode_names": [],
+      "payment_mode_ids": [],
+      "affiliate_link": "https://www.amazon.in/Home-Kitchen/b?node=976442031",
+      "merchant_logo": "https://publisher.coupomated.com/logos/images/merchants/3bb8c12301.png",
+      "merchant_name": "Amazon",
+      "id": "2273"
+    },
+    {
+      "coupon_id": "11195",
+      "merchant_id": "cpd_1004",
+      "network_id": null,
+      "title": " on Realme GT 2 smartphone ( all User)",
+      "description": "Get on Realme GT 2 smartphone. This Coupon is valid for all customers only. Click on GET CODE to use given coupon code.",
+      "discount": "Best Offer",
+      "coupon_code": "A63L29DD",
+      "plain_link": "https://www.amazon.in/dp/B09ZJ48JCJ",
+      "applicable_on": "Realme GT 2 smartphone",
+      "not_applicable_on": null,
+      "min_purchase": null,
+      "max_discount": null,
+      "brands": [],
+      "terms": null,
+      "user_type": "all",
+      "exclusive": "0",
+      "start_date": null,
+      "end_date": null,
+      "verified_at": "15-06-2023",
+      "created_at": "15-06-2023",
+      "updated_at": "15-06-2023",
+      "category_names": [
+        "Mobile"
+      ],
+      "category_ids": [
+        1001
+      ],
+      "category_names_list": "Mobile",
+      "tag_names": [],
+      "tag_ids": [],
+      "brand_names": [],
+      "brand_ids": [],
+      "payment_mode_names": [],
+      "payment_mode_ids": [],
+      "affiliate_link": "https://www.amazon.in/dp/B09ZJ48JCJ",
+      "merchant_logo": "https://publisher.coupomated.com/logos/images/merchants/3bb8c12301.png",
+      "merchant_name": "Amazon",
+      "id": "11195"
+    },
+    {
+      "coupon_id": "12650",
+      "merchant_id": "cpd_1004",
+      "network_id": null,
+      "title": "Up to 25% Cashback on Home Appliances from Amazon",
+      "description": "Amazon presenting Up to 25% Cashback on Home Appliances. Minimum order value Rs. 1,000 to redeem the Coupon Max cashback Rs. 500 per user. This Coupon is valid for all customers. Click to GET CODE to copy the coupon and apply at cart checkout. Enjoy the Coupon before expiry!",
+      "discount": "Up to 25% Cashback",
+      "coupon_code": "ABFP500N",
+      "plain_link": "https://www.amazon.in/b?node=1380263031&ref=ATFQC_seeall",
+      "applicable_on": "Home Appliances",
+      "not_applicable_on": null,
+      "min_purchase": "Rs. 1,000",
+      "max_discount": "Rs. 500",
+      "brands": [],
+      "terms": null,
+      "user_type": "all",
+      "exclusive": "0",
+      "start_date": null,
+      "end_date": null,
+      "verified_at": "28-07-2023",
+      "created_at": "01-07-2023",
+      "updated_at": "28-07-2023",
+      "category_names": [
+        "Electronics",
+        "Home Appliances",
+        "Kitchen Appliances",
+        "Decor and Furniture"
+      ],
+      "category_ids": [
+        1000,
+        1010,
+        1011,
+        1800
+      ],
+      "category_names_list": "Electronics|Home Appliances|Kitchen Appliances|Decor and Furniture",
+      "tag_names": [
+        "Festivals"
+      ],
+      "tag_ids": [
+        14000
+      ],
+      "brand_names": [],
+      "brand_ids": [],
+      "payment_mode_names": [],
+      "payment_mode_ids": [],
+      "affiliate_link": "https://www.amazon.in/b?node=1380263031&ref=ATFQC_seeall",
+      "merchant_logo": "https://publisher.coupomated.com/logos/images/merchants/3bb8c12301.png",
+      "merchant_name": "Amazon",
+      "id": "12650"
+    }
+  ]
