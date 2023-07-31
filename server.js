@@ -12,6 +12,7 @@ import walletRouter from './src/routes/wallet';
 import groupchatRouter from './src/routes/groupchatRouter';
 import portfolioRouter from './src/routes/portfolio';
 import crateRouter from './src/routes/crate';
+import winningsRouter from './src/routes/winnings';
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
@@ -55,6 +56,7 @@ app.use('/api/v1/wallet', walletRouter);
 app.use('/api/v1/groupchat', groupchatRouter);
 app.use('/api/v1/portfolio', portfolioRouter);
 app.use('/api/v1/crates', crateRouter);
+app.use('/api/v1/winnings', winningsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at port: ${port}`);
