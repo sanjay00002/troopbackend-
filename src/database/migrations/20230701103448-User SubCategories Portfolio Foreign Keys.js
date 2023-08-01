@@ -9,7 +9,7 @@ export async function up(queryInterface, Sequelize) {
   await queryInterface.addConstraint('Portfolios', {
     fields: ['userId'],
     type: 'foreign key',
-    name: 'user_portfolio_fk_constraint',
+    name: 'user_portfolios_fk_constraint',
     references: {
       field: 'id',
       table: 'Users',
@@ -39,7 +39,7 @@ export async function down(queryInterface, Sequelize) {
    */
   await queryInterface.removeConstraint(
     'Portfolios',
-    'user_portfolio_fk_constraint',
+    'user_portfolios_fk_constraint',
   );
   await queryInterface.removeConstraint(
     'Portfolios',

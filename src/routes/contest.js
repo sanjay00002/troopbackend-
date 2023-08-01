@@ -34,6 +34,10 @@ router
 router.route('/stockStats').post(validate, ContestController.getStockStats);
 
 router
+  .route('/getWinnerbyContestId')
+  .post(validate, ContestController.getWinnerbyContestId);
+
+router
   .route('/private/getPriceDistribution')
   .post(validate, ContestController.privateContestPriceDistribution);
 

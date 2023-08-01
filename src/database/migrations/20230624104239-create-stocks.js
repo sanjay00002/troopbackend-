@@ -19,6 +19,16 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    open_price: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+      defaultValue: 0
+    },
+    close_price: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+      defaultValue: 0
+    },
     status: {
       type: Sequelize.ENUM(['active', 'inactive']),
       defaultValue: 'active',

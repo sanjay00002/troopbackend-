@@ -32,7 +32,11 @@ export default (sequelize, DataTypes) => {
       isBot: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
       profileImage: { type: DataTypes.STRING, allowNull: true },
       score: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
-      tickets: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+      tickets: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       referralCode: { type: DataTypes.STRING, allowNull: true },
       referrer: { type: DataTypes.STRING, allowNull: true },
       referredAt: { type: DataTypes.DATE, allowNull: true },
