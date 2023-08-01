@@ -102,5 +102,34 @@ export default function calculatePayout(tp, ef, p) {
     JSON.stringify(priceDistribution, null, 4),
   );
 
+  const samePriceAmount = priceDistribution.filter(
+    (distribution) =>
+      distribution.priceAmount ===
+      priceDistribution[priceDistribution.length - 1].priceAmount,
+  );
+
+  samePriceAmount.sort((a, b) => a.rankStart - b.rankStart);
+
+  const samePriceRanks = {
+    rankStart: samePriceAmount[0].rankStart,
+    rankEnd: samePriceAmount[samePriceAmount.length - 1].rankEnd,
+    priceAmount: samePriceAmount[0].priceAmount,
+  };
+
+  console.log('Same Price Ranks: ', samePriceRanks);
+
+  console.log('Same Price Amount: ', samePriceAmount);
+
+  const firstRankWithSamePrice = priceDistribution.findIndex(
+    (obj) => obj.rankStart === samePriceAmount[0].rankStart,
+  );
+
+  firstRankWithSamePrice !== -1 &&
+    priceDistribution.splice(
+      firstRankWithSamePrice,
+      samePriceAmount.length,
+      samePriceRanks,
+    );
+
   return priceDistribution;
 }
