@@ -40,7 +40,7 @@ export default (sequelize, DataTypes) => {
     {
       name: { type: DataTypes.STRING, allowNull: true },
       userId: { type: DataTypes.STRING, allowNull: false },
-      score: { type: DataTypes.INTEGER, defaultValue: 0 },
+      score: { type: DataTypes.DECIMAL(25, 10), defaultValue: 0 },
       subCategoryId: { type: DataTypes.INTEGER, allowNull: false },
     },
     {

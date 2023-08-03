@@ -1,7 +1,15 @@
 import { Op } from 'sequelize';
 import model from '../models';
 
-const { Stocks, StocksSubCategories, SubCategories, Portfolio, PortfolioStocks, ContestPortfolios, Contest } = model;
+const {
+  Stocks,
+  StocksSubCategories,
+  SubCategories,
+  Portfolio,
+  PortfolioStocks,
+  ContestPortfolios,
+  Contest,
+} = model;
 
 const getStock = require('../../Stock-socket/getStocks');
 
@@ -92,7 +100,7 @@ export default {
 
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const day = String(today.getDate() + 1).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}`;
 
@@ -113,104 +121,106 @@ export default {
         if (stockrow) {
           await stockrow.update({
             open_price: stock.open_price_day,
-            close_price: stock.close_price, 
+            close_price: stock.close_price,
           });
         }
       }
 
       const contestPorts = await ContestPortfolios.findAll({
-        include:[
+        include: [
           {
             model: Contest,
-            required:true,
-            where:{
+            required: true,
+            where: {
               date: {
-                [Op.eq]: formattedDate
-              }
-            }
+                [Op.eq]: formattedDate,
+              },
+            },
           },
           {
             model: Portfolio,
-            required:true
-          }
-        ] 
-      })
+            required: true,
+          },
+        ],
+      });
 
-      if(contestPorts.length === 0){
+      if (contestPorts.length === 0) {
         return res.status(404).json({
-          message: "No ContestPortfolios to be updated"
-        })
-      }else{
-        for(const port of contestPorts){
+          message: 'No ContestPortfolios to be updated',
+        });
+      } else {
+        for (const port of contestPorts) {
           const portStocks = await PortfolioStocks.findAll({
-            where: {portfolioId: port.portfolio.id},
+            where: { portfolioId: port.portfolio.id },
             include: {
               model: Stocks,
-              required:true
-            }
-          })
-  
+              required: true,
+            },
+          });
+
           var score = 0;
-          for(const portStock of portStocks){
-            const stock = portStock.stock
-  
-            var stock_value = stock.close_price - stock.open_price
-            if(stock_value > 0){
-              if(portStock.action === 'Buy'){        
-                if(portStock.captain){
-                  score += 2*stock_value/stock.open_price;
-                }else if(portStock.viceCaptain){
-                  score += 1.5*stock_value/stock.open_price;
-                }else{
-                  score += stock_value/stock.open_price;
-                }      
+          for (const portStock of portStocks) {
+            const stock = portStock.stock;
+
+            var stock_value = stock.close_price - stock.open_price;
+            if (stock_value > 0) {
+              if (portStock.action === 'Buy') {
+                if (portStock.captain) {
+                  score += (2 * stock_value) / stock.open_price;
+                } else if (portStock.viceCaptain) {
+                  score += (1.5 * stock_value) / stock.open_price;
+                } else {
+                  score += stock_value / stock.open_price;
+                }
               }
-  
-              if(portStock.action === 'Sell'){
-                if(portStock.captain){
-                  score -= 2*stock_value/stock.open_price;
-                }else if(portStock.viceCaptain){
-                  score -= 1.5*stock_value/stock.open_price;
-                }else{
-                  score -= stock_value/stock.open_price;
-                }      
+
+              if (portStock.action === 'Sell') {
+                if (portStock.captain) {
+                  score -= (2 * stock_value) / stock.open_price;
+                } else if (portStock.viceCaptain) {
+                  score -= (1.5 * stock_value) / stock.open_price;
+                } else {
+                  score -= stock_value / stock.open_price;
+                }
               }
-            }else{
-              if(portStock.action === 'Buy'){
-                if(portStock.captain){
-                  score -= 2*stock_value/stock.open_price;
-                }else if(portStock.viceCaptain){
-                  score -= 1.5*stock_value/stock.open_price;
-                }else{
-                  score -= stock_value/stock.open_price;
-                }      
+            } else {
+              if (portStock.action === 'Buy') {
+                if (portStock.captain) {
+                  score -= (2 * stock_value) / stock.open_price;
+                } else if (portStock.viceCaptain) {
+                  score -= (1.5 * stock_value) / stock.open_price;
+                } else {
+                  score -= stock_value / stock.open_price;
+                }
               }
-  
-              if(portStock.action === 'Sell'){
-                if(portStock.captain){
-                  score += 2*stock_value/stock.open_price;
-                }else if(portStock.viceCaptain){
-                  score += 1.5*stock_value/stock.open_price;
-                }else{
-                  score += stock_value/stock.open_price;
-                }      
+
+              if (portStock.action === 'Sell') {
+                if (portStock.captain) {
+                  score += (2 * stock_value) / stock.open_price;
+                } else if (portStock.viceCaptain) {
+                  score += (1.5 * stock_value) / stock.open_price;
+                } else {
+                  score += stock_value / stock.open_price;
+                }
               }
             }
           }
-          score = score*100/portStocks.length
-  
+          console.log('Score: ', score);
+          score = (score * 100) / portStocks.length;
+
+          console.log(
+            `Score for Portfolio Id: ${portStocks.portfolioId}:- ${score}`,
+          );
+
           await port.portfolio.update({
-            score: score
-          })
+            score: score,
+          });
         }
-        
-        
+
         return res.status(200).json({
           message: 'Stock Data Updated and scores calculated Successfully',
         });
       }
-      
-
     } catch (error) {
       console.error('Error while fetching stock data:', error);
     }

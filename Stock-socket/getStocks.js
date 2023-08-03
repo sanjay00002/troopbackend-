@@ -3,12 +3,12 @@ const { WebSocketV2 } = require('./smartapi-javascript-main/lib');
 module.exports = function (io, socket, stock_token, isLive) {
   return new Promise((resolve, reject) => {
     const web_socket = new WebSocketV2({
-      clientcode: 'P51775178',
+      clientcode: 'D52282671',
       jwttoken:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsInJvbGVzIjowLCJ1c2VydHlwZSI6IlVTRVIiLCJpYXQiOjE2OTA5NTk0NjcsImV4cCI6MTY5MTA0NTg2N30.2la0zu5wi63vLuzMqufezZL-GlGtEeBfH5e_43Y4t_cq8JJX_z8wL_4md0fdbWszUShxXk88i-qpcxS-KqCRAg',
-      apikey: 'lLDi3XyK',
+        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkQ1MjI4MjY3MSIsInJvbGVzIjowLCJ1c2VydHlwZSI6IlVTRVIiLCJpYXQiOjE2OTEwNTQxMjUsImV4cCI6MTY5MTE0MDUyNX0.SllRUBNbZp0USbrYuUL-gaxrnQeY66ALlhnR70gQK4QIwl9C17U9Qw6EbtVOxNi43NUMsz4Df-AF8XNiuoKyLA',
+      apikey: 'tKDaJqSN',
       feedtype:
-        'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsImlhdCI6MTY5MDk1OTQ2NywiZXhwIjoxNjkxMDQ1ODY3fQ.gi9L01QpZP9JPA8FxOIXLfenjps-8-iuQ69Sm7bQ0AAmET6OkFIxKLXvSv4lJB9CRuld5_PZZp1L6byEQSRG2A',
+        'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkQ1MjI4MjY3MSIsImlhdCI6MTY5MTA1NDEyNSwiZXhwIjoxNjkxMTQwNTI1fQ.seGX93FdbYZr9q_hJatv_AcVxMSoMHgBRLcgf0XbBTcI7DcpjMz2f9uZNe9yBb5Mpg68kifwXooBaOu_7GXzPw',
     });
 
     if (stock_token[0]) {

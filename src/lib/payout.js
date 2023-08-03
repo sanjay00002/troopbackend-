@@ -6,7 +6,7 @@ export default function calculatePayout(tp, ef, p) {
 
   const priceDistribution = [];
 
-  console.log('Inputs: ', totalPeople, TotalPeople, entryFee, mper);
+  // console.log('Inputs: ', totalPeople, TotalPeople, entryFee, mper);
 
   let totalAmount = totalPeople * entryFee;
   // * Use loop to simulate number of iterations required to find final player count
@@ -74,11 +74,11 @@ export default function calculatePayout(tp, ef, p) {
   for (let i = 0; i < list_5.length; i++) {
     if (list_5[i] - list_5[i - 1] > 1) {
       sum += (list_5[i] - list_5[i - 1] - 1) * weights_demi[i];
-      console.log(
-        `Rank: ${list_5[i - 1] + 1} to ${list_5[i]}\tPayout: ${
-          weights_demi[i]
-        }`,
-      );
+      // console.log(
+      //   `Rank: ${list_5[i - 1] + 1} to ${list_5[i]}\tPayout: ${
+      //     weights_demi[i]
+      //   }`,
+      // );
 
       priceDistribution.push({
         rankStart: list_5[i - 1] + 1,
@@ -92,15 +92,15 @@ export default function calculatePayout(tp, ef, p) {
         rankEnd: list_5[i],
         priceAmount: weights_demi[i],
       });
-      console.log(`Rank: ${list_5[i]}\t\t Payout: ${weights_demi[i]}`);
+      // console.log(`Rank: ${list_5[i]}\t\t Payout: ${weights_demi[i]}`);
     }
   }
-  console.log('Payout to players: ', sum);
-  console.log('Payout to organizers: ', totalAmount - sum);
-  console.log(
-    'Price Distribution: ',
-    JSON.stringify(priceDistribution, null, 4),
-  );
+  // console.log('Payout to players: ', sum);
+  // console.log('Payout to organizers: ', totalAmount - sum);
+  // console.log(
+  //   'Price Distribution: ',
+  //   JSON.stringify(priceDistribution, null, 4),
+  // );
 
   const samePriceAmount = priceDistribution.filter(
     (distribution) =>
@@ -116,9 +116,9 @@ export default function calculatePayout(tp, ef, p) {
     priceAmount: samePriceAmount[0].priceAmount,
   };
 
-  console.log('Same Price Ranks: ', samePriceRanks);
+  // console.log('Same Price Ranks: ', samePriceRanks);
 
-  console.log('Same Price Amount: ', samePriceAmount);
+  // console.log('Same Price Amount: ', samePriceAmount);
 
   const firstRankWithSamePrice = priceDistribution.findIndex(
     (obj) => obj.rankStart === samePriceAmount[0].rankStart,

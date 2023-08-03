@@ -14,7 +14,7 @@ const getWinner = (id, pool, socket, matched_user) => {
       const apponentPerformance =
         (curr_match.apponentStockCloseValue -
           curr_match.apponentStockOpenValue) /
-      curr_match.apponentStockOpenValue;
+        curr_match.apponentStockOpenValue;
 
       console.log('self: ' + selfPerformance);
       console.log('apponent: ' + apponentPerformance);
@@ -220,7 +220,7 @@ module.exports = function findMatch(io, socket, pool, user) {
                         });
                       }
                       isEnd = true;
-                    }, 5000);
+                    }, 5000); // TODO: Need to change the live contest ending time to 30mins
                   }
                 },
               );

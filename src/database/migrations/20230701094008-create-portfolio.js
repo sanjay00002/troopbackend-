@@ -16,7 +16,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
     score: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DECIMAL(25, 10),
       defaultValue: 0,
     },
     subCategoryId: {
