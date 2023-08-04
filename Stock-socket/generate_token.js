@@ -12,7 +12,7 @@ const feed = '';
 const client_id = 'D52282671';
 const client_password = '3690';
 smart_api
-  .generateSession(client_id, client_password, '295970')
+  .generateSession(client_id, client_password, '990444')
   .then((data) => {
     // jwt = data.data.jwtToken;
     console.log(data.data);

@@ -1,5 +1,7 @@
 import { Op } from 'sequelize';
 import model from '../models';
+import momentTimezone from 'moment-timezone';
+import moment from 'moment/moment';
 
 const {
   Stocks,
@@ -96,13 +98,10 @@ export default {
     }
   },
   updatePrices: async function (req, res) {
-    const today = new Date();
+    const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
+    const formattedDate = today.format('YYYY-MM-DD');
 
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate() + 1).padStart(2, '0');
-
-    const formattedDate = `${year}-${month}-${day}`;
+    console.log('Formated Date: ', formattedDate);
 
     const token_list = [];
     const stocks = await Stocks.findAll();

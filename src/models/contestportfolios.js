@@ -34,6 +34,13 @@ export default (sequelize, DataTypes) => {
         keyType: DataTypes.INTEGER,
         uniqueKey: 'portfolio_contestportfolio_fk_constraint',
       });
+
+      models.Contest.belongsToMany(models.Portfolio, {
+        through: ContestPortfolios,
+      });
+      models.Portfolio.belongsToMany(models.Contest, {
+        through: ContestPortfolios,
+      });
     }
   }
   ContestPortfolios.init(

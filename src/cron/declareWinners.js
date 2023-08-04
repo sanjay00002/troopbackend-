@@ -19,6 +19,24 @@ module.exports = () => {
     () => {
       // * Close Contest
       // * Declare Winners
+      async function updateAllPortfolioScores() {
+        try {
+          // * Update Stock Prices
+          await CronJobController.updateStockPrices();
+
+          // * Calculate the portfolio scores
+          await CronJobController.calculatePortfolioScore();
+
+          // * Declare winners for all the today's contest
+          await CronJobController.generateWinners();
+        } catch (error) {
+          console.error(
+            'Error while updating stock prices and scores of portfolios',
+          );
+        }
+      }
+
+      updateAllPortfolioScores();
     },
     {
       name: 'Close-Contests',
