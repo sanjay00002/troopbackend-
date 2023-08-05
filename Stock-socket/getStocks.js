@@ -1,14 +1,14 @@
 const { WebSocketV2 } = require('./smartapi-javascript-main/lib');
 
+require('dotenv').config();
+
 module.exports = function (io, socket, stock_token, isLive) {
   return new Promise((resolve, reject) => {
     const web_socket = new WebSocketV2({
-      clientcode: 'P51775178',
-      jwttoken:
-        'Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsInJvbGVzIjowLCJ1c2VydHlwZSI6IlVTRVIiLCJpYXQiOjE2OTA2MzMyMTEsImV4cCI6MTY5MDcxOTYxMX0.zKGc6KPG_Ai2bw8WMS_FraauiINNkq-jCJW61a48lJI0KP0qRJZK6W3MFz1fltc4a4QTiNC8GrZCdaQ1OtZwvA',
-      apikey: 'lLDi3XyK',
-      feedtype:
-        'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IlA1MTc3NTE3OCIsImlhdCI6MTY5MDYzMzIxMSwiZXhwIjoxNjkwNzE5NjExfQ.bCBuYW3O6PNtEOs_1cLnwSfZff06d5qKHFH6xwB4iEUrKnW1UXxqULG6lDmxgWTtSKFKwbHmy0vr8BwMCsTHFg',
+      clientcode: process.env.SMARTAPI_CLIENT_CODE,
+      jwttoken: 'Bearer ' + process.env.SMARTAPI_JWT,
+      apikey: process.env.SMARTAPI_API_KEY,
+      feedtype: process.env.SMARTAPI_FEED_TOKEN,
     });
 
     if (stock_token[0]) {
