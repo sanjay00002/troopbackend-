@@ -3,7 +3,7 @@ import cors from 'cors';
 import { Sequelize } from 'sequelize';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-
+import chat from './chatWS';
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
@@ -18,7 +18,7 @@ import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 
-const chatWSServer = require('./chatWS');
+// const chatWSServer = require('./chatWS');
 
 import model from './src/models';
 
@@ -41,11 +41,13 @@ const { Pool } = require('pg');
 require('dotenv').config({ path: './.env' });
 const app = express();
 const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
   cors: {
     origin: '*',
   },
 });
+
 
 const pool = new Pool({
   user: process.env.PGUSER,
@@ -56,6 +58,7 @@ const pool = new Pool({
 });
 
 io.on('connection', (socket) => {
+  chat(io);
   socket.on('send-stock-tokens', (stock_token) => {
     getStock(io, socket, stock_token, true);
   });
@@ -99,7 +102,7 @@ slotMachine.on('connection', (socket) => {
 });
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(json());
@@ -188,7 +191,7 @@ httpServer.listen(port, () => {
         throw Error('Exists a user with the given username');
       }
     } catch (error) {
-      console.error('Error creating admin user: ', error);
+      // console.error('Error creating admin user: ', error);
     }
   })();
 
@@ -206,7 +209,7 @@ httpServer.listen(port, () => {
         throw new Error('Common wallet already exists');
       }
     } catch (error) {
-      console.error('Error creating common wallet for bots: ', error);
+      // console.error('Error creating common wallet for bots: ', error);
     }
   })();
 
@@ -215,6 +218,3 @@ httpServer.listen(port, () => {
   botsJoinContestsCronJobs();
 });
 
-chatWSServer.listen('5002', () => {
-  console.log('chat ws server listening on 5002');
-});
