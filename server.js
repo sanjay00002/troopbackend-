@@ -48,7 +48,6 @@ const io = new Server(httpServer, {
   },
 });
 
-
 const pool = new Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
@@ -96,11 +95,10 @@ liveContest.on('connection', (socket) => {
 const slotMachine = io.of('/slotMachine');
 
 slotMachine.on('connection', (socket) => {
-  socket.on('triggered',()=>{
+  socket.on('triggered', () => {
     console.log('Slot Machine triggered');
-  })
+  });
 });
-
 
 const port = process.env.PORT || 5001;
 
@@ -191,7 +189,7 @@ httpServer.listen(port, () => {
         throw Error('Exists a user with the given username');
       }
     } catch (error) {
-      // console.error('Error creating admin user: ', error);
+      console.error('Error creating admin user: ', error);
     }
   })();
 
@@ -209,7 +207,7 @@ httpServer.listen(port, () => {
         throw new Error('Common wallet already exists');
       }
     } catch (error) {
-      // console.error('Error creating common wallet for bots: ', error);
+      console.error('Error creating common wallet for bots: ', error);
     }
   })();
 
@@ -217,4 +215,3 @@ httpServer.listen(port, () => {
   declareWinnersCronJobs();
   botsJoinContestsCronJobs();
 });
-

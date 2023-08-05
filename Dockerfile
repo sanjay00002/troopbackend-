@@ -174,19 +174,39 @@
 # # CMD ["cd /node-app", "&&", "npm", "start", "&&", "cd ..", "&&", "cd /java-app", "&&", "java", "-jar", "./Troopapi-0.0.1-SNAPSHOT.jar"]
 
 # Java Backend
-FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
+# FROM maven:3.9.0-eclipse-temurin-17-alpine AS build
 
-COPY ../Payment-java-api/v1api/ .
+# COPY ../Payment-java-api/v1api/ .
 
-RUN mvn clean package -DskipTests
+# RUN mvn clean package -DskipTests
 
 
-FROM openjdk:19
+# FROM openjdk:19
 
-COPY --from=build target/Troopapi-0.0.1-SNAPSHOT.jar troopapi.jar
+# COPY --from=build target/Troopapi-0.0.1-SNAPSHOT.jar troopapi.jar
 
-ENV PORT=8080
+# ENV PORT=8080
 
-EXPOSE 8080
+# EXPOSE 8080
 
-CMD [ "java", "-jar", "troopapi.jar" ]
+# CMD [ "java", "-jar", "troopapi.jar" ]
+
+FROM node:16-alpine3.18
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package.json .
+
+# For npm@5 or later, copy package-lock.json as well
+COPY package-lock.json .
+
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+EXPOSE 5000
+
+CMD [ "npm", "start" ]
