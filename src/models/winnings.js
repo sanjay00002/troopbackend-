@@ -42,7 +42,7 @@ export default (sequelize, DataTypes) => {
 
       Winnings.belongsTo(models.Rewards, {
         foreignKey: 'rewardId',
-        keyType: DataTypes.INTEGER,
+        keyType: DataTypes.STRING,
         constraints: true,
         targetKey: 'id',
         uniqueKey: 'rewards_winnings_fk_constraint',
@@ -52,7 +52,7 @@ export default (sequelize, DataTypes) => {
   Winnings.init(
     {
       crateCategoryId: { type: DataTypes.INTEGER, allowNull: false },
-      rewardId: { type: DataTypes.INTEGER, allowNull: false },
+      rewardId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
     },
     {

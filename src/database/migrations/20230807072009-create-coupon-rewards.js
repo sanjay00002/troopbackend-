@@ -27,7 +27,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: true,
     },
     plainLink: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(512),
       allowNull: false,
     },
     minPurchase: {
@@ -55,7 +55,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
     merchantLogo: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(512),
       allowNull: false,
     },
     merchantName: {

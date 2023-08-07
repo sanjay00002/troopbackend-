@@ -33,7 +33,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
       plainLink: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(512),
         allowNull: false,
       },
       minPurchase: {
@@ -57,7 +57,7 @@ export default (sequelize, DataTypes) => {
         allowNull: true,
       },
       affiliateLink: { type: DataTypes.STRING, allowNull: false },
-      merchantLogo: { type: DataTypes.STRING, allowNull: false },
+      merchantLogo: { type: DataTypes.STRING(512), allowNull: false },
       merchantName: { type: DataTypes.STRING, allowNull: false },
     },
     {

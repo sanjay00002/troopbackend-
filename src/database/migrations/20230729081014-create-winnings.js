@@ -11,7 +11,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: false,
     },
     rewardId: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     userId: {
