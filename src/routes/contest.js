@@ -7,7 +7,7 @@ const router = Router();
 
 router.route('/create').post(validate, ContestController.createContest);
 
-router.route('/contestById').post(validate, ContestController.getContestById);
+router.route('/contestById').post(ContestController.getContestById);
 
 router
   .route('/categories')
@@ -19,7 +19,7 @@ router
 
 router
   .route('/contestsBySubCategory')
-  .post(validate, ContestController.getContestsBySubCategory);
+  .post(ContestController.getContestsBySubCategory);
 
 router.route('/join').post(validate, ContestController.joinContestById);
 
@@ -31,10 +31,10 @@ router
   .route('/joinedContestsByStatus')
   .post(validate, ContestController.fetchJoinedContestByStatus);
 
-router.route('/stockStats').post(validate, ContestController.getStockStats);
+router.route('/stockStats').post(ContestController.getStockStats);
 
 router
   .route('/getWinnerbyContestId')
-  .post(validate, ContestController.getWinnerbyContestId);
+  .post(ContestController.getWinnerbyContestId);
 
 module.exports = router;
