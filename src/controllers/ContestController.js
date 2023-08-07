@@ -262,34 +262,7 @@ export default {
             where: { contestId: await contest.get('id') },
           });
 
-          const stocks = await StocksSubCategories.findAll({
-            where: {
-              subCategoryId: await contest.get('subCategoryId'),
-            },
-            attributes: {
-              exclude: [
-                'createdAt',
-                'updatedAt',
-                'stockId',
-                'subCategoryId',
-                'id',
-              ],
-            },
-            include: {
-              model: Stocks,
-              required: true,
-              attributes: { exclude: ['createdAt', 'updatedAt'] },
-            },
-          });
-
-          console.log('Stocks: ', stocks);
-
-          const stocksArr = await Promise.all(
-            stocks?.map(async (stock) => await stock.get('stock').get()),
-          );
-
           contestWithParticipants[i].participants = participants.count;
-          contestWithParticipants[i].stocks = stocksArr;
 
           console.log('Participants: ', participants.count);
         }
@@ -719,17 +692,17 @@ export default {
           where: { contestId: contestId },
         });
 
-        if (contestWinnersExist.length > 0){
+        if (contestWinnersExist.length > 0) {
           return res.status(401).json({
             message: 'Contest Winners already calculated',
           });
-        }else{
-          var total_users = portfolios.length
+        } else {
+          var total_users = portfolios.length;
           var rank = 0;
           var prev_score = -1;
           for (const portfolio of portfolios) {
-            // Rank updation takes here 
-            if(prev_score !== portfolio.portfolio.score){
+            // Rank updation takes here
+            if (prev_score !== portfolio.portfolio.score) {
               prev_score = portfolio.portfolio.score;
               rank += 1;
             }
@@ -739,18 +712,18 @@ export default {
               rank: rank,
             });
             // ticket count updates here
-            if((rank/total_users) <= 0.75){
-              const top_user = await User.findByPk(portfolio.portfolio.userId)
+            if (rank / total_users <= 0.75) {
+              const top_user = await User.findByPk(portfolio.portfolio.userId);
               await top_user.update({
-                tickets: (top_user.tickets + 1)
-              })
+                tickets: top_user.tickets + 1,
+              });
             }
           }
-  
+
           const winners = await ContestWinners.findAll({
             where: { contestId: contestId },
           });
-  
+
           return res.status(200).json(winners);
         }
       } catch (err) {
