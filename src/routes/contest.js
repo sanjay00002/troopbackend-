@@ -11,11 +11,11 @@ router.route('/contestById').post(validate, ContestController.getContestById);
 
 router
   .route('/categories')
-  .get(validate, ContestCategoriesController.getContestCategories);
+  .get(ContestCategoriesController.getContestCategories);
 
 router
   .route('/contestsByCategory')
-  .post(validate, ContestController.getContestsByCategory);
+  .post(ContestController.getContestsByCategory);
 
 router
   .route('/contestsBySubCategory')
