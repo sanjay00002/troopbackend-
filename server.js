@@ -3,6 +3,8 @@ import cors from 'cors';
 import { Sequelize } from 'sequelize';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import momentTimezone from 'moment-timezone';
+import moment from 'moment/moment';
 
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
@@ -26,7 +28,12 @@ import model from './src/models';
 
 import { generateReferralCode } from './src/lib/referralCode';
 
-const { User, UserRole, Role, Wallet, CommonWallet } = model;
+import { getAllCoupons } from './src/api/rewards/coupons';
+import { getAllOffers } from './src/api/rewards/rewards';
+
+const { User, UserRole, Role, Wallet, CommonWallet, CouponRewards, Rewards } =
+  model;
+
 import liveContestRouter from './src/routes/liveContest';
 import bankDetailRouter from './src/routes/bankDetail';
 import faqRouter from './src/routes/faq';
@@ -205,11 +212,124 @@ httpServer.listen(port, () => {
         const newCommonWallet = await CommonWallet.create({
           purpose: 'bots',
         });
+
+        console.log('Successfully created Common Wallet!');
       } else {
         throw new Error('Common wallet already exists');
       }
     } catch (error) {
       console.error('Error creating common wallet for bots: ', error);
+    }
+  })();
+
+  // * Populate the CouponRewards & Rewards Tables
+  (async () => {
+    console.log('Started');
+    let wholeStart = performance.now();
+    try {
+      let start = performance.now();
+      const couponCount = await CouponRewards.count();
+      if (couponCount === 0) {
+        const coupons = await getAllCoupons().then((res) => res.data);
+
+        const currentTimestamp = momentTimezone.tz(moment(), 'Asia/Kolkata');
+        const length = coupons.length;
+        const couponsToInsert = [];
+
+        for (let index = 0; index < length; ++index) {
+          const coupon = coupons[index];
+
+          couponsToInsert.push({
+            id: coupon.coupon_id,
+            merchantId: coupon.merchant_id,
+            title: coupon.title,
+            description: coupon.description,
+            discount: coupon.discount,
+            couponCode: coupon.coupon_code,
+            plainLink: coupon.plain_link,
+            minPurchase: coupon.min_purchase,
+            maxDiscount: coupon.max_discount,
+            terms: coupon.terms,
+            startDate: coupon.start_date
+              ? moment(coupon.start_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            endDate: coupon.end_date
+              ? moment(coupon.end_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            affiliateLink: coupon.affiliate_link,
+            merchantLogo: coupon.merchant_logo,
+            merchantName: coupon.merchant_name,
+            createdAt: currentTimestamp.toISOString(),
+            updatedAt: currentTimestamp.toISOString(),
+          });
+        }
+
+        await CouponRewards.bulkCreate(couponsToInsert, {
+          validate: true,
+          individualHooks: true,
+        });
+
+        let end = performance.now() - start;
+        console.log('CouponRewards Populated: ', end);
+      } else {
+        console.log('CouponRewards already populated!');
+      }
+
+      const rewardCount = await Rewards.count();
+
+      if (rewardCount === 0) {
+        let start = performance.now();
+        const offers = await getAllOffers().then((res) => res.data);
+
+        const currentTimestamp = momentTimezone.tz(moment(), 'Asia/Kolkata');
+        const length = offers.length;
+        const offersToInsert = [];
+
+        for (let index = 0; index < length; ++index) {
+          const offer = offers[index];
+
+          offersToInsert.push({
+            id: offer.coupon_id,
+            merchantId: offer.merchant_id,
+            title: offer.title,
+            description: offer.description,
+            discount: offer.discount,
+            plainLink: offer.plain_link,
+            minPurchase: offer.min_purchase,
+            maxDiscount: offer.max_discount,
+            terms: offer.terms,
+            startDate: offer.start_date
+              ? moment(offer.start_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            endDate: offer.end_date
+              ? moment(offer.end_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            affiliateLink: offer.affiliate_link,
+            merchantLogo: offer.merchant_logo,
+            merchantName: offer.merchant_name,
+            createdAt: currentTimestamp.toISOString(),
+            updatedAt: currentTimestamp.toISOString(),
+          });
+        }
+
+        await Rewards.bulkCreate(offersToInsert, {
+          validate: true,
+          individualHooks: true,
+        }).catch((error) => console.log('Error in Bulk Create: ', error));
+
+        let end = performance.now() - start;
+
+        console.log('CouponRewards Populated: ', end);
+      } else {
+        console.log('Rewards already popluated!');
+      }
+      let wholeEnd = performance.now() - wholeStart;
+      console.log('Time Taken:- ', wholeEnd);
+    } catch (error) {
+      console.error(
+        'Error while Populating the CouponRewards or Rewards Table',
+        error,
+      );
     }
   })();
 

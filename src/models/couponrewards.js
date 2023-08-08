@@ -18,23 +18,23 @@ export default (sequelize, DataTypes) => {
       },
       title: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       description: {
         type: DataTypes.STRING(1024),
-        allowNull: false,
+        allowNull: true,
       },
       discount: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       couponCode: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       plainLink: {
         type: DataTypes.STRING(512),
-        allowNull: false,
+        allowNull: true,
       },
       minPurchase: {
         type: DataTypes.STRING,
@@ -46,7 +46,7 @@ export default (sequelize, DataTypes) => {
       },
       terms: {
         type: DataTypes.STRING(1024),
-        allowNull: false,
+        allowNull: true,
       },
       startDate: {
         type: DataTypes.DATEONLY,
@@ -56,9 +56,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      affiliateLink: { type: DataTypes.STRING, allowNull: false },
-      merchantLogo: { type: DataTypes.STRING(512), allowNull: false },
-      merchantName: { type: DataTypes.STRING, allowNull: false },
+      affiliateLink: { type: DataTypes.STRING, allowNull: true },
+      merchantLogo: { type: DataTypes.STRING(512), allowNull: true },
+      merchantName: { type: DataTypes.STRING, allowNull: true },
     },
     {
       name: {

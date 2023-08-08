@@ -8,7 +8,7 @@ export async function up(queryInterface, Sequelize) {
     },
     merchantId: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     title: {
       type: Sequelize.STRING,
@@ -20,7 +20,7 @@ export async function up(queryInterface, Sequelize) {
     },
     discount: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     couponCode: {
       type: Sequelize.STRING,
@@ -28,7 +28,7 @@ export async function up(queryInterface, Sequelize) {
     },
     plainLink: {
       type: Sequelize.STRING(512),
-      allowNull: false,
+      allowNull: true,
     },
     minPurchase: {
       type: Sequelize.STRING,
@@ -40,7 +40,7 @@ export async function up(queryInterface, Sequelize) {
     },
     terms: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     startDate: {
       type: Sequelize.DATEONLY,
@@ -52,15 +52,15 @@ export async function up(queryInterface, Sequelize) {
     },
     affiliateLink: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     merchantLogo: {
       type: Sequelize.STRING(512),
-      allowNull: false,
+      allowNull: true,
     },
     merchantName: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     createdAt: {
       allowNull: false,

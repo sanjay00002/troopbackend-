@@ -8,23 +8,23 @@ export async function up(queryInterface, Sequelize) {
     },
     merchantId: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     title: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     description: {
       type: Sequelize.STRING(1024),
-      allowNull: false,
+      allowNull: true,
     },
     discount: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     plainLink: {
       type: Sequelize.STRING(512),
-      allowNull: false,
+      allowNull: true,
     },
     minPurchase: {
       type: Sequelize.STRING,
@@ -48,15 +48,15 @@ export async function up(queryInterface, Sequelize) {
     },
     affiliateLink: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     merchantLogo: {
       type: Sequelize.STRING(512),
-      allowNull: false,
+      allowNull: true,
     },
     merchantName: {
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     createdAt: {
       allowNull: false,

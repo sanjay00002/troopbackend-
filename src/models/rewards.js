@@ -14,23 +14,23 @@ export default (sequelize, DataTypes) => {
     {
       merchantId: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       title: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       description: {
         type: DataTypes.STRING(1024),
-        allowNull: false,
+        allowNull: true,
       },
       discount: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       plainLink: {
         type: DataTypes.STRING(512),
-        allowNull: false,
+        allowNull: true,
       },
       minPurchase: {
         type: DataTypes.STRING,
@@ -54,15 +54,15 @@ export default (sequelize, DataTypes) => {
       },
       affiliateLink: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       merchantLogo: {
         type: DataTypes.STRING(512),
-        allowNull: false,
+        allowNull: true,
       },
       merchantName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
