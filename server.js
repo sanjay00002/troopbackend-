@@ -232,7 +232,7 @@ httpServer.listen(port, () => {
       let start = performance.now();
       const couponCount = await CouponRewards.count();
       if (couponCount === 0) {
-        const coupons = await getAllCoupons().then((res) => res.data);
+        const coupons = await getAllCoupons();
 
         const currentTimestamp = momentTimezone.tz(moment(), 'Asia/Kolkata');
         const length = coupons.length;
@@ -290,7 +290,7 @@ httpServer.listen(port, () => {
 
       if (rewardCount === 0) {
         let start = performance.now();
-        const offers = await getAllOffers().then((res) => res.data);
+        const offers = await getAllOffers();
 
         const currentTimestamp = momentTimezone.tz(moment(), 'Asia/Kolkata');
         const length = offers.length;
