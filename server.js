@@ -216,3 +216,7 @@ httpServer.listen(port, () => {
   declareWinnersCronJobs();
   botsJoinContestsCronJobs();
 });
+
+httpServer.on('error', (err) => {
+  console.log('Error in the server: ', err);
+});
