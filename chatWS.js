@@ -123,12 +123,12 @@ export default function chat(io) {
     });
 
     // Listen for 'chat message' events from the client
-    socket.on('chatMessage', (data) => {
+    socket.on('chatMessage', async (data) => {
       const { roomId, message } = data;
       console.log('Received message:', message.content);
 
       try {
-        GroupChatMessage.create({
+        await GroupChatMessage.create({
           content: message.content,
           senderId: message.sender,
           roomId: roomId,
@@ -152,4 +152,3 @@ export default function chat(io) {
     return sortedIds.join(separator);
   }
 }
-

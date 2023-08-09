@@ -58,6 +58,7 @@ const pool = new Pool({
 
 io.on('connection', (socket) => {
   chat(io);
+  console.log('Connection Established!');
   socket.on('send-stock-tokens', (stock_token) => {
     getStock(io, socket, stock_token, true);
   });
