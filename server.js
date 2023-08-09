@@ -225,7 +225,9 @@ httpServer.listen(port, () => {
   // * Populate the CouponRewards & Rewards Tables
   (async () => {
     console.log('Started');
-    let wholeStart = performance.now();
+    let wholeStart = performance.now(),
+      couponsLength,
+      rewardsLength;
     try {
       let start = performance.now();
       const couponCount = await CouponRewards.count();
@@ -264,10 +266,19 @@ httpServer.listen(port, () => {
           });
         }
 
-        await CouponRewards.bulkCreate(couponsToInsert, {
-          validate: true,
-          individualHooks: true,
-        });
+        const chunkSize = 50,
+          dataLength = couponsToInsert.length;
+        couponsLength = dataLength;
+
+        for (let i = 0; i < dataLength; i += chunkSize) {
+          const chunk = couponsToInsert.slice(i, i + chunkSize);
+          await CouponRewards.bulkCreate(chunk, {
+            validate: true,
+            individualHooks: true,
+          });
+
+          console.log('Chunk inserted: ', chunk.length);
+        }
 
         let end = performance.now() - start;
         console.log('CouponRewards Populated: ', end);
@@ -312,10 +323,19 @@ httpServer.listen(port, () => {
           });
         }
 
-        await Rewards.bulkCreate(offersToInsert, {
-          validate: true,
-          individualHooks: true,
-        }).catch((error) => console.log('Error in Bulk Create: ', error));
+        const chunkSize = 50,
+          dataLength = offersToInsert.length;
+        rewardsLength = dataLength;
+
+        for (let i = 0; i < dataLength; i += chunkSize) {
+          const chunk = offersToInsert.slice(i, i + chunkSize);
+          await Rewards.bulkCreate(chunk, {
+            validate: true,
+            individualHooks: true,
+          }).catch((error) => console.log('Error in Bulk Create: ', error));
+
+          console.log('Chunk inserted: ', chunk.length);
+        }
 
         let end = performance.now() - start;
 
@@ -325,6 +345,8 @@ httpServer.listen(port, () => {
       }
       let wholeEnd = performance.now() - wholeStart;
       console.log('Time Taken:- ', wholeEnd);
+      console.log('Coupons: ', couponsLength);
+      console.log('Rewards: ', rewardsLength);
     } catch (error) {
       console.error(
         'Error while Populating the CouponRewards or Rewards Table',

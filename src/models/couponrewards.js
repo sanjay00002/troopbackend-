@@ -17,7 +17,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(1024),
         allowNull: true,
       },
       description: {
@@ -56,7 +56,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: true,
       },
-      affiliateLink: { type: DataTypes.STRING, allowNull: true },
+      affiliateLink: { type: DataTypes.STRING(512), allowNull: true },
       merchantLogo: { type: DataTypes.STRING(512), allowNull: true },
       merchantName: { type: DataTypes.STRING, allowNull: true },
     },

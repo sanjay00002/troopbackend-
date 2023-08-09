@@ -11,7 +11,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: true,
     },
     title: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(512),
       allowNull: true,
     },
     description: {
@@ -35,7 +35,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: true,
     },
     terms: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(1024),
       allowNull: true,
     },
     startDate: {
@@ -47,7 +47,7 @@ export async function up(queryInterface, Sequelize) {
       allowNull: true,
     },
     affiliateLink: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(512),
       allowNull: true,
     },
     merchantLogo: {
