@@ -18,17 +18,24 @@ module.exports = () => {
       async function updateCoupons() {
         try {
           await CronJobController.insertNewCoupons();
+        } catch (error) {
+          console.error('Error while updating coupons in CRON job: ', error);
+        }
+      }
 
-          await CronJobController.removeCoupons();
+      async function updateOffers() {
+        try {
+          await CronJobController.insertNewOffers();
         } catch (error) {
           console.error('Error while updating coupons in CRON job: ', error);
         }
       }
 
       updateCoupons();
+      updateOffers();
     },
     {
-      name: 'Update-Coupons',
+      name: 'Update-Coupons-Offers',
       ...scheduleOptions,
     },
   );

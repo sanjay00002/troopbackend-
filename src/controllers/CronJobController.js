@@ -2,7 +2,10 @@ import { Op, Sequelize } from 'sequelize';
 import model from '../models';
 import moment from 'moment';
 import momentTimezone from 'moment-timezone';
+
 import getStocks from '../../Stock-socket/getStocks';
+import { getAllOffers } from '../api/rewards/rewards';
+import { getAllCoupons } from '../api/rewards/coupons';
 
 const {
   Contest,
@@ -15,7 +18,7 @@ const {
   Portfolio,
   User,
   CouponRewards,
-  Coupons,
+  Rewards,
 } = model;
 
 export default {
@@ -358,10 +361,74 @@ export default {
     }
   },
 
-  removeCoupons: async function () {
+  insertNewOffers: async function () {
     try {
+      let start = performance.now();
+
+      const newOffers = await getAllOffers();
+      const updatedLength = newOffers?.length,
+        offersToInsert = [],
+        currentTimestamp = momentTimezone.tz(moment(), 'Asia/Kolkata');
+
+      if (updatedLength && updatedLength > 0) {
+        // * Truncate the table
+        console.log('TRUNCATING TABLE!!!!');
+
+        await Rewards.destroy({
+          where: {},
+          hooks: false,
+          truncate: true,
+          cascade: true,
+        });
+
+        for (let index = 0; index < updatedLength; ++index) {
+          const offer = newOffers[index];
+
+          offersToInsert.push({
+            id: offer.coupon_id,
+            merchantId: offer.merchant_id,
+            title: offer.title,
+            description: offer.description,
+            discount: offer.discount,
+            plainLink: offer.plain_link,
+            minPurchase: offer.min_purchase,
+            maxDiscount: offer.max_discount,
+            terms: offer.terms,
+            startDate: offer.start_date
+              ? moment(offer.start_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            endDate: offer.end_date
+              ? moment(offer.end_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            affiliateLink: offer.affiliate_link,
+            merchantLogo: offer.merchant_logo,
+            merchantName: offer.merchant_name,
+            createdAt: currentTimestamp.toISOString(),
+            updatedAt: currentTimestamp.toISOString(),
+          });
+        }
+
+        const chunkSize = 50,
+          dataLength = offersToInsert.length;
+
+        for (let i = 0; i < dataLength; i += chunkSize) {
+          const chunk = offersToInsert.slice(i, i + chunkSize);
+          await Rewards.bulkCreate(chunk, {
+            validate: true,
+            individualHooks: true,
+          }).catch((error) => console.log('Error in Bulk Create: ', error));
+
+          console.log('Chunk inserted: ', chunk.length);
+        }
+      }
+
+      let end = performance.now() - start;
+      console.log(
+        'Time taken for truncating & inserting all the offers: ',
+        end,
+      );
     } catch (error) {
-      console.error('Error while removing coupons: ', error);
+      console.error('Error while inserting offers: ', error);
     }
   },
 };
