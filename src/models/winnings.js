@@ -35,24 +35,24 @@ export default (sequelize, DataTypes) => {
         uniqueKey: 'user_winnings_fk_constraint',
       });
 
-      models.Rewards.hasMany(Winnings, {
-        foreignKey: 'rewardId',
+      models.RewardsLent.hasMany(Winnings, {
+        foreignKey: 'rewardsLentId',
         sourceKey: 'id',
       });
 
-      Winnings.belongsTo(models.Rewards, {
-        foreignKey: 'rewardId',
+      Winnings.belongsTo(models.RewardsLent, {
+        foreignKey: 'rewardsLentId',
         keyType: DataTypes.STRING,
         constraints: true,
         targetKey: 'id',
-        uniqueKey: 'rewards_winnings_fk_constraint',
+        uniqueKey: 'rewardsLent_winnings_fk_constraint',
       });
     }
   }
   Winnings.init(
     {
       crateCategoryId: { type: DataTypes.INTEGER, allowNull: false },
-      rewardId: { type: DataTypes.STRING, allowNull: false },
+      rewardsLentId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
     },
     {

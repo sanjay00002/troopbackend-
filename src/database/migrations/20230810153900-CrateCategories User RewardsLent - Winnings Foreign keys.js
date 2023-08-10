@@ -31,11 +31,11 @@ export async function up(queryInterface, Sequelize) {
   });
 
   await queryInterface.addConstraint('Winnings', {
-    fields: ['rewardId'],
+    fields: ['rewardsLentId'],
     type: 'foreign key',
-    name: 'rewards_winnings_fk_constraint',
+    name: 'rewardslent_winnings_fk_constraint',
     references: {
-      table: 'Rewards',
+      table: 'RewardsLents',
       field: 'id',
     },
     onDelete: 'CASCADE',
@@ -61,6 +61,6 @@ export async function down(queryInterface, Sequelize) {
 
   await queryInterface.removeConstraint(
     'Winnings',
-    'rewards_winnings_fk_constraint',
+    'rewardslent_winnings_fk_constraint',
   );
 }

@@ -10,7 +10,7 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    rewardId: {
+    rewardsLentId: {
       type: Sequelize.STRING,
       allowNull: false,
     },
