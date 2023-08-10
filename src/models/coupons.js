@@ -20,22 +20,22 @@ export default (sequelize, DataTypes) => {
         uniqueKey: 'user_coupons_fk_constraint',
       });
 
-      models.CouponRewards.hasMany(Coupons, {
-        foreignKey: 'couponRewardsId',
+      models.CouponsLent.hasMany(Coupons, {
+        foreignKey: 'couponsLentId',
         sourceKey: 'id',
       });
-      Coupons.belongsTo(models.CouponRewards, {
-        foreignKey: 'couponRewardsId',
+      Coupons.belongsTo(models.CouponsLent, {
+        foreignKey: 'couponsLentId',
         targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: 'couponrewards_coupons_fk_constraint',
+        uniqueKey: 'couponslent_coupons_fk_constraint',
       });
     }
   }
   Coupons.init(
     {
-      couponRewardsId: { type: DataTypes.STRING, allowNull: false },
+      couponsLentId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
       expiryTime: { type: DataTypes.DATE, allowNull: false },
       redeemed: {

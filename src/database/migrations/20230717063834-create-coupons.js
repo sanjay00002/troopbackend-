@@ -7,7 +7,7 @@ export async function up(queryInterface, Sequelize) {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    couponRewardsId: {
+    couponsLentId: {
       type: Sequelize.STRING,
       allowNull: false,
     },

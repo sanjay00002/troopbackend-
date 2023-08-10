@@ -7,12 +7,12 @@ export async function up(queryInterface, Sequelize) {
    * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
    */
   await queryInterface.addConstraint('Coupons', {
-    fields: ['couponRewardsId'],
+    fields: ['couponsLentId'],
     type: 'foreign key',
-    name: 'couponrewards_coupons_fk_constraint',
+    name: 'couponslent_coupons_fk_constraint',
     references: {
       field: 'id',
-      table: 'CouponRewards',
+      table: 'CouponsLents',
     },
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
@@ -27,6 +27,6 @@ export async function down(queryInterface, Sequelize) {
    */
   await queryInterface.removeConstraint(
     'Coupons',
-    'couponrewards_coupons_fk_constraint',
+    'couponslent_coupons_fk_constraint',
   );
 }

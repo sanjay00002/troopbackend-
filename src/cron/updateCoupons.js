@@ -18,6 +18,8 @@ module.exports = () => {
       async function updateCoupons() {
         try {
           await CronJobController.insertNewCoupons();
+
+          await CronJobController.removeCoupons();
         } catch (error) {
           console.error('Error while updating coupons in CRON job: ', error);
         }
