@@ -14,6 +14,8 @@ const {
   PortfolioStocks,
   Portfolio,
   User,
+  CouponRewards,
+  Coupons,
 } = model;
 
 export default {
@@ -281,6 +283,85 @@ export default {
         "Error while generating winners for all the today's contest: ",
         error,
       );
+    }
+  },
+
+  insertNewCoupons: async function () {
+    try {
+      let start = performance.now();
+
+      const newCoupons = await getAllCoupons();
+      const updatedLength = newCoupons?.length,
+        couponsToInsert = [],
+        currentTimestamp = momentTimezone.tz(moment(), 'Asia/Kolkata');
+
+      if (updatedLength && updatedLength > 0) {
+        // * Truncate the table
+        console.log('TRUNCATING TABLE!!!!');
+
+        await CouponRewards.destroy({
+          where: {},
+          hooks: false,
+          truncate: true,
+          cascade: true,
+        });
+
+        for (let index = 0; index < updatedLength; ++index) {
+          const coupon = newCoupons[index];
+
+          couponsToInsert.push({
+            id: coupon.coupon_id,
+            merchantId: coupon.merchant_id,
+            title: coupon.title,
+            description: coupon.description,
+            discount: coupon.discount,
+            couponCode: coupon.coupon_code,
+            plainLink: coupon.plain_link,
+            minPurchase: coupon.min_purchase,
+            maxDiscount: coupon.max_discount,
+            terms: coupon.terms,
+            startDate: coupon.start_date
+              ? moment(coupon.start_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            endDate: coupon.end_date
+              ? moment(coupon.end_date, 'DD-MM-YYYY').format('YYYY-MM-DD')
+              : null,
+            affiliateLink: coupon.affiliate_link,
+            merchantLogo: coupon.merchant_logo,
+            merchantName: coupon.merchant_name,
+            createdAt: currentTimestamp.toISOString(),
+            updatedAt: currentTimestamp.toISOString(),
+          });
+        }
+
+        const chunkSize = 50,
+          dataLength = couponsToInsert.length;
+
+        for (let i = 0; i < dataLength; i += chunkSize) {
+          const chunk = couponsToInsert.slice(i, i + chunkSize);
+          await CouponRewards.bulkCreate(chunk, {
+            validate: true,
+            individualHooks: true,
+          });
+
+          console.log('Chunk inserted: ', chunk.length);
+        }
+      }
+
+      let end = performance.now() - start;
+      console.log(
+        'Time taken for truncating & inserting all the coupons: ',
+        end,
+      );
+    } catch (error) {
+      console.error('Error while inserting coupons: ', error);
+    }
+  },
+
+  removeCoupons: async function () {
+    try {
+    } catch (error) {
+      console.error('Error while removing coupons: ', error);
     }
   },
 };

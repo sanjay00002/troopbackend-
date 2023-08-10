@@ -21,6 +21,7 @@ import winningsRouter from './src/routes/winnings';
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
+import updateCoupnsCronJobs from './src/cron/updateCoupons';
 
 const chatWSServer = require('./chatWS');
 
@@ -358,6 +359,7 @@ httpServer.listen(port, () => {
   createContestsCronJobs();
   declareWinnersCronJobs();
   botsJoinContestsCronJobs();
+  updateCoupnsCronJobs();
 });
 
 chatWSServer.listen('5002', () => {
