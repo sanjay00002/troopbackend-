@@ -79,15 +79,13 @@ export default {
   },
 
   getLiveContests: async function (req, res) {
-    const userId = req.id;
     try {
-      const user = await User.findByPk(userId);
-      if (user && !user?.isBot) {
-        const contests = await LiveContest.findAll({
-          where: {
-            isLive: true,
-          },
-        });
+      const contests = await LiveContest.findAll({
+        where: {
+          isLive: true,
+        },
+      });
+      if (contests) {
         return res.status(200).json(contests);
       } else {
         return res.status(404).json({ error: 'No contest found!' });
@@ -104,17 +102,14 @@ export default {
     const userId = req.id;
     try {
       const user = await User.findByPk(userId);
-      if(user && !user?.isBot){
+      if (user && !user?.isBot) {
         const history = await MatchedLiveUser.findAll({
-          where:{
-            [Op.or]:[
-              { selfId : userId },
-              { apponentId: userId },
-            ]
-          }
-        })
+          where: {
+            [Op.or]: [{ selfId: userId }, { opponentId: userId }],
+          },
+        });
         return res.status(200).json(history);
-      }else{
+      } else {
         return res.status(404).json({ error: 'No User found!' });
       }
     } catch (error) {

@@ -5,7 +5,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import momentTimezone from 'moment-timezone';
 import moment from 'moment/moment';
-
+import chat from './chatWS';
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
@@ -23,7 +23,7 @@ import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 import updateCoupnsCronJobs from './src/cron/updateCoupons';
 
-const chatWSServer = require('./chatWS');
+// const chatWSServer = require('./chatWS');
 
 import model from './src/models';
 
@@ -51,6 +51,7 @@ const { Pool } = require('pg');
 require('dotenv').config({ path: './.env' });
 const app = express();
 const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
   cors: {
     origin: '*',
@@ -66,6 +67,8 @@ const pool = new Pool({
 });
 
 io.on('connection', (socket) => {
+  chat(io);
+  console.log('Connection Established!');
   socket.on('send-stock-tokens', (stock_token) => {
     getStock(io, socket, stock_token, true);
   });
@@ -362,6 +365,6 @@ httpServer.listen(port, () => {
   updateCoupnsCronJobs();
 });
 
-chatWSServer.listen('5002', () => {
-  console.log('chat ws server listening on 5002');
+httpServer.on('error', (err) => {
+  console.log('Error in the server: ', err);
 });

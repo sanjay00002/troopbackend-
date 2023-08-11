@@ -264,34 +264,7 @@ export default {
             where: { contestId: await contest.get('id') },
           });
 
-          const stocks = await StocksSubCategories.findAll({
-            where: {
-              subCategoryId: await contest.get('subCategoryId'),
-            },
-            attributes: {
-              exclude: [
-                'createdAt',
-                'updatedAt',
-                'stockId',
-                'subCategoryId',
-                'id',
-              ],
-            },
-            include: {
-              model: Stocks,
-              required: true,
-              attributes: { exclude: ['createdAt', 'updatedAt'] },
-            },
-          });
-
-          console.log('Stocks: ', stocks);
-
-          const stocksArr = await Promise.all(
-            stocks?.map(async (stock) => await stock.get('stock').get()),
-          );
-
           contestWithParticipants[i].participants = participants.count;
-          contestWithParticipants[i].stocks = stocksArr;
 
           console.log('Participants: ', participants.count);
         }
