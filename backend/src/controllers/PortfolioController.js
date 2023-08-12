@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import model from '../models';
+import model from '../../../database/models';
 import { validatePortfolio } from '../lib/portfolio';
 
 const { Portfolio, PortfolioStocks } = model;

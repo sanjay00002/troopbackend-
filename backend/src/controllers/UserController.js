@@ -1,5 +1,5 @@
 import { generateReferralCode } from '../lib/referralCode';
-import model from '../models';
+import model from '../../../database/models';
 
 const { User, UserRole, Role, Wallet } = model;
 

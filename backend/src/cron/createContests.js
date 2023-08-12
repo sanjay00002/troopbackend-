@@ -2,7 +2,7 @@ import moment from 'moment';
 import momentTimezone from 'moment-timezone';
 import cron from 'node-cron';
 
-import models from '../models';
+import models from '../../../database/models';
 
 import CronJobController from '../controllers/CronJobController';
 

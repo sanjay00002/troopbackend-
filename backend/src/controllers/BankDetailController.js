@@ -1,5 +1,5 @@
 import { Op, Sequelize } from 'sequelize';
-import model from '../models';
+import model from '../../../database/models';
 import moment from 'moment';
 
 const { User, BankDetail } = model;
@@ -12,22 +12,26 @@ export default {
     try {
       const user = await User.findByPk(userId);
       const bankdetailcheck = await BankDetail.findOne({
-        where: { userId : userId }
-      })
+        where: { userId: userId },
+      });
       if (user && !user?.isBot) {
-        if(bankdetailcheck){
-            return res.status(400).json({message: 'Bank details already present for the existing user'})
-        }else{
-            const newBdl = await BankDetail.create({
-              bankAccount: bankDetail?.bankAccount,
-              ifsc: bankDetail?.ifsc,
-              address: bankDetail?.address,
-              userId: userId,
+        if (bankdetailcheck) {
+          return res
+            .status(400)
+            .json({
+              message: 'Bank details already present for the existing user',
             });
-    
-            if(newBdl){
-                return res.status(201).json(newBdl);
-            }
+        } else {
+          const newBdl = await BankDetail.create({
+            bankAccount: bankDetail?.bankAccount,
+            ifsc: bankDetail?.ifsc,
+            address: bankDetail?.address,
+            userId: userId,
+          });
+
+          if (newBdl) {
+            return res.status(201).json(newBdl);
+          }
         }
       } else {
         return res.status(400).json({
@@ -43,7 +47,7 @@ export default {
   },
 
   getBankDetailById: async function (req, res) {
-    const bankdetailId = req.body.id
+    const bankdetailId = req.body.id;
 
     try {
       // * Fetch the contest and the prize distribution
@@ -64,32 +68,31 @@ export default {
     }
   },
 
-  updateBankDetail: async function (req,res){
-      const newbankDetail = req.body;
-      
-      try {
-        const bankDetail = await BankDetail.findByPk(newbankDetail.id)
-        if(bankDetail){
-            await bankDetail.update({
-                bankAccount: newbankDetail?.bankAccount ?? bankDetail.bankAccount,
-                ifsc: newbankDetail?.ifsc ?? bankDetail.ifsc,
-                address: newbankDetail?.address ?? bankDetail.address
-            })
+  updateBankDetail: async function (req, res) {
+    const newbankDetail = req.body;
 
-            const result = await bankDetail.get()
-            return res.status(200).json(result);
-        }
-        else {
-          return res.status(404).json({
-            error: 'No Bank details Found!',
-          });
-        }
-      } catch (error) {
-        console.error('Error while updating Bank Detail', error);
-        return res.status(500).json({
-          errorMessage: error.message,
-          error: 'Something went wrong while updating the bankdetail!',
+    try {
+      const bankDetail = await BankDetail.findByPk(newbankDetail.id);
+      if (bankDetail) {
+        await bankDetail.update({
+          bankAccount: newbankDetail?.bankAccount ?? bankDetail.bankAccount,
+          ifsc: newbankDetail?.ifsc ?? bankDetail.ifsc,
+          address: newbankDetail?.address ?? bankDetail.address,
+        });
+
+        const result = await bankDetail.get();
+        return res.status(200).json(result);
+      } else {
+        return res.status(404).json({
+          error: 'No Bank details Found!',
         });
       }
-    },
+    } catch (error) {
+      console.error('Error while updating Bank Detail', error);
+      return res.status(500).json({
+        errorMessage: error.message,
+        error: 'Something went wrong while updating the bankdetail!',
+      });
+    }
+  },
 };

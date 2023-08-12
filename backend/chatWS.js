@@ -1,7 +1,7 @@
 const chatWS = require('express')();
 const chatWSServer = require('http').createServer(chatWS);
 const socketIO = require('socket.io');
-import model from './src/models';
+import model from '../database/models';
 import getAllMessages from './src/controllers/privateChatController.js';
 import groupChatController from './src/controllers/groupChatController.js';
 

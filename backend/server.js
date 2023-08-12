@@ -1,3 +1,7 @@
+require('@babel/register')({
+  rootMode: 'upward',
+});
+
 import express, { json } from 'express';
 import cors from 'cors';
 import { Sequelize } from 'sequelize';
@@ -25,7 +29,7 @@ import updateCoupnsCronJobs from './src/cron/updateCoupons';
 
 // const chatWSServer = require('./chatWS');
 
-import model from './src/models';
+import model from '../database/models';
 
 import { generateReferralCode } from './src/lib/referralCode';
 

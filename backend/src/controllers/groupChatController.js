@@ -1,11 +1,10 @@
 import { Op } from 'sequelize';
-import model from '../models';
+import model from '../../../database/models';
 import moment from 'moment';
 
 const { GroupChat, GroupChatMessage } = model;
 
 export default {
-
   getAllGroupMessages: async function (roomID) {
     try {
       const messages = await GroupChatMessage.findAll({

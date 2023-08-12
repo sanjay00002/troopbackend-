@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import models from '../models';
+import models from '../../../database/models';
 
 const { Winnings, CrateCategories, Rewards } = models;
 

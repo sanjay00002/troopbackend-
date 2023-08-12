@@ -1,5 +1,5 @@
 import { Op, Sequelize } from 'sequelize';
-import model from '../models';
+import model from '../../../database/models';
 import moment from 'moment';
 import momentTimezone from 'moment-timezone';
 

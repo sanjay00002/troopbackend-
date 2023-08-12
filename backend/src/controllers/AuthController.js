@@ -7,7 +7,7 @@ import { generateReferralCode } from '../lib/referralCode';
 
 import { generateOtp, verifyOTP } from '../lib/verifyOtp';
 
-import model from '../models';
+import model from '../../../database/models';
 import JWTController from './JWTController';
 
 const { User, UserRole, Role, Wallet } = model;

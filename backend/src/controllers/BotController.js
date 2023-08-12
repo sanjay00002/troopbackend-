@@ -1,5 +1,5 @@
 import { generateNBotDetails } from '../lib/bot';
-import model from '../models';
+import model from '../../../database/models';
 import JWTController from './JWTController';
 
 const { User } = model;

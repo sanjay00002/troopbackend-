@@ -1,5 +1,5 @@
 import { Op, Sequelize } from 'sequelize';
-import model from '../models';
+import model from '../../../database/models';
 import { validatePortfolio } from '../lib/portfolio';
 import { getContestStatus } from '../lib/contest';
 import calculatePayout, { calculatePrivatePayout } from './../lib/payout';
