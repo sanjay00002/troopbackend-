@@ -19,6 +19,7 @@ websockets/.env.local
 websockets/.env.dev
 websockets/.env.dev2
 websockets/src/config/config.json
+websockets/config/config.json
 websockets/node_modules
 
 database/config/config.json

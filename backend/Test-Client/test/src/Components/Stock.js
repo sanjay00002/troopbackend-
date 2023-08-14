@@ -1,56 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:5000/stockConnection');
+const socket = io.connect('http://localhost:5001/stockConnection');
 
 export default function Stock() {
-  
-  const [stockName, setstockName] = useState('demo name')
-  const [ltp, setltp] = useState(0)
-  const [openPrice, setopenPrice] = useState(0)
-  const [highPrice, sethighPrice] = useState(0)
-  const [lowPrice, setlowPrice] = useState(0)
-  const [closePrice, setclosePrice] = useState(0)
+  const [stockName, setstockName] = useState('demo name');
+  const [ltp, setltp] = useState(0);
+  const [openPrice, setopenPrice] = useState(0);
+  const [highPrice, sethighPrice] = useState(0);
+  const [lowPrice, setlowPrice] = useState(0);
+  const [closePrice, setclosePrice] = useState(0);
 
-  const getData =()=>{
-    socket.emit("get-data");
-  }
+  const getData = () => {
+    socket.emit('get-data');
+  };
 
-    useEffect(() => {
+  useEffect(() => {
+    // For testing purpose
+    socket.on('Tick', (data) => {
+      // console.log("Data Recived");
+      console.log('receiveTick:::::', data);
 
-      // For testing purpose
-      socket.on("Tick",(data)=>{
-        // console.log("Data Recived");
-			  console.log('receiveTick:::::', data);
+      setltp(data.last_traded_price);
+      setopenPrice(data.open_price_day);
+      sethighPrice(data.high_price_day);
+      setlowPrice(data.low_price_day);
+      setclosePrice(data.close_price);
+    });
 
-        setltp(data.last_traded_price);
-        setopenPrice(data.open_price_day);
-        sethighPrice(data.high_price_day);
-        setlowPrice(data.low_price_day);
-        setclosePrice(data.close_price);
-      })
-
-      // Smart api connection check
-      socket.emit("smart-api-connect")
-
-    },[] )
+    // Smart api connection check
+    socket.emit('smart-api-connect');
+  }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        
-        <div className='stock'>
+        <div className="stock">
           <p>Stock Name: {stockName}</p>
           <p>Last Traded Price: {ltp}</p>
           <p>Open Price: {openPrice}</p>
           <p>High Price: {highPrice}</p>
           <p>Low Price: {lowPrice}</p>
           <p>Close Price: {closePrice}</p>
-        <button onClick={getData}>Get Data</button>
+          <button onClick={getData}>Get Data</button>
         </div>
       </header>
     </div>
-  )
+  );
 }
 
 // subscription_mode: '2',
