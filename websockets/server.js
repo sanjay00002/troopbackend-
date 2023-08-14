@@ -1,3 +1,7 @@
+require('@babel/register')({
+  rootMode: 'upward',
+});
+
 import { Server } from 'socket.io';
 import { Pool } from 'pg';
 import { createAdapter } from '@socket.io/postgres-adapter';
