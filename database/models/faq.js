@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 
 export default (sequelize, DataTypes) => {
   class Faq extends Model {
@@ -19,11 +19,11 @@ export default (sequelize, DataTypes) => {
     },
     {
       name: {
-        plural: "faqs",
-        singular: "faq",
+        plural: 'faqs',
+        singular: 'faq',
       },
       sequelize,
-      modelName: "Faq",
+      modelName: 'Faq',
     }
   );
   Faq.beforeValidate(async (faq, options) => {

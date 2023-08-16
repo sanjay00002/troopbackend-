@@ -1,4 +1,6 @@
-import { nanoid } from 'nanoid/async';
+const nanoid = import('nanoid/async').then(
+  (nanoidModule) => nanoidModule.nanoid,
+);
 module.exports = async function joinLiveContest(socket, pool, user) {
   const contestId = user.contest_id;
   const userId = user.user_id;

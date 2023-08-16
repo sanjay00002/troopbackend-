@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 
 export default (sequelize, DataTypes) => {
   class Wallet extends Model {
@@ -11,16 +11,16 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasOne(Wallet, {
-        foreignKey: "userId",
-        sourceKey: "id",
+        foreignKey: 'userId',
+        sourceKey: 'id',
       });
 
       Wallet.belongsTo(models.User, {
-        foreignKey: "userId",
-        targetKey: "id",
+        foreignKey: 'userId',
+        targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: "user_wallet_fk_constraint",
+        uniqueKey: 'user_wallet_fk_constraint',
       });
     }
   }
@@ -33,11 +33,11 @@ export default (sequelize, DataTypes) => {
     },
     {
       name: {
-        plural: "wallets",
-        singular: "wallet",
+        plural: 'wallets',
+        singular: 'wallet',
       },
       sequelize,
-      modelName: "Wallet",
+      modelName: 'Wallet',
     }
   );
   Wallet.beforeValidate(async (wallet, options) => {

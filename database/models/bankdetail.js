@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 export default (sequelize, DataTypes) => {
   class BankDetail extends Model {
     /**
@@ -10,16 +10,16 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasOne(BankDetail, {
-        foreignKey: "userId",
-        sourceKey: "id",
+        foreignKey: 'userId',
+        sourceKey: 'id',
       });
 
       BankDetail.belongsTo(models.User, {
-        foreignKey: "userId",
-        targetKey: "id",
+        foreignKey: 'userId',
+        targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: "user_bankDetail_fk_constraint",
+        uniqueKey: 'user_bankDetail_fk_constraint',
       });
     }
   }
@@ -32,11 +32,11 @@ export default (sequelize, DataTypes) => {
     },
     {
       name: {
-        plural: "bankDetails",
-        singular: "bankDetail",
+        plural: 'bankDetails',
+        singular: 'bankDetail',
       },
       sequelize,
-      modelName: "BankDetail",
+      modelName: 'BankDetail',
     }
   );
   BankDetail.beforeValidate(async (bankDetail, options) => {

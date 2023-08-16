@@ -1,5 +1,7 @@
-import { nanoid } from 'nanoid/async';
 module.exports = async function joinLiveContest(socket, pool, user) {
+  const nanoid = await import('nanoid/async').then(
+    (nanoidModule) => nanoidModule.nanoid
+  );
   const contestId = user.contest_id;
   const userId = user.user_id;
   const socketId = user.socket_id;
@@ -17,6 +19,6 @@ module.exports = async function joinLiveContest(socket, pool, user) {
         console.log('Contest saved successfully');
         socket.emit('select-stock');
       }
-    },
+    }
   );
 };

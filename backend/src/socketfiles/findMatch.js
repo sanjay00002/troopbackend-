@@ -1,4 +1,6 @@
-import { nanoid } from 'nanoid/async';
+const nanoid = import('nanoid/async').then(
+  (nanoidModule) => nanoidModule.nanoid,
+);
 
 const getWinner = (id, pool, socket, matched_user) => {
   const getWinnerQuery =

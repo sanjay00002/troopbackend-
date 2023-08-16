@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 
 export default (sequelize, DataTypes) => {
   class CommonWallet extends Model {
@@ -21,11 +21,11 @@ export default (sequelize, DataTypes) => {
     },
     {
       name: {
-        singular: "commonWallet",
-        plural: "commonWallets",
+        singular: 'commonWallet',
+        plural: 'commonWallets',
       },
       sequelize,
-      modelName: "CommonWallet",
+      modelName: 'CommonWallet',
     }
   );
   CommonWallet.beforeValidate(async (wallet, options) => {

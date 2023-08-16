@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 
 export default (sequelize, DataTypes) => {
   class Winnings extends Model {
@@ -11,42 +11,42 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.CrateCategories.hasMany(Winnings, {
-        foreignKey: "crateCategoryId",
-        sourceKey: "id",
+        foreignKey: 'crateCategoryId',
+        sourceKey: 'id',
       });
 
       Winnings.belongsTo(models.CrateCategories, {
-        foreignKey: "crateCategoryId",
+        foreignKey: 'crateCategoryId',
         keyType: DataTypes.INTEGER,
         constraints: true,
-        targetKey: "id",
-        uniqueKey: "cratecategories_winnings_fk_constraint",
+        targetKey: 'id',
+        uniqueKey: 'cratecategories_winnings_fk_constraint',
       });
 
       models.User.hasMany(Winnings, {
-        foreignKey: "userId",
-        sourceKey: "id",
+        foreignKey: 'userId',
+        sourceKey: 'id',
       });
 
       Winnings.belongsTo(models.User, {
-        foreignKey: "userId",
+        foreignKey: 'userId',
         keyType: DataTypes.STRING,
         constraints: true,
-        targetKey: "id",
-        uniqueKey: "user_winnings_fk_constraint",
+        targetKey: 'id',
+        uniqueKey: 'user_winnings_fk_constraint',
       });
 
       models.RewardsLent.hasMany(Winnings, {
-        foreignKey: "rewardsLentId",
-        sourceKey: "id",
+        foreignKey: 'rewardsLentId',
+        sourceKey: 'id',
       });
 
       Winnings.belongsTo(models.RewardsLent, {
-        foreignKey: "rewardsLentId",
+        foreignKey: 'rewardsLentId',
         keyType: DataTypes.STRING,
         constraints: true,
-        targetKey: "id",
-        uniqueKey: "rewardsLent_winnings_fk_constraint",
+        targetKey: 'id',
+        uniqueKey: 'rewardsLent_winnings_fk_constraint',
       });
     }
   }
@@ -58,11 +58,11 @@ export default (sequelize, DataTypes) => {
     },
     {
       name: {
-        singular: "winning",
-        plural: "winnings",
+        singular: 'winning',
+        plural: 'winnings',
       },
       sequelize,
-      modelName: "Winnings",
+      modelName: 'Winnings',
     }
   );
   Winnings.beforeValidate((winning, options) => {

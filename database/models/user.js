@@ -1,8 +1,8 @@
-import { Model } from "sequelize";
+import { Model } from 'sequelize';
 // import("nanoid/async").then((nanoid) => nanoid.nanoid);
-import { generateUserId } from "../../backend/src/lib/userId";
+import { generateUserId } from '../../lib/generateId';
 
-import("@faker-js/faker/locale/en_IN").then((faker) => faker.faker);
+import('@faker-js/faker/locale/en_IN').then((faker) => faker.faker);
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
       firstName: { type: DataTypes.STRING, allowNull: true },
       lastName: { type: DataTypes.STRING, allowNull: true },
       gender: {
-        type: DataTypes.ENUM(["Male", "Female", "Other"]),
+        type: DataTypes.ENUM(['Male', 'Female', 'Other']),
         allowNull: true,
       },
       dob: { type: DataTypes.DATEONLY, allowNull: true },
@@ -48,7 +48,7 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: 'User',
     }
   );
   User.beforeValidate(async (user, option) => {
@@ -63,14 +63,14 @@ export default (sequelize, DataTypes) => {
           !!user?.dataValues.firstName === false &&
           !!user?.dataValues.lastName === false
         ) {
-          user.username = "Trooper-" + user?.id.split("-")[1];
+          user.username = 'Trooper-' + user?.id.split('-')[1];
         }
         if (
           user?.dataValues.firstName &&
           user?.dataValues.lastName &&
           !!user?.dataValues.username === false
         ) {
-          import("@faker-js/faker/locale/en_IN").then((fakerModule) => {
+          import('@faker-js/faker/locale/en_IN').then((fakerModule) => {
             const username = fakerModule.faker.internet.userName({
               firstName: user.dataValues.firstName,
               lastName: user.dataValues.lastName,

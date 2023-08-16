@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 
 export default (sequelize, DataTypes) => {
   class LiveContestUserPool extends Model {
@@ -11,42 +11,42 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasMany(LiveContestUserPool, {
-        foreignKey: "userId",
-        sourceKey: "id",
+        foreignKey: 'userId',
+        sourceKey: 'id',
       });
 
       LiveContestUserPool.belongsTo(models.User, {
-        foreignKey: "userId",
-        targetKey: "id",
+        foreignKey: 'userId',
+        targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: "user_livecontest_fk_constraint",
+        uniqueKey: 'user_livecontest_fk_constraint',
       });
 
       models.Contest.hasMany(LiveContestUserPool, {
-        foreignKey: "contestId",
-        sourceKey: "id",
+        foreignKey: 'contestId',
+        sourceKey: 'id',
       });
 
       LiveContestUserPool.belongsTo(models.Contest, {
-        foreignKey: "contestId",
-        targetKey: "id",
+        foreignKey: 'contestId',
+        targetKey: 'id',
         constraints: true,
         keyType: DataTypes.STRING,
-        uniqueKey: "contest_live_fk_constraint",
+        uniqueKey: 'contest_live_fk_constraint',
       });
 
       models.Stocks.hasMany(LiveContestUserPool, {
-        foreignKey: "stockId",
-        sourceKey: "id",
+        foreignKey: 'stockId',
+        sourceKey: 'id',
       });
 
       LiveContestUserPool.belongsTo(models.Stocks, {
-        foreignKey: "stockId",
-        targetKey: "id",
+        foreignKey: 'stockId',
+        targetKey: 'id',
         constraints: true,
         keyType: DataTypes.INTEGER,
-        uniqueKey: "stock_live_fk_constraint",
+        uniqueKey: 'stock_live_fk_constraint',
       });
     }
   }
@@ -61,7 +61,7 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "LiveContestUserPool",
+      modelName: 'LiveContestUserPool',
     }
   );
   LiveContestUserPool.beforeValidate(async (liveuser, options) => {

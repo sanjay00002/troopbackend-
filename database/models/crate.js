@@ -1,5 +1,5 @@
-import { Model } from "sequelize";
-import { generateUserId } from "../../backend/src/lib/userId";
+import { Model } from 'sequelize';
+import { generateUserId } from '../../lib/generateId';
 
 export default (sequelize, DataTypes) => {
   class Crate extends Model {
@@ -11,29 +11,29 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.CrateCategories.hasMany(Crate, {
-        foreignKey: "crateCategoryId",
-        sourceKey: "id",
+        foreignKey: 'crateCategoryId',
+        sourceKey: 'id',
       });
 
       Crate.belongsTo(models.CrateCategories, {
-        foreignKey: "crateCategoryId",
+        foreignKey: 'crateCategoryId',
         keyType: DataTypes.INTEGER,
         constraints: true,
-        targetKey: "id",
-        uniqueKey: "cratecategories_crate_fk_constraint",
+        targetKey: 'id',
+        uniqueKey: 'cratecategories_crate_fk_constraint',
       });
 
       models.User.hasMany(Crate, {
-        foreignKey: "userId",
-        sourceKey: "id",
+        foreignKey: 'userId',
+        sourceKey: 'id',
       });
 
       Crate.belongsTo(models.User, {
-        foreignKey: "userId",
+        foreignKey: 'userId',
         keyType: DataTypes.STRING,
         constraints: true,
-        targetKey: "id",
-        uniqueKey: "user_crate_fk_constraint",
+        targetKey: 'id',
+        uniqueKey: 'user_crate_fk_constraint',
       });
     }
   }
@@ -50,11 +50,11 @@ export default (sequelize, DataTypes) => {
     },
     {
       name: {
-        singular: "crate",
-        plural: "crates",
+        singular: 'crate',
+        plural: 'crates',
       },
       sequelize,
-      modelName: "Crate",
+      modelName: 'Crate',
     }
   );
   Crate.beforeValidate((crate, options) => {

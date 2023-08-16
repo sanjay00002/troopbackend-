@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid/async';
-
 const getWinner = (id, pool, socket, matched_user) => {
   const getWinnerQuery =
     'SELECT * FROM public."MatchedLiveUsers" WHERE id = $1';
@@ -60,7 +58,11 @@ const getWinner = (id, pool, socket, matched_user) => {
   });
 };
 
-module.exports = function findMatch(io, socket, pool, user) {
+module.exports = async function findMatch(io, socket, pool, user) {
+  const nanoid = await import('nanoid/async').then(
+    (nanoidModule) => nanoidModule.nanoid
+  );
+
   const userId = user.user_id;
   const socketId = user.socket_id;
   const contestId = user.contest_id;
@@ -119,7 +121,7 @@ module.exports = function findMatch(io, socket, pool, user) {
                         } else {
                           console.log('Matched users registered in history');
                         }
-                      },
+                      }
                     );
 
                     const deleteQuery =
@@ -152,7 +154,7 @@ module.exports = function findMatch(io, socket, pool, user) {
                           'stock value updated ' +
                             stockFlow.stock1 +
                             ' ' +
-                            stock2,
+                            stock2
                         );
                         stock1 = stockFlow.stock1;
                         stock2 = stockFlow.stock2;
@@ -180,7 +182,7 @@ module.exports = function findMatch(io, socket, pool, user) {
                               matchedObject.selfSelectedStockId === stock1[0]
                             ) {
                               console.log(
-                                'Stock1 ' + stock1 + ' Stock2 ' + stock2,
+                                'Stock1 ' + stock1 + ' Stock2 ' + stock2
                               );
                               const finalStockUpdateQuery =
                                 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "apponentStockCloseValue" = $2 WHERE "id" = $3';
@@ -190,13 +192,13 @@ module.exports = function findMatch(io, socket, pool, user) {
                                 async (error, result) => {
                                   if (error) {
                                     console.log(
-                                      'Error while deciding error' + error,
+                                      'Error while deciding error' + error
                                     );
                                   } else {
                                     console.log('final stock values fetched');
                                     getWinner(id, pool, socket, matched_user);
                                   }
-                                },
+                                }
                               );
                             } else {
                               const finalStockUpdateQuery =
@@ -207,13 +209,13 @@ module.exports = function findMatch(io, socket, pool, user) {
                                 (error, result) => {
                                   if (error) {
                                     console.log(
-                                      'Error while deciding error' + error,
+                                      'Error while deciding error' + error
                                     );
                                   } else {
                                     console.log('final stock values fetched');
                                     getWinner(id, pool, socket, matched_user);
                                   }
-                                },
+                                }
                               );
                             }
                           }
@@ -222,12 +224,12 @@ module.exports = function findMatch(io, socket, pool, user) {
                       isEnd = true;
                     }, 5000); // TODO: Need to change the live contest ending time to 30mins
                   }
-                },
+                }
               );
             }
           }
         });
       }
-    },
+    }
   );
 };
