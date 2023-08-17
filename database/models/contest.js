@@ -1,5 +1,5 @@
 import { Model } from "sequelize";
-
+import { nanoid } from "nanoid/async";
 // import("nanoid/async").then((nanoid) => nanoid);
 
 /**
@@ -92,10 +92,8 @@ export default (sequelize, DataTypes) => {
   );
   Contest.beforeValidate(async (contest, option) => {
     if (contest.isNewRecord) {
-      import("nanoid/async").then(async (nanoidModule) => {
-        const id = await nanoidModule.nanoid(10);
-        contest.id = id;
-      });
+      const id = await nanoid(10);
+      contest.id = id;
     }
   });
   return Contest;

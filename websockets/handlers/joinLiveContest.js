@@ -1,7 +1,9 @@
-module.exports = async function joinLiveContest(socket, pool, user) {
-  const nanoid = await import('nanoid/async').then(
-    (nanoidModule) => nanoidModule.nanoid
-  );
+import { nanoid } from "nanoid/async";
+
+export default async function joinLiveContest(socket, pool, user) {
+  // const nanoid = await import('nanoid/async').then(
+  //   (nanoidModule) => nanoidModule.nanoid
+  // );
   const contestId = user.contest_id;
   const userId = user.user_id;
   const socketId = user.socket_id;
@@ -13,12 +15,12 @@ module.exports = async function joinLiveContest(socket, pool, user) {
     [id, contestId, userId, socketId],
     (error, result) => {
       if (error) {
-        console.error('Error saving contest:', error);
+        console.error("Error saving contest:", error);
         // Handle the error and send an appropriate response
       } else {
-        console.log('Contest saved successfully');
-        socket.emit('select-stock');
+        console.log("Contest saved successfully");
+        socket.emit("select-stock");
       }
     }
   );
-};
+}

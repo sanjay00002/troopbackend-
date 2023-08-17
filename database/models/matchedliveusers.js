@@ -1,4 +1,5 @@
-const { Model } = require("sequelize");
+import { Model } from "sequelize";
+import { nanoid } from "nanoid/async";
 // import("nanoid/async").then((nanoid) => nanoid.nanoid);
 
 export default (sequelize, DataTypes) => {
@@ -98,10 +99,8 @@ export default (sequelize, DataTypes) => {
   );
   MatchedLiveUser.beforeValidate(async (match, option) => {
     if (match.isNewRecord) {
-      import("nanoid/async").then(async (nanoidModule) => {
-        const id = await nanoidModule.nanoid(10);
-        match.id = id;
-      });
+      const id = await nanoid(10);
+      match.id = id;
     }
   });
   return MatchedLiveUser;

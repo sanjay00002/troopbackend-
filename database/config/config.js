@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 module.exports = {
   local: {
     username: process.env.PGUSER,
@@ -6,7 +6,7 @@ module.exports = {
     database: process.env.PGDATABASE,
     host: process.env.PGHOST,
     port: process.env.PGPORT,
-    dialect: 'postgres',
+    dialect: "postgres",
   },
   development: {
     username: process.env.PGUSER,
@@ -14,7 +14,7 @@ module.exports = {
     database: process.env.PGDATABASE,
     host: process.env.PGHOST,
     port: process.env.PGPORT,
-    dialect: 'postgres',
+    dialect: "postgres",
     dialectOptions: {
       ssl: {
         require: process.env.PGSSLMODE,

@@ -4,7 +4,12 @@
     "private": true,
     "scripts": {
         "start:backend": "nodemon --exec babel-node ./backend/server.js",
-        "start:websocket": "nodemon --exec babel-node ./websockets/server.js"
+        "start:websocket": "nodemon --exec babel-node ./websockets/server.js",
+        "generate:token": "node ./websockets/stockSocket/generate_token.mjs",
+        "migrate": "npx sequelize-cli db:migrate",
+        "undo-migration": "npx sequelize-cli db:migrate:undo",
+        "undo-all-migration": "npx sequelize-cli db:migrate:undo:all",
+        "generate-migration": "npx sequelize-cli migration:generate --name"
     },
     "workspaces": [
         "backend/*",
@@ -27,6 +32,7 @@
         "nanoid-dictionary": "^4.3.0",
         "pg": "^8.11.2",
         "pg-hstore": "^2.3.4",
-        "sequelize": "^6.32.1"
+        "sequelize": "^6.32.1",
+        "smartapi-javascript": "^1.0.15"
     }
 }

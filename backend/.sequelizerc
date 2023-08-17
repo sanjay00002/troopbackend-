@@ -12,7 +12,7 @@ const nodeEnv = process.env.NODE_ENV;
 
 module.exports = {
   env: nodeEnv,
-  config: path.resolve('./src/config', 'config.js'),
+  config: path.resolve('../database/config', 'config.js'),
   'models-path': path.resolve('../database/models'),
   'seeders-path': path.resolve('./src/database/seeders'),
   'migrations-path': path.resolve('../database/migrations'),

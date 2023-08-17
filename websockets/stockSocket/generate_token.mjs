@@ -1,7 +1,9 @@
-// import { SmartAPI, WebSocket } from 'smartapi-javascript';
-const { SmartAPI } = require('smartapi-javascript');
+import { SmartAPI, WebSocket } from "smartapi-javascript";
+// const { SmartAPI } = require("smartapi-javascript");
 
-require('dotenv').config();
+// require("dotenv").config();
+import { config } from "dotenv";
+config();
 
 let refreshToken = null,
   jwtToken = null;
@@ -18,19 +20,22 @@ const smart_api = new SmartAPI({
 const client_id = process.env.SMARTAPI_CLIENT_CODE;
 const client_password = process.env.SMARTAPI_CLIENT_PASSWORD;
 smart_api
-  .generateSession(client_id, client_password, '508077')
+  .generateSession(client_id, client_password, "175358")
   .then((data) => {
     // jwt = data.data.jwtToken;
-    console.log('Tokens: ', data.data);
+    console.log("Tokens: ", data.data);
     // feed = data.data.feedToken;
     return smart_api.getProfile();
+  })
+  .catch((error) => {
+    console.log("Error in generating the session: ", error);
   })
   .then((data) => {
     // Profile details
   })
   .catch((ex) => {
     //Log error
-    console.error('Error: ', ex);
+    console.error("Error: ", ex);
   });
 
 // TO HANDLE SESSION EXPIRY, USERS CAN PROVIDE A CUSTOM FUNCTION AS PARAMETER TO setSessionExpiryHook METHOD
@@ -42,6 +47,6 @@ function customSessionHook() {
   // * https://smartapi.angelbroking.com/docs/User#Generate
 
   smart_api.generateToken(smart_api.refresh_token);
-  smart_api.console.log('Refreshed Tokens');
+  smart_api.console.log("Refreshed Tokens");
   // console.log('User loggedout');
 }

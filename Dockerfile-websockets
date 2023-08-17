@@ -18,6 +18,9 @@ COPY .env .
 
 COPY lib/ ./lib/
 
+# Comment out the below line if you are using docker-compose to deploy
+COPY database/ ./database/
+
 RUN npm install
 
 # Bundle app source

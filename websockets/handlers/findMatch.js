@@ -1,9 +1,11 @@
+import { nanoid } from "nanoid/async";
+
 const getWinner = (id, pool, socket, matched_user) => {
   const getWinnerQuery =
     'SELECT * FROM public."MatchedLiveUsers" WHERE id = $1';
   pool.query(getWinnerQuery, [id], (error, result) => {
     if (error) {
-      console.log('No such match found' + error);
+      console.log("No such match found" + error);
     } else {
       const curr_match = result.rows[0];
       const selfPerformance =
@@ -14,10 +16,10 @@ const getWinner = (id, pool, socket, matched_user) => {
           curr_match.apponentStockOpenValue) /
         curr_match.apponentStockOpenValue;
 
-      console.log('self: ' + selfPerformance);
-      console.log('apponent: ' + apponentPerformance);
+      console.log("self: " + selfPerformance);
+      console.log("apponent: " + apponentPerformance);
       if (selfPerformance > apponentPerformance) {
-        const winner = 'Self';
+        const winner = "Self";
         const setWinnerQuery =
           'UPDATE public."MatchedLiveUsers" SET "winner" =$1  WHERE "id" = $2';
         pool.query(setWinnerQuery, [winner, id], (error, result) => {
@@ -25,14 +27,14 @@ const getWinner = (id, pool, socket, matched_user) => {
             console.log(error);
           } else {
             console.log(winner);
-            socket.emit('set-winner', winner);
+            socket.emit("set-winner", winner);
             socket.broadcast
               .to(matched_user.socket_id)
-              .emit('set-winner', 'Apponent');
+              .emit("set-winner", "Apponent");
           }
         });
       } else if (selfPerformance < apponentPerformance) {
-        const winner = 'Apponent';
+        const winner = "Apponent";
         const setWinnerQuery =
           'UPDATE public."MatchedLiveUsers" SET "winner" =$1  WHERE "id" = $2';
         pool.query(setWinnerQuery, [winner, id], (error, result) => {
@@ -41,27 +43,27 @@ const getWinner = (id, pool, socket, matched_user) => {
           } else {
             console.log(winner);
 
-            socket.emit('set-winner', winner);
+            socket.emit("set-winner", winner);
             socket.broadcast
               .to(matched_user.socket_id)
-              .emit('set-winner', 'Self');
+              .emit("set-winner", "Self");
           }
         });
       } else {
-        const winner = 'Tie';
+        const winner = "Tie";
         console.log(winner);
 
-        socket.emit('set-winner', winner);
-        socket.broadcast.to(matched_user.socket_id).emit('set-winner', winner);
+        socket.emit("set-winner", winner);
+        socket.broadcast.to(matched_user.socket_id).emit("set-winner", winner);
       }
     }
   });
 };
 
 module.exports = async function findMatch(io, socket, pool, user) {
-  const nanoid = await import('nanoid/async').then(
-    (nanoidModule) => nanoidModule.nanoid
-  );
+  // const nanoid = await import("nanoid/async").then(
+  //   (nanoidModule) => nanoidModule.nanoid
+  // );
 
   const userId = user.user_id;
   const socketId = user.socket_id;
@@ -76,15 +78,15 @@ module.exports = async function findMatch(io, socket, pool, user) {
     [stock_id, stock_value, contestId, socketId],
     (error, result) => {
       if (error) {
-        console.error('Error saving contest:', error);
+        console.error("Error saving contest:", error);
       } else {
-        console.log('stock selected successfully');
+        console.log("stock selected successfully");
 
         const getQuery =
           'SELECT * FROM public."LiveContestUserPool" WHERE contest_id = $1 AND stock_id <> $2 AND matched = false';
         pool.query(getQuery, [contestId, stock_id], (error, result) => {
           if (error) {
-            console.log('Error occured:', error);
+            console.log("Error occured:", error);
           } else {
             const matched_user = result.rows[0];
             if (matched_user) {
@@ -95,9 +97,9 @@ module.exports = async function findMatch(io, socket, pool, user) {
                 [socketId, contestId, matched_user.id],
                 async (error, result) => {
                   if (error) {
-                    console.log('error in matching', error);
+                    console.log("error in matching", error);
                   } else {
-                    console.log('matched');
+                    console.log("matched");
                     const id = await nanoid(10);
 
                     const matchedQuery =
@@ -117,9 +119,9 @@ module.exports = async function findMatch(io, socket, pool, user) {
                       ],
                       (error, result) => {
                         if (error) {
-                          console.log('error in matching', error);
+                          console.log("error in matching", error);
                         } else {
-                          console.log('Matched users registered in history');
+                          console.log("Matched users registered in history");
                         }
                       }
                     );
@@ -128,32 +130,32 @@ module.exports = async function findMatch(io, socket, pool, user) {
                       'DELETE FROM public."LiveContestUserPool" WHERE matched = true';
                     pool.query(deleteQuery, (error, result) => {
                       if (error) {
-                        console.log('error in deleting', error);
+                        console.log("error in deleting", error);
                       } else {
-                        console.log('Deleted matched users');
+                        console.log("Deleted matched users");
                       }
                     });
 
-                    socket.emit('match-found', matched_user.user_id);
+                    socket.emit("match-found", matched_user.user_id);
                     socket.broadcast
                       .to(matched_user.socket_id)
-                      .emit('match-found', userId);
+                      .emit("match-found", userId);
 
                     var isEnd = false;
 
                     var stock1 = [];
                     var stock2 = [];
                     var isFetched = false;
-                    socket.on('send-stock-value', (stockFlow) => {
+                    socket.on("send-stock-value", (stockFlow) => {
                       if (
                         isFetched === false &&
                         stockFlow.stock1[1] !== null &&
                         stockFlow.stock2[1] !== null
                       ) {
                         console.log(
-                          'stock value updated ' +
+                          "stock value updated " +
                             stockFlow.stock1 +
-                            ' ' +
+                            " " +
                             stock2
                         );
                         stock1 = stockFlow.stock1;
@@ -172,17 +174,17 @@ module.exports = async function findMatch(io, socket, pool, user) {
                           'SELECT * FROM public."MatchedLiveUsers" WHERE id = $1';
                         pool.query(getQuery, [id], async (error, result) => {
                           if (error) {
-                            console.log('No such match found' + error);
+                            console.log("No such match found" + error);
                           } else {
                             await result;
                             var matchedObject = result.rows[0];
-                            console.log('on line 110');
+                            console.log("on line 110");
                             console.log(matchedObject);
                             if (
                               matchedObject.selfSelectedStockId === stock1[0]
                             ) {
                               console.log(
-                                'Stock1 ' + stock1 + ' Stock2 ' + stock2
+                                "Stock1 " + stock1 + " Stock2 " + stock2
                               );
                               const finalStockUpdateQuery =
                                 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "apponentStockCloseValue" = $2 WHERE "id" = $3';
@@ -192,10 +194,10 @@ module.exports = async function findMatch(io, socket, pool, user) {
                                 async (error, result) => {
                                   if (error) {
                                     console.log(
-                                      'Error while deciding error' + error
+                                      "Error while deciding error" + error
                                     );
                                   } else {
-                                    console.log('final stock values fetched');
+                                    console.log("final stock values fetched");
                                     getWinner(id, pool, socket, matched_user);
                                   }
                                 }
@@ -209,10 +211,10 @@ module.exports = async function findMatch(io, socket, pool, user) {
                                 (error, result) => {
                                   if (error) {
                                     console.log(
-                                      'Error while deciding error' + error
+                                      "Error while deciding error" + error
                                     );
                                   } else {
-                                    console.log('final stock values fetched');
+                                    console.log("final stock values fetched");
                                     getWinner(id, pool, socket, matched_user);
                                   }
                                 }
