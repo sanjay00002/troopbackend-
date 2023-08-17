@@ -269,9 +269,38 @@ export default {
           console.log('Participants: ', participants.count);
         }
 
+        const stocksORM = await StocksSubCategories.findAll({
+          where: {
+            subCategoryId,
+          },
+          attributes: {
+            exclude: [
+              'createdAt',
+              'updatedAt',
+              'stockId',
+              'subCategoryId',
+              'id',
+            ],
+          },
+          include: {
+            model: Stocks,
+            required: true,
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
+        });
+
+        const stocksArr = await Promise.all([
+          ...(await stocksORM.map(
+            async (stocks) => await stocks.get('stock').get(),
+          )),
+        ]);
+
         console.log('Contest with Participants: ', contestWithParticipants);
 
-        return res.status(200).json(contestWithParticipants);
+        return res.status(200).json({
+          contests: contestWithParticipants,
+          stocks: stocksArr,
+        });
       } else {
         return res.status(404).json({ error: 'No contest found!' });
       }
