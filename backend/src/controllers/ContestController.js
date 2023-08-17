@@ -447,12 +447,12 @@ export default {
             },
             attributes: { exclude: ['createdAt', 'updatedAt', 'contestId'] },
           },
-          {
-            model: ContestParticipants,
-            required: true,
-            as: 'participants',
-            attributes: [],
-          },
+          // {
+          //   model: ContestParticipants,
+          //   required: true,
+          //   as: 'participants',
+          //   attributes: [],
+          // },
         ],
         attributes: {
           include: [
@@ -463,10 +463,10 @@ export default {
             'pricePool',
             'createdBy',
             'slots',
-            [
-              Sequelize.fn('COUNT', Sequelize.col('participants.id')),
-              'participantsCount',
-            ],
+            // [
+            //   Sequelize.fn('COUNT', Sequelize.col('participants.id')),
+            //   'participantsCount',
+            // ],
           ],
         },
         group: [
@@ -476,7 +476,23 @@ export default {
         ],
       });
 
-      // console.log('Contests: ', contests);
+      const allJoinedContest = await Promise.all([
+        ...(await contests.map(async (c) => await c.get())),
+      ]);
+
+      const length = allJoinedContest.length;
+      for (let index = 0; index < length; index++) {
+        const contest = await allJoinedContest[index];
+        const participants = await ContestParticipants.findAndCountAll({
+          where: {
+            contestId: contest.id,
+          },
+        });
+
+        allJoinedContest[index].participantCount = participants.count;
+      }
+
+      console.log('Contests: ', allJoinedContest);
 
       return res.status(200).json(contests);
     } catch (error) {
