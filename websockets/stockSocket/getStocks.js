@@ -24,7 +24,6 @@ module.exports = function (io, socket, stock_token, isLive) {
           ? smart_api?.feed_token
           : process.env.SMARTAPI_FEED_TOKEN,
       });
-
       if (stock_token[0]) {
         try {
           web_socket.connect().then(() => {
@@ -46,6 +45,8 @@ module.exports = function (io, socket, stock_token, isLive) {
             function receiveTick(data) {
               // console.log("socket file");
               // console.log('receiveTick:::::', data);
+              console.log(data)
+              console.log("working")
               if (isLive) {
                 io.of('/liveContest').emit('get-live-data', data);
                 io.of('/normalContest').emit('get-live-data', data);

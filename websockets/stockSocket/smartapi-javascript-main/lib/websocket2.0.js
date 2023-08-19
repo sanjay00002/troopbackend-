@@ -67,7 +67,7 @@ let WebSocketV2 = function (params) {
 						let lastMessageTimeStamp = currentTimeStamp - timeStamp;
 						if (lastMessageTimeStamp > 20) {
 							if (ws?._readyState === open) {
-								ws.close();
+								// ws.close();
 							}
 							clearInterval(reset);
 							clearInterval(stopInterval);
@@ -81,7 +81,7 @@ let WebSocketV2 = function (params) {
 						}
 						try {
 							if (ws?._readyState === open) {
-								ws.close();
+								// ws.close();
 							}
 							clearInterval(reset);
 						} catch (error) {
@@ -144,7 +144,7 @@ let WebSocketV2 = function (params) {
 
 		this.close = function () {
 			clearInterval(stopInterval);
-			ws.close();
+			// ws.close();
 		};
 	} catch (error) {
 		throw new Error(error);
