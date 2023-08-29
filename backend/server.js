@@ -21,6 +21,7 @@ import groupchatRouter from './src/routes/groupchatRouter';
 import portfolioRouter from './src/routes/portfolio';
 import crateRouter from './src/routes/crate';
 import winningsRouter from './src/routes/winnings';
+import avatarGeneratorRouter from './src/routes/avatarGenerator.routes';
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
@@ -145,6 +146,7 @@ app.use('/api/v1/bank-detail', bankDetailRouter);
 app.use('/api/v1/faq', faqRouter);
 app.use('/api/v1/crates', crateRouter);
 app.use('/api/v1/winnings', winningsRouter);
+app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express
