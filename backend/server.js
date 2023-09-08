@@ -22,6 +22,7 @@ import portfolioRouter from './src/routes/portfolio';
 import crateRouter from './src/routes/crate';
 import winningsRouter from './src/routes/winnings';
 import avatarGeneratorRouter from './src/routes/avatarGenerator.routes';
+import stockImagesRouter from './src/routes/stockImages.router';
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
@@ -116,7 +117,7 @@ const app = express();
 //   });
 // });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 2100;
 
 app.use(cors());
 app.use(json());
@@ -147,6 +148,7 @@ app.use('/api/v1/faq', faqRouter);
 app.use('/api/v1/crates', crateRouter);
 app.use('/api/v1/winnings', winningsRouter);
 app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
+app.use('/api/v1/stockImages', stockImagesRouter);
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express

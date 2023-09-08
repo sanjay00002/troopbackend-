@@ -1,12 +1,12 @@
-import { readdirSync } from 'fs';
-import { basename as _basename, join } from 'path';
-import Sequelize, { DataTypes } from 'sequelize';
-require('dotenv').config();
+import { readdirSync } from "fs";
+import { basename as _basename, join } from "path";
+import Sequelize, { DataTypes } from "sequelize";
+require("dotenv").config();
 
-import { env as _env } from 'process';
+import { env as _env } from "process";
 const basename = _basename(__filename);
-const env = _env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')[env];
+const env = _env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
 
 let sequelize;
@@ -17,17 +17,17 @@ if (config.use_env_variable) {
     config.database,
     config.username,
     config.password,
-    config,
+    config
   );
 }
 
 readdirSync(__dirname)
   .filter((file) => {
     return (
-      file.indexOf('.') !== 0 &&
+      file.indexOf(".") !== 0 &&
       file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
+      file.slice(-3) === ".js" &&
+      file.indexOf(".test.js") === -1
     );
   })
   .forEach((file) => {

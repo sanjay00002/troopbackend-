@@ -187,7 +187,10 @@ function LTP(buf) {
     })
     .int64("sequence_number", { formatter: toNumber })
     .int64("exchange_timestamp", { formatter: toNumber })
-    .int32("last_traded_price", { formatter: toNumber });
+    .int32("last_traded_price", {
+      formatter: toNumber,
+      pre: (value) => value / 100,
+    });
 
   return ltp.parse(buf);
 }
@@ -222,7 +225,11 @@ function SNAP_QUOTE(buf) {
     .endianness("little")
     .int16("buy_sell_indicator", { formatter: toNumber, length: 2 })
     .int64("buy_sell_quantity", { formatter: toNumber, length: 8 })
-    .int64("buy_sell_price", { formatter: toNumber, length: 8 })
+    .int64("buy_sell_price", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
+    })
     .int16("buy_sell_orders", { formatter: toNumber, length: 2 });
 
   const snapQuote = new Parser()
@@ -232,18 +239,40 @@ function SNAP_QUOTE(buf) {
     .array("token", { type: "int8", length: 25, formatter: _atos })
     .uint64("sequence_number", { formatter: toNumber, length: 8 })
     .uint64("exchange_timestamp", { formatter: toNumber, length: 8 })
-    .doublele("last_traded_price", { formatter: toNumber, length: 8 })
-    .doublele("last_traded_quantity", { formatter: toNumber, length: 8 })
-    .doublele("avg_traded_price", { formatter: toNumber, length: 8 })
-    .doublele("vol_traded", { formatter: toNumber, length: 8 })
-    .doublele("total_buy_quantity", { formatter: toNumber, length: 8 })
-    .doublele("total_sell_quantity", { formatter: toNumber, length: 8 })
-    .doublele("open_price_day", { formatter: toNumber, length: 8 })
-    .doublele("high_price_day", { formatter: toNumber, length: 8 })
-    .doublele("low_price_day", { formatter: toNumber, length: 8 })
-    .doublele("close_price", {
+    .uint64("last_traded_price", {
       formatter: toNumber,
       length: 8,
+      pre: (value) => value / 100,
+    })
+    .int64("last_traded_quantity", { formatter: toNumber, length: 8 })
+    .int64("avg_traded_price", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
+    })
+    .int64("vol_traded", { formatter: toNumber, length: 8 })
+    .doublele("total_buy_quantity", { formatter: toNumber, length: 8 })
+    .doublele("total_sell_quantity", { formatter: toNumber, length: 8 })
+    .int64("open_price_day", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
+    })
+    .int64("high_price_day", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
+    })
+
+    .int64("low_price_day", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
+    })
+    .int64("close_price", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
     })
     .int64("last_traded_timestamp", { formatter: toNumber, length: 8 })
     .int64("open_interest", { formatter: toNumber, length: 8 })
@@ -257,8 +286,13 @@ function SNAP_QUOTE(buf) {
     .int64("fiftytwo_week_high", {
       formatter: toNumber,
       length: 8,
+      pre: (value) => value / 100,
     })
-    .int64("fiftytwo_week_low", { formatter: toNumber, length: 8 });
+    .int64("fiftytwo_week_low", {
+      formatter: toNumber,
+      length: 8,
+      pre: (value) => value / 100,
+    });
 
   // let response = snapQuote.parse(buf);
   return snapQuote.parse(buf);
