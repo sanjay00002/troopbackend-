@@ -17,6 +17,7 @@ export async function generateOtp(credential, channel) {
         .services(verifySid)
         .verifications.create({ to: credential, channel: 'email' });
     case 'sms':
+      console.log(verifySid)
       return await client.verify.v2
         .services(verifySid)
         .verifications.create({ to: credential, channel: 'sms' });
@@ -26,6 +27,7 @@ export async function generateOtp(credential, channel) {
 }
 
 export async function verifyOTP(credential, otpCode) {
+  console.log(credential)
   return await client.verify.v2
     .services(verifySid)
     .verificationChecks.create({ to: credential, code: otpCode });

@@ -3,7 +3,7 @@ import model from '../../../database/models';
 import moment from 'moment';
 
 const { LiveContest, User, Stocks, MatchedLiveUser } = model;
-
+const getStock = require('../../Stock-socket/getStocks');
 export default {
   createLiveContest: async function (req, res) {
     const contest = req.body;
@@ -11,13 +11,18 @@ export default {
 
     try {
       const user = await User.findByPk(userId);
+      const stock1 = await Stocks.findByPk(contest.stock1Id);
+      const stock2 = await Stocks.findByPk(contest.stock2Id);
 
+      console.log(stock1)
       if (user && !user?.isBot) {
         const newContest = await LiveContest.create({
           stock1Id: contest?.stock1Id,
           stock2Id: contest?.stock2Id,
           entryAmount: contest?.entryAmount,
           createdBy: userId,
+          stocktoken1: stock1?.token,
+          stocktoken2: stock2?.token,
         });
 
         const newContestId = await newContest.get('id');
@@ -54,13 +59,15 @@ export default {
 
         const stock1 = await Stocks.findByPk(contest.stock1Id);
         const stock2 = await Stocks.findByPk(contest.stock2Id);
+        
 
         const stocksArr = {
           company1: stock1,
           company2: stock2,
         };
 
-        console.log('Stocks Arr: ', stocksArr);
+        console.log(stock1)
+        // console.log('Stocks Arr: ', stocksArr);
 
         const result = {
           ...(await contest.get()),
@@ -119,4 +126,8 @@ export default {
       });
     }
   },
+
+
+
 };
+

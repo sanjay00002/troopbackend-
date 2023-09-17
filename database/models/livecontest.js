@@ -24,7 +24,7 @@ export default (sequelize, DataTypes) => {
         keyType: DataTypes.INTEGER,
         uniqueKey: "stock1_livecontest_fk_constraint",
       });
-
+      
       models.Stocks.hasMany(LiveContest, {
         foreignKey: "stock2Id",
         sourceKey: "id",
@@ -38,6 +38,33 @@ export default (sequelize, DataTypes) => {
         uniqueKey: "stock2_livecontest_fk_constraint",
       });
 
+         
+      models.Stocks.hasMany(LiveContest, {
+        foreignKey: "stocktoken1",
+        sourceKey: "token",
+      });
+
+      LiveContest.belongsTo(models.Stocks, {
+        foreignKey: "stocktoken1",
+        targetKey: "token",
+        constraints: true,
+        keyType: DataTypes.INTEGER,
+        uniqueKey: "stock1token_livecontest_fk_constraint",
+      });
+
+
+      models.Stocks.hasMany(LiveContest, {
+        foreignKey: "stocktoken2",
+        sourceKey: "token",
+      });
+
+      LiveContest.belongsTo(models.Stocks, {
+        foreignKey: "stocktoken2",
+        targetKey: "token",
+        constraints: true,
+        keyType: DataTypes.INTEGER,
+        uniqueKey: "stocktoken2_livecontest_fk_constraint",
+      });
       models.User.hasMany(LiveContest, {
         foreignKey: "createdBy",
         sourceKey: "id",

@@ -22,7 +22,7 @@ export default {
     try {
       const existSubCategory = await SubCategories.findOne({
         where: { name: subCategory },
-      });
+      }); 
 
       if (!existSubCategory) {
         return res.status(400).json({
