@@ -58,6 +58,7 @@ export default (sequelize, DataTypes) => {
       stockId: { type: DataTypes.INTEGER, allowNull: true },
       stockValue: { type: DataTypes.INTEGER, allowNull: true },
       matched: { type: DataTypes.BOOLEAN, allowNull: true },
+      isBot: { type: DataTypes.BOOLEAN, allowNull: true},
     },
     {
       sequelize,
