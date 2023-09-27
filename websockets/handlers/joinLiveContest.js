@@ -9,7 +9,7 @@ export default async function joinLiveContest(socket, pool, user) {
   const socketId = user.socket_id;
   const id = await nanoid(10);
   const insertQuery =
-    'INSERT INTO public."LiveContestUserPool" (id,contest_id, user_id, socket_id, matched) VALUES ($1, $2, $3, $4, false)';
+    'INSERT INTO public."LiveContestUserPool" (id,"contestId", "userId", "socketId", "matched") VALUES ($1, $2, $3, $4, false)';
   pool.query(
     insertQuery,
     [id, contestId, userId, socketId],

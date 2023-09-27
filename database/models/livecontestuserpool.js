@@ -52,7 +52,7 @@ export default (sequelize, DataTypes) => {
   }
   LiveContestUserPool.init(
     {
-      constestId: { type: DataTypes.STRING, allowNull: false },
+      contestId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
       socketId: { type: DataTypes.STRING, allowNull: false },
       stockId: { type: DataTypes.INTEGER, allowNull: true },
