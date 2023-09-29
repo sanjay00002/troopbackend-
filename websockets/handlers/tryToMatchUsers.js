@@ -1,3 +1,4 @@
+
 async function tryToMatchUsers(io,socket,pool,user){
 
     const user_id = user.user_id;
@@ -9,12 +10,11 @@ async function tryToMatchUsers(io,socket,pool,user){
     let userToMatchWith;
     let currentUser;
 
-
     const getQuery = 'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" <> $2 AND "matched" = false AND "userId" <> $3 AND "isBot" = false'
      
     try {
         const result = await pool.query(getQuery, [contest_id, stock_id, user_id]);
-        console.log("Successfully fetched number of users we can match with: ", result.rows[0]);
+        console.log("Successfully fetched number of users we can match with: ", result.rows.length);
         countOfPossibleMatches = result.rows.length;
         userToMatchWith = result.rows[0];
       } catch (error) {
@@ -36,12 +36,13 @@ async function tryToMatchUsers(io,socket,pool,user){
         socket.emit("match-found", userToMatchWith.userId);
         socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId);
 
-        startGame(currentUser, userToMatchWith)
+        startGame(currentUser, userToMatchWith, pool)
       }
     }
 
-    async function startGame(currentUser, userToMatchWith){
-        
+    async function startGame(currentUser, userToMatchWith, pool){
+        // const insertQuery = 'INSERT INTO "your_table_name" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfOpenStockValue", "opponnetSelectedStockId", "opponnentStockOpenValue", "column8") VALUES ('value1', 'value2', 'value3', 'value4', 'value5', 'value6', 'value7', 'value8')';
+        // console.log("hi")
     }
 
     // await pool.query(getQuery, [contest_id, stock_id, user_id],(error, result)=>{
