@@ -11,8 +11,8 @@ import getStocks from "./stockSocket/getStocks";
 import chat from "./handlers/chatWS";
 import joinLiveContest from "./handlers/joinLiveContest";
 import currentUserCount from "./handlers/currentUserCount";
-import findMatch from "./handlers/findMatch";
-import matchWithBot from "./handlers/matchWithBot";
+import selectStock from "./handlers/selectStock";
+import tryToMatchUsers from "./handlers/tryToMatchUsers";
 
 const io = new Server({
   cors: {
@@ -58,14 +58,16 @@ liveContest.on("connection", (socket) => {
 
   socket.on("add-in-db", (user) => {
     joinLiveContest(socket, pool, user);
+    
   });
 
-  socket.on("find-match", (user) => {
-    findMatch(io, socket, pool, user);
+  socket.on("select-stock", async (user) => {
+    await selectStock(io, socket, pool, user);
+    tryToMatchUsers(io, socket, pool, user);
   });
 
   socket.on("25-seconds-done", (user) => {
-    matchWithBot(io, socket, pool, user);
+    console.log("you are supposed to be matched with a bot");
   });
 });
 

@@ -72,7 +72,7 @@ module.exports = async function findMatch(io, socket, pool, user) {
   const stock_value = user.stock_value;
 
   const updateQuery =
-    'UPDATE public."LiveContestUserPool" SET stock_id = $1, stock_value = $2 WHERE contest_id = $3 AND socket_id = $4';
+    'UPDATE public."LiveContestUserPool" SET "stockId" = $1, stock_value = $2 WHERE contest_id = $3 AND socket_id = $4';
   pool.query(
     updateQuery,
     [stock_id, stock_value, contestId, socketId],

@@ -21,8 +21,8 @@ export default {
           stock2Id: contest?.stock2Id,
           entryAmount: contest?.entryAmount,
           createdBy: userId,
-          stocktoken1: stock1?.token,
-          stocktoken2: stock2?.token,
+          // stocktoken1: stock1?.token,
+          // stocktoken2: stock2?.token,
         });
 
         const newContestId = await newContest.get('id');

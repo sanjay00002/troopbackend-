@@ -8,8 +8,9 @@ export default async function joinLiveContest(socket, pool, user) {
   const userId = user.user_id;
   const socketId = user.socket_id;
   const id = await nanoid(10);
+  console.log(contestId,userId,socketId)
   const insertQuery =
-    'INSERT INTO public."LiveContestUserPool" (id,"contestId", "userId", "socketId", "matched") VALUES ($1, $2, $3, $4, false)';
+    'INSERT INTO public."LiveContestUserPool" (id,"contestId", "userId", "socketId", "matched", "isBot") VALUES ($1, $2, $3, $4, false, false)';
   pool.query(
     insertQuery,
     [id, contestId, userId, socketId],
@@ -18,9 +19,10 @@ export default async function joinLiveContest(socket, pool, user) {
         console.error("Error saving contest:", error);
         // Handle the error and send an appropriate response
       } else {
-        console.log("Contest saved successfully");
-        socket.emit("select-stock");
+        console.log("Person saved successfully");
+        socket.emit("select-stock"); // think some data has to be sent back too
       }
     }
   );
+
 }
