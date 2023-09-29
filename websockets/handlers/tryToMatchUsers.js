@@ -35,7 +35,15 @@ async function tryToMatchUsers(io,socket,pool,user){
       if (countOfPossibleMatches > 0) {
         socket.emit("match-found", userToMatchWith.userId);
         socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId);
+
+        startGame(currentUser, userToMatchWith)
       }
+    }
+
+    async function startGame(currentUser, userToMatchWith){
+        
+    }
+
     // await pool.query(getQuery, [contest_id, stock_id, user_id],(error, result)=>{
     //     if(error){
     //         console.log("Error fetching count", error)
@@ -66,11 +74,7 @@ async function tryToMatchUsers(io,socket,pool,user){
     //     socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId)
 
     // }
-}
 
-async function startGame(){
-
-}
 
 
 
