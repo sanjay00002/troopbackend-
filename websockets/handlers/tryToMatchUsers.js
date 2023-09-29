@@ -1,5 +1,5 @@
-import 
-
+import MatchedLiveUser from "../../database/models/matchedliveusers";
+import {nanoid} from 'nanoid'
 
 async function tryToMatchUsers(io,socket,pool,user){
 
@@ -43,9 +43,30 @@ async function tryToMatchUsers(io,socket,pool,user){
     }
 
     async function startGame(currentUser, userToMatchWith, pool){
-        // const insertQuery = 'INSERT INTO "your_table_name" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfOpenStockValue", "opponnetSelectedStockId", "opponnentStockOpenValue", "column8") VALUES ('value1', 'value2', 'value3', 'value4', 'value5', 'value6', 'value7', 'value8')';
-        // console.log("hi")
+        const uniqueId = nanoid(10)
+        const selfId = currentUser.userId
+        const opponentId = userToMatchWith.userId
+        const selfSelectedStockId = currentUser.stockId
+        const selfStockOpenValue = currentUser.stockValue
+        const opponnetSelectedStockId = userToMatchWith.stockId
+        const opponentStockOpenValue = userToMatchWith.stockValue
+        const contestId = currentUser.contestId
+        const createdAt = await getCurrentTimeStamp()
+        const updatedAt = await getCurrentTimeStamp()
+
+        const insertQuery = 'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+        const result = await pool.query(insertQuery, [uniqueId, selfId, opponentId, selfSelectedStockId, selfStockOpenValue, opponnetSelectedStockId, opponentStockOpenValue, contestId, createdAt, updatedAt])
+        console.log(result)
     }
+
+
+async function getCurrentTimeStamp(){
+  const currentTime = new Date();
+
+// Format the current time as a string with the timezone
+  const formattedTimestamp = currentTime.toLocaleString('en-US', { timeZoneName: 'short' });
+  return formattedTimestamp
+}
 
     // await pool.query(getQuery, [contest_id, stock_id, user_id],(error, result)=>{
     //     if(error){

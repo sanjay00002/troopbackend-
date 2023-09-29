@@ -55,6 +55,7 @@ const liveContest = io.of("/liveContest");
 liveContest.on("connection", (socket) => {
   // console.log("Live contest socket connected");
   socket.emit("get-socket-id", socket.id);
+  console.log(socket.id)
 
   socket.on("add-in-db", (user) => {
     joinLiveContest(socket, pool, user);
