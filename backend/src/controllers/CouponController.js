@@ -148,7 +148,44 @@ export default {
       });
     }
 
-  }
+  },
+
+  UserHaveCoupon: async function (req, res) {
+    try {
+      const userId = req.params.id;
+  
+      const coupons = await Coupons.findAll({
+        attributes: ['couponsLentId'],
+        where: { userId },
+      });
+  
+      if (!coupons || coupons.length === 0) {
+        return res.status(404).json({ message: 'No coupons found for this user.' });
+      }
+  
+      const couponLentIds = coupons.map((coupon) => coupon.couponsLentId);
+      console.log(couponLentIds);
+
+      const couponLentData = await CouponsLent.findAll({
+        where: { id: couponLentIds },
+      });
+      console.log(couponLentData);
+      
+      if (!couponLentData || couponLentData.length === 0) {
+        return res.status(404).json({ message: 'No coupon data found for the user.' });
+      }
+  
+      return res.status(200).json({ couponLentData });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching user coupons.',
+        errorMessage: error.message,
+      });
+    }
+  },
+  
+
 };
   
 
