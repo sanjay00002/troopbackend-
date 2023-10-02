@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import getStockTokenFromId from "../helpers/getStockTokenFromId";
 import model from "../../database/models";
+import getStockLTPFromToken from "../helpers/getStockLTPFromToken";
 
 const { MatchedLiveUsers } = model;
 
@@ -9,16 +10,17 @@ async function tryToMatchUsers(io, socket, pool, user) {
   const socket_id = user.socket_id;
   const contest_id = user.contest_id;
   const stock_id = user.stock_id;
+  const contest_entry_price = user.contest_entry_price
 
   let countOfPossibleMatches;
   let userToMatchWith;
   let currentUser;
 
   const getQuery =
-    'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" <> $2 AND "matched" = false AND "userId" <> $3 AND "isBot" = false';
+    'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" <> $2 AND "matched" = false AND "userId" <> $3 AND "isBot" = false AND "contestEntryPrice" = $4';
 
   try {
-    const result = await pool.query(getQuery, [contest_id, stock_id, user_id]);
+    const result = await pool.query(getQuery, [contest_id, stock_id, user_id, contest_entry_price]);
     console.log(
       "Successfully fetched number of users we can match with: ",
       result.rows.length
@@ -30,13 +32,14 @@ async function tryToMatchUsers(io, socket, pool, user) {
   }
 
   const currentUserQuery =
-    'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false';
+    'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false AND "contestEntryPrice" = $4';
 
   try {
     const result = await pool.query(currentUserQuery, [
       contest_id,
       stock_id,
       user_id,
+      contest_entry_price
     ]);
     console.log("got current user", result.rows[0]);
     currentUser = result.rows[0];
@@ -67,12 +70,13 @@ async function startGame(currentUser, userToMatchWith, pool) {
   const contestId = currentUser.contestId;
   const createdAt = await getCurrentTimeStamp();
   const updatedAt = await getCurrentTimeStamp();
+  const contestEntryPrice = currentUser.contestEntryPrice
 
   const currentUserLiveContestUserPoolId = currentUser.id;
   const opponentLiveContestUserPoolId = userToMatchWith.id;
 
   const insertQuery =
-    'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+    'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
   const insertResult = await pool.query(insertQuery, [
     uniqueId,
     selfId,
@@ -84,6 +88,7 @@ async function startGame(currentUser, userToMatchWith, pool) {
     contestId,
     createdAt,
     updatedAt,
+    contestEntryPrice,
   ]);
 
   const deletionQuery =
@@ -101,14 +106,19 @@ async function startGame(currentUser, userToMatchWith, pool) {
       opponnetSelectedStockId
     );
 
+    const selfStockCloseValue = getStockLTPFromToken(selfStockToken)
+    const opponentStockCloseValue = getStockLTPFromToken(opponentStockToken)
+
     const updateQuery =
       'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1 AND "opponentStockCloseValue" = $2 WHERE condition "id" = $3';
-    const updateResult = await pool.query(updateQuery, [300, 400, uniqueId]);
-    //TODO WRITE CODE TO ACTUALLY GET THE STOCK VALUES
+    const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, uniqueId]);
+    
+    console.log("before select query")
     const selectQuery =
-      'SELECT * FROM public."LiveContestUserPool" WHERE "id" = $1';
+      'SELECT * FROM public."MatchedLiveUsers" WHERE "id" = $1';
     const matchObj = await pool.query(selectQuery, [uniqueId]);
     const winner = findWinner(matchObj.rows[0]);
+    console.log(winner) //Rework this logic
   }, 10000);
 }
 
