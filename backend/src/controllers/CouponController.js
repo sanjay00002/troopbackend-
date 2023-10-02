@@ -41,7 +41,7 @@ export default {
 // },
 
 
-  signUpAndAssignCoupon: async function (req, res) {
+  AssignCoupon: async function (req, res) {
    
     try {
           const userId = req.params.id;
