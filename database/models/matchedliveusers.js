@@ -88,6 +88,7 @@ export default (sequelize, DataTypes) => {
       opponentStockOpenValue: { type: DataTypes.INTEGER, allowNull: true },
       opponentStockCloseValue: { type: DataTypes.INTEGER, allowNull: true },
       contestId: { type: DataTypes.STRING, allowNull: false },
+      contestEntryPrice: { type: DataTypes.FLOAT, allowNull:true},
       winner: {
         type: DataTypes.ENUM(["Self", "Opponent"]),
       },

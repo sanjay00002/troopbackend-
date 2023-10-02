@@ -59,6 +59,7 @@ export default (sequelize, DataTypes) => {
       stockValue: { type: DataTypes.INTEGER, allowNull: true },
       matched: { type: DataTypes.BOOLEAN, allowNull: true },
       isBot: { type: DataTypes.BOOLEAN, allowNull: true},
+      contestEntryPrice: { type: DataTypes.FLOAT, allowNull:true},
     },
     {
       sequelize,

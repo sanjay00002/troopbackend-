@@ -1,105 +1,164 @@
-import MatchedLiveUser from "../../database/models/matchedliveusers";
-import {nanoid} from 'nanoid'
+import { nanoid } from "nanoid";
+import getStockTokenFromId from "../helpers/getStockTokenFromId";
+import model from "../../database/models";
 
-async function tryToMatchUsers(io,socket,pool,user){
+const { MatchedLiveUsers } = model;
 
-    const user_id = user.user_id;
-    const socket_id = user.socket_id;
-    const contest_id = user.contest_id;
-    const stock_id = user.stock_id;
+async function tryToMatchUsers(io, socket, pool, user) {
+  const user_id = user.user_id;
+  const socket_id = user.socket_id;
+  const contest_id = user.contest_id;
+  const stock_id = user.stock_id;
 
-    let countOfPossibleMatches;
-    let userToMatchWith;
-    let currentUser;
+  let countOfPossibleMatches;
+  let userToMatchWith;
+  let currentUser;
 
-    const getQuery = 'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" <> $2 AND "matched" = false AND "userId" <> $3 AND "isBot" = false'
-     
-    try {
-        const result = await pool.query(getQuery, [contest_id, stock_id, user_id]);
-        console.log("Successfully fetched number of users we can match with: ", result.rows.length);
-        countOfPossibleMatches = result.rows.length;
-        userToMatchWith = result.rows[0];
-      } catch (error) {
-        console.error("Error fetching count", error);
-      }
-    
-      const currentUserQuery =
-        'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false';
-    
-      try {
-        const result = await pool.query(currentUserQuery, [contest_id, stock_id, user_id]);
-        console.log("got current user", result.rows[0]);
-        currentUser = result.rows[0];
-      } catch (error) {
-        console.error("Error fetching current user", error);
-      }
-    
-      if (countOfPossibleMatches > 0) {
-        socket.emit("match-found", userToMatchWith.userId);
-        socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId);
+  const getQuery =
+    'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" <> $2 AND "matched" = false AND "userId" <> $3 AND "isBot" = false';
 
-        startGame(currentUser, userToMatchWith, pool)
-      }
-    }
+  try {
+    const result = await pool.query(getQuery, [contest_id, stock_id, user_id]);
+    console.log(
+      "Successfully fetched number of users we can match with: ",
+      result.rows.length
+    );
+    countOfPossibleMatches = result.rows.length;
+    userToMatchWith = result.rows[0];
+  } catch (error) {
+    console.error("Error fetching count", error);
+  }
 
-    async function startGame(currentUser, userToMatchWith, pool){
-        const uniqueId = nanoid(10)
-        const selfId = currentUser.userId
-        const opponentId = userToMatchWith.userId
-        const selfSelectedStockId = currentUser.stockId
-        const selfStockOpenValue = currentUser.stockValue
-        const opponnetSelectedStockId = userToMatchWith.stockId
-        const opponentStockOpenValue = userToMatchWith.stockValue
-        const contestId = currentUser.contestId
-        const createdAt = await getCurrentTimeStamp()
-        const updatedAt = await getCurrentTimeStamp()
+  const currentUserQuery =
+    'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false';
 
-        const insertQuery = 'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
-        const result = await pool.query(insertQuery, [uniqueId, selfId, opponentId, selfSelectedStockId, selfStockOpenValue, opponnetSelectedStockId, opponentStockOpenValue, contestId, createdAt, updatedAt])
-        console.log(result)
-    }
+  try {
+    const result = await pool.query(currentUserQuery, [
+      contest_id,
+      stock_id,
+      user_id,
+    ]);
+    console.log("got current user", result.rows[0]);
+    currentUser = result.rows[0];
+  } catch (error) {
+    console.error("Error fetching current user", error);
+  }
 
+  if (countOfPossibleMatches > 0) {
+    socket.emit("match-found", userToMatchWith.userId); //not sure how this code works
+    socket.broadcast
+      .to(userToMatchWith.socketId)
+      .emit("match-found", currentUser.userId);
 
-async function getCurrentTimeStamp(){
-  const currentTime = new Date();
-
-// Format the current time as a string with the timezone
-  const formattedTimestamp = currentTime.toLocaleString('en-US', { timeZoneName: 'short' });
-  return formattedTimestamp
+    startGame(currentUser, userToMatchWith, pool);
+  } else {
+    console.log("No person to match with");
+  }
 }
 
-    // await pool.query(getQuery, [contest_id, stock_id, user_id],(error, result)=>{
-    //     if(error){
-    //         console.log("Error fetching count", error)
-    //     }
-    //     else{
-    //         console.log("Successfully fetched number of users we can match with: ", result.rows.length)
-    //         countOfPossibleMatches = result.rows.length
-    //         userToMatchWith = result.rows[0]
-    //     }
-    // })
+async function startGame(currentUser, userToMatchWith, pool) {
+  const uniqueId = nanoid(10);
+  const selfId = currentUser.userId;
+  const opponentId = userToMatchWith.userId;
+  const selfSelectedStockId = currentUser.stockId;
+  const selfStockOpenValue = currentUser.stockValue;
+  const opponnetSelectedStockId = userToMatchWith.stockId;
+  const opponentStockOpenValue = userToMatchWith.stockValue;
+  const contestId = currentUser.contestId;
+  const createdAt = await getCurrentTimeStamp();
+  const updatedAt = await getCurrentTimeStamp();
 
-    // const currentUserQuery = 'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false'
+  const currentUserLiveContestUserPoolId = currentUser.id;
+  const opponentLiveContestUserPoolId = userToMatchWith.id;
 
-    // await pool.query(currentUserQuery, [contest_id, stock_id, user_id],(error, result)=>{
-    //     if(error){
-    //         console.log("Error fetching count", error)
-    //     }
-    //     else{
-            
-    //         console.log("got current user",result.rows[0])
-    //         currentUser = result.rows[0]
-    //     }
-    // })
+  const insertQuery =
+    'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)';
+  const insertResult = await pool.query(insertQuery, [
+    uniqueId,
+    selfId,
+    opponentId,
+    selfSelectedStockId,
+    selfStockOpenValue,
+    opponnetSelectedStockId,
+    opponentStockOpenValue,
+    contestId,
+    createdAt,
+    updatedAt,
+  ]);
 
+  const deletionQuery =
+    'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1 OR "id" = $2';
+  const deletionResult = await pool.query(deletionQuery, [
+    currentUserLiveContestUserPoolId,
+    opponentLiveContestUserPoolId,
+  ]);
 
-    // if(countOfPossibleMatches>0){
-    //     socket.emit("match-found", userToMatchWith.userId)
-    //     socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId)
+  // Start game for 10 seconds. Change to 30 minutes in production
 
-    // }
+  setTimeout(async () => {
+    const selfStockToken = await getStockTokenFromId(selfSelectedStockId);
+    const opponentStockToken = await getStockTokenFromId(
+      opponnetSelectedStockId
+    );
 
+    const updateQuery =
+      'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1 AND "opponentStockCloseValue" = $2 WHERE condition "id" = $3';
+    const updateResult = await pool.query(updateQuery, [300, 400, uniqueId]);
+    //TODO WRITE CODE TO ACTUALLY GET THE STOCK VALUES
+    const selectQuery =
+      'SELECT * FROM public."LiveContestUserPool" WHERE "id" = $1';
+    const matchObj = await pool.query(selectQuery, [uniqueId]);
+    const winner = findWinner(matchObj.rows[0]);
+  }, 10000);
+}
 
+function findWinner(matchObjRow){
+  if(matchObjRow.selfStockCloseValue > matchObjRow.opponentStockCloseValue){
+  return "self"
+  }
+else{
+  return "opponent"
+}
+}
 
+async function getCurrentTimeStamp() {
+  const currentTime = new Date();
 
-module.exports = tryToMatchUsers
+  // Format the current time as a string with the timezone
+  const formattedTimestamp = currentTime.toLocaleString("en-US", {
+    timeZoneName: "short",
+  });
+  return formattedTimestamp;
+}
+
+// await pool.query(getQuery, [contest_id, stock_id, user_id],(error, result)=>{
+//     if(error){
+//         console.log("Error fetching count", error)
+//     }
+//     else{
+//         console.log("Successfully fetched number of users we can match with: ", result.rows.length)
+//         countOfPossibleMatches = result.rows.length
+//         userToMatchWith = result.rows[0]
+//     }
+// })
+
+// const currentUserQuery = 'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false'
+
+// await pool.query(currentUserQuery, [contest_id, stock_id, user_id],(error, result)=>{
+//     if(error){
+//         console.log("Error fetching count", error)
+//     }
+//     else{
+
+//         console.log("got current user",result.rows[0])
+//         currentUser = result.rows[0]
+//     }
+// })
+
+// if(countOfPossibleMatches>0){
+//     socket.emit("match-found", userToMatchWith.userId)
+//     socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId)
+
+// }
+
+module.exports = tryToMatchUsers;
