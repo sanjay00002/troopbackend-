@@ -9,11 +9,11 @@ import getStockLTPFromToken from "../helpers/getStockLTPFromToken";
 const { MatchedLiveUsers } = model;
 
 async function tryToMatchUsers(io, socket, pool, user) {
-  const user_id = user.user_id;
-  const socket_id = user.socket_id;
-  const contest_id = user.contest_id;
-  const stock_id = user.stock_id;
-  const contest_entry_price = user.contest_entry_price
+    const user_id = user.user_id;
+    const socket_id = user.socket_id;
+    const contest_id = user.contest_id;
+    const stock_id = user.stock_id;
+    const contest_entry_price = user.contest_entry_price
 
   let countOfPossibleMatches;
   let userToMatchWith;
@@ -56,13 +56,13 @@ async function tryToMatchUsers(io, socket, pool, user) {
       .to(userToMatchWith.socketId)
       .emit("match-found", currentUser.userId);
 
-    startGame(currentUser, userToMatchWith, pool);
+    startGame(currentUser, userToMatchWith, pool, io, socket);
   } else {
     console.log("No person to match with");
   }
 }
 
-async function startGame(currentUser, userToMatchWith, pool) {
+async function startGame(currentUser, userToMatchWith, pool, io , socket) {
   const uniqueId = nanoid(10);
   const selfId = currentUser.userId;
   const opponentId = userToMatchWith.userId;
@@ -74,12 +74,13 @@ async function startGame(currentUser, userToMatchWith, pool) {
   const createdAt = await getCurrentTimeStamp();
   const updatedAt = await getCurrentTimeStamp();
   const contestEntryPrice = currentUser.contestEntryPrice
-
+  const selfSocketId = currentUser.socketId;
+  const opponentSocketId = userToMatchWith.socketId;
   const currentUserLiveContestUserPoolId = currentUser.id;
   const opponentLiveContestUserPoolId = userToMatchWith.id;
 
   const insertQuery =
-    'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)';
+    'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice", "selfSocketId", "opponentSocketId", "matchStatus") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
   const insertResult = await pool.query(insertQuery, [
     uniqueId,
     selfId,
@@ -92,6 +93,9 @@ async function startGame(currentUser, userToMatchWith, pool) {
     createdAt,
     updatedAt,
     contestEntryPrice,
+    selfSocketId,
+    opponentSocketId,
+    "running"
   ]);
 
   // const deletionQuery =
@@ -115,8 +119,11 @@ async function startGame(currentUser, userToMatchWith, pool) {
     
     console.log("Updating")
     const winner = getWinner(selfStockOpenValue, selfStockCloseValue, opponentStockOpenValue, opponentStockCloseValue, selfId, opponentId)
-    const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3  WHERE "id" = $4'
-    const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, uniqueId])
+    const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3, "matchStatus" = $4  WHERE "id" = $5'
+    const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, "completed", uniqueId])
+
+    socket.emit('match-done', uniqueId) //not sure on this code
+    socket.broadcast.to(opponentSocketId).emit('match-done', uniqueId)
   }, 10000);
 }
 
