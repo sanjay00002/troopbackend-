@@ -83,7 +83,7 @@ export default (sequelize, DataTypes) => {
     {
       stock1Id: { type: DataTypes.INTEGER, allowNull: false },
       stock2Id: { type: DataTypes.INTEGER, allowNull: false },
-      entryAmount: { type: DataTypes.DOUBLE, allowNull: false },
+      entryAmount: { type: DataTypes.ARRAY(DataTypes.FLOAT), allowNull: false },
       isLive: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
       createdBy: { type: DataTypes.STRING, allowNull: false },
     },
