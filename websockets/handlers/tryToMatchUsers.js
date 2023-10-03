@@ -91,12 +91,12 @@ async function startGame(currentUser, userToMatchWith, pool) {
     contestEntryPrice,
   ]);
 
-  const deletionQuery =
-    'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1 OR "id" = $2';
-  const deletionResult = await pool.query(deletionQuery, [
-    currentUserLiveContestUserPoolId,
-    opponentLiveContestUserPoolId,
-  ]);
+  // const deletionQuery =
+  //   'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1 OR "id" = $2';
+  // const deletionResult = await pool.query(deletionQuery, [
+  //   currentUserLiveContestUserPoolId,
+  //   opponentLiveContestUserPoolId,
+  // ]);
 
   // Start game for 10 seconds. Change to 30 minutes in production
 
@@ -106,30 +106,18 @@ async function startGame(currentUser, userToMatchWith, pool) {
       opponnetSelectedStockId
     );
 
-    const selfStockCloseValue = getStockLTPFromToken(selfStockToken)
-    const opponentStockCloseValue = getStockLTPFromToken(opponentStockToken)
-
-    const updateQuery =
-      'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1 AND "opponentStockCloseValue" = $2 WHERE condition "id" = $3';
-    const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, uniqueId]);
+    const selfStockCloseValue = await getStockLTPFromToken(selfStockToken)
+    const opponentStockCloseValue = await getStockLTPFromToken(opponentStockToken)
+    console.log("stock LTP")
     
-    console.log("before select query")
-    const selectQuery =
-      'SELECT * FROM public."MatchedLiveUsers" WHERE "id" = $1';
-    const matchObj = await pool.query(selectQuery, [uniqueId]);
-    const winner = findWinner(matchObj.rows[0]);
-    console.log(winner) //Rework this logic
+    const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2 WHERE "id" = $3'
+    const updateResult = await pool.query(updateQuery, [300, 200, uniqueId])
+    console.log(updateResult)
+ 
   }, 10000);
 }
 
-function findWinner(matchObjRow){
-  if(matchObjRow.selfStockCloseValue > matchObjRow.opponentStockCloseValue){
-  return "self"
-  }
-else{
-  return "opponent"
-}
-}
+
 
 async function getCurrentTimeStamp() {
   const currentTime = new Date();
