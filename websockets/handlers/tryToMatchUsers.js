@@ -1,3 +1,6 @@
+//TODO uncomment out code for deletion of users from livecontestUserPool and make connections to front end to send event
+
+
 import { nanoid } from "nanoid";
 import getStockTokenFromId from "../helpers/getStockTokenFromId";
 import model from "../../database/models";
@@ -121,7 +124,7 @@ async function startGame(currentUser, userToMatchWith, pool) {
 function getWinner(selfStockOpenValue, selfStockCloseValue, opponentStockOpenValue, opponentStockCloseValue, selfId, opponentId){
   let winner
 
-  if(selfStockCloseValue/selfStockOpenValue > opponentStockCloseValue/opponentStockOpenValue){
+  if((selfStockCloseValue-selfStockOpenValue)/selfStockOpenValue > (opponentStockCloseValue-opponentStockOpenValue)/opponentStockOpenValue){
     winner = selfId
   }
   else{

@@ -11,7 +11,7 @@ module.exports = {
      */
     await queryInterface.removeColumn('MatchedLiveUsers', 'winner');
     await queryInterface.addColumn('MatchedLiveUsers', 'winner', {
-      type: Sequelize.FLOAT,
+      type: Sequelize.STRING,
       allowNull: true
     })
   },

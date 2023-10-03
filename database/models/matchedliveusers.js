@@ -90,8 +90,19 @@ export default (sequelize, DataTypes) => {
       contestId: { type: DataTypes.STRING, allowNull: false },
       contestEntryPrice: { type: DataTypes.FLOAT, allowNull:true},
       winner: {
-        type: DataTypes.FLOAT, allowNull: true,
+        type: DataTypes.STRING, allowNull: true,
       },
+      matchStatus: {
+        type: DataTypes.ENUM('running', 'completed'), allowNull: true
+      },
+      selfSocketId: {
+        type: DataTypes.STRING, allowNull: true
+      },
+      opponentSocketId: {
+        type: DataTypes.STRING, allowNull: true
+      }
+      
+
     },
     {
       sequelize,
