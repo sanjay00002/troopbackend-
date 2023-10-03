@@ -110,13 +110,25 @@ async function startGame(currentUser, userToMatchWith, pool) {
     const opponentStockCloseValue = await getStockLTPFromToken(opponentStockToken)
     console.log("stock LTP")
     
-    const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2 WHERE "id" = $3'
-    const updateResult = await pool.query(updateQuery, [300, 200, uniqueId])
-    console.log(updateResult)
- 
+    console.log("Updating")
+    const winner = getWinner(selfStockOpenValue, selfStockCloseValue, opponentStockOpenValue, opponentStockCloseValue, selfId, opponentId)
+    const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3  WHERE "id" = $4'
+    const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, uniqueId])
   }, 10000);
 }
 
+
+function getWinner(selfStockOpenValue, selfStockCloseValue, opponentStockOpenValue, opponentStockCloseValue, selfId, opponentId){
+  let winner
+
+  if(selfStockCloseValue/selfStockOpenValue > opponentStockCloseValue/opponentStockOpenValue){
+    winner = selfId
+  }
+  else{
+    winner = opponentId
+  }
+  return winner
+}
 
 
 async function getCurrentTimeStamp() {
@@ -129,34 +141,6 @@ async function getCurrentTimeStamp() {
   return formattedTimestamp;
 }
 
-// await pool.query(getQuery, [contest_id, stock_id, user_id],(error, result)=>{
-//     if(error){
-//         console.log("Error fetching count", error)
-//     }
-//     else{
-//         console.log("Successfully fetched number of users we can match with: ", result.rows.length)
-//         countOfPossibleMatches = result.rows.length
-//         userToMatchWith = result.rows[0]
-//     }
-// })
 
-// const currentUserQuery = 'SELECT * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "stockId" = $2 AND "matched" = false AND "userId" = $3 AND "isBot" = false'
-
-// await pool.query(currentUserQuery, [contest_id, stock_id, user_id],(error, result)=>{
-//     if(error){
-//         console.log("Error fetching count", error)
-//     }
-//     else{
-
-//         console.log("got current user",result.rows[0])
-//         currentUser = result.rows[0]
-//     }
-// })
-
-// if(countOfPossibleMatches>0){
-//     socket.emit("match-found", userToMatchWith.userId)
-//     socket.broadcast.to(userToMatchWith.socketId).emit("match-found", currentUser.userId)
-
-// }
 
 module.exports = tryToMatchUsers;
