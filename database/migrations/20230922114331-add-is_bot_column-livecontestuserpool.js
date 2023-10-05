@@ -25,5 +25,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.removeColumn('LiveContestUserPool', 'isBot');
   }
 };
