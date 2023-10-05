@@ -18,7 +18,6 @@ const matchWithBot = async (io, socket,pool,user) => {
     const url = process.env.BACKEND_BASE_URL + 'api/v1/bot/create'
     try{
         bot = await axios.post(url)
-        console.log(bot.data)
 
         
     }catch(error){

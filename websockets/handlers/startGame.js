@@ -19,6 +19,8 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     const opponentSocketId = userToMatchWith.socketId;
     const currentUserLiveContestUserPoolId = currentUser.id
     const opponentLiveContestUserPoolId = userToMatchWith.id
+
+    
   
   
     const insertQuery =
@@ -39,6 +41,12 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       opponentSocketId,
       "running"
     ]);
+
+    console.log("Match beginning socket event fired")
+    socket.emit("match-beginning", userToMatchWith.userId); 
+    socket.broadcast
+      .to(userToMatchWith.socketId)
+      .emit("match-beginning", currentUser.userId);
   
     if(isBotMatch==false){
     const deletionQuery =
@@ -55,6 +63,10 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     // Start game for 10 seconds. Change to 30 minutes in production
   
     setTimeout(async () => {
+      console.log("Set timeout started")
+
+      
+
       const selfStockToken = await getStockTokenFromId(selfSelectedStockId);
       const opponentStockToken = await getStockTokenFromId(
         opponnetSelectedStockId

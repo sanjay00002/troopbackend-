@@ -52,16 +52,13 @@ export async function tryToMatchUsers(io, socket, pool, user) {
   }
 
   if (countOfPossibleMatches > 0) {
-    socket.emit("match-found", userToMatchWith.userId); //not sure how this code works
-    socket.broadcast
-      .to(userToMatchWith.socketId)
-      .emit("match-found", currentUser.userId);
+    
 
     startGame(currentUser, userToMatchWith, pool, io, socket, false);
   } else {
     console.log("No person to match with");
   }
-  console.log("CURRENT USER OBJECT")
+  
 }
 
 
