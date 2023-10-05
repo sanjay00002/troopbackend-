@@ -28,7 +28,7 @@ const matchWithBot = async (io, socket,pool,user) => {
     const livecontest = await LiveContest.findByPk(user.contest_id)
     
     const selfId = user.user_id
-    const opponentId = bot.data.id
+
     const selfSelectedStockId = user.stock_id
 
     const selfStockOpenValue = user.stock_value;
@@ -45,7 +45,8 @@ const matchWithBot = async (io, socket,pool,user) => {
     const selectQuery = 'Select * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "userId" = $2'
     const currentUserLiveContestUserPoolObj = await pool.query(selectQuery, [contestId, selfId])
 
-    const liveContestUserPoolDbEntryId = currentUserLiveContestUserPoolObj.id
+ 
+    const liveContestUserPoolDbEntryId = currentUserLiveContestUserPoolObj.rows[0].id
 
 
 

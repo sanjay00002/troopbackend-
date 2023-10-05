@@ -8,6 +8,8 @@ export default async function joinLiveContest(socket, pool, user) {
       const socketId = user.socket_id;
       const contestEntryPrice = user.contest_entry_price;
       const stockId = user.stock_id;
+      console.log(typeof(user.stock_id))
+      console.log(typeof(stockId))
       const stockValue = user.stock_value;
       const id = await nanoid(10);
       console.log(contestId, userId, socketId);

@@ -40,7 +40,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       "running"
     ]);
   
-    if(isBotMatch===false){
+    if(isBotMatch==false){
     const deletionQuery =
       'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1 OR "id" = $2';
     const deletionResult = await pool.query(deletionQuery, [
