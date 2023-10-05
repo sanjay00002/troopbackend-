@@ -30,9 +30,9 @@ const matchWithBot = async (io, socket,pool,user) => {
     const selfId = user.user_id
     const opponentId = bot.data.id
     const selfSelectedStockId = user.stock_id
-     //write code to do this
+
     const selfStockOpenValue = user.stock_value;
-     //write code to do this
+
     const contestId = user.contest_id
     const contestEntryPrice = user.contest_entry_price
     const selfSocketId = user.socket_id
