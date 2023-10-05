@@ -88,7 +88,7 @@ export default (sequelize, DataTypes) => {
       opponentStockOpenValue: { type: DataTypes.FLOAT, allowNull: true },
       opponentStockCloseValue: { type: DataTypes.FLOAT, allowNull: true },
       contestId: { type: DataTypes.STRING, allowNull: false },
-      contestEntryPrice: { type: DataTypes.FLOAT, allowNull:true},
+      contestEntryPrice: { type: DataTypes.INTEGER, allowNull:true},
       winner: {
         type: DataTypes.STRING, allowNull: true,
       },
