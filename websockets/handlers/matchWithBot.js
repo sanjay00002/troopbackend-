@@ -1,4 +1,4 @@
-//TODO write code to delete user from pool
+
 
 import { nanoid } from "nanoid";
 import { startGame } from "./startGame";
