@@ -17,7 +17,7 @@ export default async function joinLiveContest(socket, pool, user) {
       const insertQuery =
         'INSERT INTO public."LiveContestUserPool" (id,"contestId", "userId", "socketId", "matched", "isBot", "contestEntryPrice", "stockId", "stockValue") VALUES ($1, $2, $3, $4, false, false, $5, $6, $7)';
 
-      pool.query(
+      await pool.query(
         insertQuery,
         [id, contestId, userId, socketId, contestEntryPrice, stockId, stockValue],
         (error, result) => {

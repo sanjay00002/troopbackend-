@@ -1,4 +1,4 @@
-//TODO uncomment out code for deletion of users from livecontestUserPool and make connections to front end to send event
+
 
 import { startGame } from "./startGame";
 import { nanoid } from "nanoid";

@@ -60,7 +60,7 @@ liveContest.on("connection", (socket) => {
 
   socket.on("add-user-to-live-contest", async (user) => {
     await joinLiveContest(socket, pool, user);
-    tryToMatchUsers(io, socket, pool, user);
+    await tryToMatchUsers(io, socket, pool, user);
   });
 
 
