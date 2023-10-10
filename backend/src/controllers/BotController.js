@@ -17,7 +17,7 @@ export default {
         { id: newBotId },
         true,
       );
-
+        console.log(newBotId)
       await bot.update({
         accessToken,
         refreshToken,

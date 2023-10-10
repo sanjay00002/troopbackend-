@@ -13,7 +13,9 @@ const scheduleOptions = {
 
 module.exports = () => {
   cron.schedule(
-    '0 03 * * *',
+    // '*/10 * * * *' ,
+    // '0 */2 * * *',
+    '0 3 * * *',
     () => {
       async function updateCoupons() {
         try {

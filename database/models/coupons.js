@@ -37,7 +37,7 @@ export default (sequelize, DataTypes) => {
     {
       couponsLentId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
-      expiryTime: { type: DataTypes.DATE, allowNull: false },
+      expiryTime: { type: DataTypes.DATE, allowNull: true },
       redeemed: {
         type: DataTypes.BOOLEAN,
         allowNull: true,

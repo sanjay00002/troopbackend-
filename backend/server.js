@@ -23,6 +23,8 @@ import crateRouter from './src/routes/crate';
 import winningsRouter from './src/routes/winnings';
 import avatarGeneratorRouter from './src/routes/avatarGenerator.routes';
 import stockImagesRouter from './src/routes/stockImages.router';
+import couponRouter from './src/routes/coupon';
+import kycRouter from './src/routes/kyc'
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
@@ -149,6 +151,8 @@ app.use('/api/v1/crates', crateRouter);
 app.use('/api/v1/winnings', winningsRouter);
 app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
 app.use('/api/v1/stockImages', stockImagesRouter);
+app.use('/api/v1/coupon', couponRouter)
+app.use('/api/v1/kyc', kycRouter)
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express
