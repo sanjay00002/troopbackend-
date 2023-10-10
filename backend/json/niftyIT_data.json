@@ -1,0 +1,62 @@
+[
+  {
+    "name": "TECHM-EQ",
+    "token": "13538",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "MPHASIS-EQ",
+    "token": "4503",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "TCS-EQ",
+    "token": "11536",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "LTIM-EQ",
+    "token": "17818",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "WIPRO-EQ",
+    "token": "3787",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "COFORGE-EQ",
+    "token": "11543",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "INFY-EQ",
+    "token": "1594",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "HCLTECH-EQ",
+    "token": "7229",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "LTTS-EQ",
+    "token": "18564",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  },
+  {
+    "name": "PERSISTENT-EQ",
+    "token": "18365",
+    "exchangeType": 1,
+    "subCategory": "Nifty IT"
+  }
+]

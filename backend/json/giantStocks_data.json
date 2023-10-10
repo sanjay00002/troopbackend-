@@ -1,0 +1,80 @@
+[
+  {
+    "name": "ABBOTINDIA-EQ",
+    "token": "17903",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "SHREECEM-EQ",
+    "token": "3103",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "PGHH-EQ",
+    "token": "2535",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "NESTLEIND-EQ",
+    "token": "17963",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "LAXMIMACH-EQ",
+    "token": "1979",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "3MINDIA-EQ",
+    "token": "474",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "TASTYBITE-EQ",
+    "token": "20092",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "PAGEIND-EQ",
+    "token": "14413",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "HONAUT-EQ",
+    "token": "3417",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "MRF-EQ",
+    "token": "2277",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "BOSCHLTD-EQ",
+    "token": "2181",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "ZFCVINDIA-EQ",
+    "token": "16915",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  },
+  {
+    "name": "WENDT-EQ",
+    "token": "4235",
+    "exchangeType": 1,
+    "subCategory": "Giant Stocks"
+  }
+]

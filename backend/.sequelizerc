@@ -1,0 +1,19 @@
+// require('@babel/register');
+require('@babel/register')({
+  rootMode: 'upward',
+});
+
+require('dotenv').config();
+// require('dotenv').config({ path: './.env.local' });
+// require('dotenv').config({ path: './.env.dev' });
+
+const path = require('path');
+const nodeEnv = process.env.NODE_ENV;
+
+module.exports = {
+  env: nodeEnv,
+  config: path.resolve('../database/config', 'config.js'),
+  'models-path': path.resolve('../database/models'),
+  'seeders-path': path.resolve('./src/database/seeders'),
+  'migrations-path': path.resolve('../database/migrations'),
+};

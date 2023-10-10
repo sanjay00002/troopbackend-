@@ -1,0 +1,74 @@
+[
+  {
+    "name": "INDUSINDBK-EQ",
+    "token": "5258",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "IDFCFIRSTB-EQ",
+    "token": "11184",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "KOTAKBANK-EQ",
+    "token": "1922",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "ICICIBANK-EQ",
+    "token": "4963",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "AUBANK-EQ",
+    "token": "21238",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "AXISBANK-EQ",
+    "token": "5900",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "BANKBARODA-EQ",
+    "token": "4668",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "SBIN-EQ",
+    "token": "3045",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "PNB-EQ",
+    "token": "10666",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "FEDERALBNK-EQ",
+    "token": "1023",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "BANDHANBNK-EQ",
+    "token": "2263",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  },
+  {
+    "name": "HDFCBANK-EQ",
+    "token": "1333",
+    "exchangeType": 1,
+    "subCategory": "Nifty Bank"
+  }
+]

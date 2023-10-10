@@ -1,0 +1,1898 @@
+{
+    "50001": {
+      "id": 50001,
+      "name": "A.O. Smith"
+    },
+    "50002": {
+      "id": 50002,
+      "name": "AARA"
+    },
+    "50003": {
+      "id": 50003,
+      "name": "Aarika"
+    },
+    "50004": {
+      "id": 50004,
+      "name": "Aatike"
+    },
+    "50005": {
+      "id": 50005,
+      "name": "Acco"
+    },
+    "50006": {
+      "id": 50006,
+      "name": "Acer"
+    },
+    "50007": {
+      "id": 50007,
+      "name": "Activa"
+    },
+    "50008": {
+      "id": 50008,
+      "name": "Adata"
+    },
+    "50009": {
+      "id": 50009,
+      "name": "Adidas"
+    },
+    "50010": {
+      "id": 50010,
+      "name": "Adron"
+    },
+    "50011": {
+      "id": 50011,
+      "name": "Aerotix"
+    },
+    "50012": {
+      "id": 50012,
+      "name": "Agaro"
+    },
+    "50013": {
+      "id": 50013,
+      "name": "AirCase"
+    },
+    "50014": {
+      "id": 50014,
+      "name": "Airtel"
+    },
+    "50015": {
+      "id": 50015,
+      "name": "Alcatel"
+    },
+    "50016": {
+      "id": 50016,
+      "name": "Allen Cooper"
+    },
+    "50017": {
+      "id": 50017,
+      "name": "Allen Solly"
+    },
+    "50018": {
+      "id": 50018,
+      "name": "Alpak"
+    },
+    "50019": {
+      "id": 50019,
+      "name": "Amaron"
+    },
+    "50020": {
+      "id": 50020,
+      "name": "Amazon"
+    },
+    "50021": {
+      "id": 50021,
+      "name": "AmazonBasics"
+    },
+    "50022": {
+      "id": 50022,
+      "name": "Ambrane"
+    },
+    "50023": {
+      "id": 50023,
+      "name": "AMD"
+    },
+    "50024": {
+      "id": 50024,
+      "name": "AMERICAN EAGLE"
+    },
+    "50025": {
+      "id": 50025,
+      "name": "American Swan"
+    },
+    "50026": {
+      "id": 50026,
+      "name": "AMKETTE"
+    },
+    "50027": {
+      "id": 50027,
+      "name": "Amy & Ely"
+    },
+    "50028": {
+      "id": 50028,
+      "name": "Anchor"
+    },
+    "50029": {
+      "id": 50029,
+      "name": "AND"
+    },
+    "50030": {
+      "id": 50030,
+      "name": "Anindita"
+    },
+    "50031": {
+      "id": 50031,
+      "name": "ANTHEM"
+    },
+    "50032": {
+      "id": 50032,
+      "name": "Antony Morato"
+    },
+    "50033": {
+      "id": 50033,
+      "name": "Aoc"
+    },
+    "50034": {
+      "id": 50034,
+      "name": "APC"
+    },
+    "50035": {
+      "id": 50035,
+      "name": "Apple"
+    },
+    "50036": {
+      "id": 50036,
+      "name": "Apsara"
+    },
+    "50037": {
+      "id": 50037,
+      "name": "Aquaguard"
+    },
+    "50038": {
+      "id": 50038,
+      "name": "Arrow"
+    },
+    "50039": {
+      "id": 50039,
+      "name": "Artis"
+    },
+    "50040": {
+      "id": 50040,
+      "name": "Asian Paints"
+    },
+    "50041": {
+      "id": 50041,
+      "name": "Asics"
+    },
+    "50042": {
+      "id": 50042,
+      "name": "ASOS CURVE"
+    },
+    "50043": {
+      "id": 50043,
+      "name": "Asus"
+    },
+    "50044": {
+      "id": 50044,
+      "name": "Atomberg"
+    },
+    "50045": {
+      "id": 50045,
+      "name": "Atomos"
+    },
+    "50046": {
+      "id": 50046,
+      "name": "Avita"
+    },
+    "50047": {
+      "id": 50047,
+      "name": "Baby Alive"
+    },
+    "50048": {
+      "id": 50048,
+      "name": "Baby Dove"
+    },
+    "50049": {
+      "id": 50049,
+      "name": "babyHug"
+    },
+    "50050": {
+      "id": 50050,
+      "name": "Bajaj"
+    },
+    "50051": {
+      "id": 50051,
+      "name": "Balzano"
+    },
+    "50052": {
+      "id": 50052,
+      "name": "Bambalio"
+    },
+    "50053": {
+      "id": 50053,
+      "name": "Barbie"
+    },
+    "50054": {
+      "id": 50054,
+      "name": "Basics"
+    },
+    "50055": {
+      "id": 50055,
+      "name": "bburago"
+    },
+    "50056": {
+      "id": 50056,
+      "name": "Beetel"
+    },
+    "50057": {
+      "id": 50057,
+      "name": "Being Human"
+    },
+    "50058": {
+      "id": 50058,
+      "name": "Bekner"
+    },
+    "50059": {
+      "id": 50059,
+      "name": "Belkin"
+    },
+    "50060": {
+      "id": 50060,
+      "name": "BenQ"
+    },
+    "50061": {
+      "id": 50061,
+      "name": "Bewakoof"
+    },
+    "50062": {
+      "id": 50062,
+      "name": "Biba"
+    },
+    "50063": {
+      "id": 50063,
+      "name": "Billion"
+    },
+    "50064": {
+      "id": 50064,
+      "name": "BindEx"
+    },
+    "50065": {
+      "id": 50065,
+      "name": "Blackberry"
+    },
+    "50066": {
+      "id": 50066,
+      "name": "Blackberrys"
+    },
+    "50067": {
+      "id": 50067,
+      "name": "Blue Star"
+    },
+    "50068": {
+      "id": 50068,
+      "name": "Boat"
+    },
+    "50069": {
+      "id": 50069,
+      "name": "Boitique"
+    },
+    "50070": {
+      "id": 50070,
+      "name": "Bombay Selection"
+    },
+    "50071": {
+      "id": 50071,
+      "name": "Borosil"
+    },
+    "50072": {
+      "id": 50072,
+      "name": "Bosch"
+    },
+    "50073": {
+      "id": 50073,
+      "name": "Bose"
+    },
+    "50074": {
+      "id": 50074,
+      "name": "Boss"
+    },
+    "50075": {
+      "id": 50075,
+      "name": "BPL"
+    },
+    "50076": {
+      "id": 50076,
+      "name": "Bravieo"
+    },
+    "50077": {
+      "id": 50077,
+      "name": "British Club"
+    },
+    "50078": {
+      "id": 50078,
+      "name": "Brother"
+    },
+    "50079": {
+      "id": 50079,
+      "name": "Butterfly"
+    },
+    "50080": {
+      "id": 50080,
+      "name": "Callas"
+    },
+    "50081": {
+      "id": 50081,
+      "name": "Calvin Klein"
+    },
+    "50082": {
+      "id": 50082,
+      "name": "Camlin"
+    },
+    "50083": {
+      "id": 50083,
+      "name": "Canon"
+    },
+    "50084": {
+      "id": 50084,
+      "name": "Carrier"
+    },
+    "50085": {
+      "id": 50085,
+      "name": "Celebration"
+    },
+    "50086": {
+      "id": 50086,
+      "name": "Celio"
+    },
+    "50087": {
+      "id": 50087,
+      "name": "Cello"
+    },
+    "50088": {
+      "id": 50088,
+      "name": "Cherokee"
+    },
+    "50089": {
+      "id": 50089,
+      "name": "Chicco"
+    },
+    "50090": {
+      "id": 50090,
+      "name": "Chicoo"
+    },
+    "50091": {
+      "id": 50091,
+      "name": "CHOOSY"
+    },
+    "50092": {
+      "id": 50092,
+      "name": "Chroma"
+    },
+    "50093": {
+      "id": 50093,
+      "name": "Chumbak"
+    },
+    "50094": {
+      "id": 50094,
+      "name": "cisco"
+    },
+    "50095": {
+      "id": 50095,
+      "name": "Classmate"
+    },
+    "50096": {
+      "id": 50096,
+      "name": "Cloth Theory"
+    },
+    "50097": {
+      "id": 50097,
+      "name": "Conbre"
+    },
+    "50098": {
+      "id": 50098,
+      "name": "Coolpad"
+    },
+    "50099": {
+      "id": 50099,
+      "name": "Corsair"
+    },
+    "50100": {
+      "id": 50100,
+      "name": "Corslet"
+    },
+    "50101": {
+      "id": 50101,
+      "name": "Cosmus"
+    },
+    "50102": {
+      "id": 50102,
+      "name": "CP Plus"
+    },
+    "50103": {
+      "id": 50103,
+      "name": "Craft"
+    },
+    "50104": {
+      "id": 50104,
+      "name": "CrazyCute"
+    },
+    "50105": {
+      "id": 50105,
+      "name": "Crmopton"
+    },
+    "50106": {
+      "id": 50106,
+      "name": "Crocodile"
+    },
+    "50107": {
+      "id": 50107,
+      "name": "Croma"
+    },
+    "50108": {
+      "id": 50108,
+      "name": "Crompton"
+    },
+    "50109": {
+      "id": 50109,
+      "name": "Cross"
+    },
+    "50110": {
+      "id": 50110,
+      "name": "Crystal Digital"
+    },
+    "50111": {
+      "id": 50111,
+      "name": "D-Link"
+    },
+    "50112": {
+      "id": 50112,
+      "name": "Dabur"
+    },
+    "50113": {
+      "id": 50113,
+      "name": "Daikin"
+    },
+    "50114": {
+      "id": 50114,
+      "name": "DAILY PAPER"
+    },
+    "50115": {
+      "id": 50115,
+      "name": "Daluci"
+    },
+    "50116": {
+      "id": 50116,
+      "name": "Datawind"
+    },
+    "50117": {
+      "id": 50117,
+      "name": "DC"
+    },
+    "50118": {
+      "id": 50118,
+      "name": "Definite"
+    },
+    "50119": {
+      "id": 50119,
+      "name": "Dell"
+    },
+    "50120": {
+      "id": 50120,
+      "name": "Di-karaft"
+    },
+    "50121": {
+      "id": 50121,
+      "name": "Digisol"
+    },
+    "50122": {
+      "id": 50122,
+      "name": "Digitek"
+    },
+    "50123": {
+      "id": 50123,
+      "name": "Disney"
+    },
+    "50124": {
+      "id": 50124,
+      "name": "DJI"
+    },
+    "50125": {
+      "id": 50125,
+      "name": "Dollar"
+    },
+    "50126": {
+      "id": 50126,
+      "name": "doodle"
+    },
+    "50127": {
+      "id": 50127,
+      "name": "DressBerry"
+    },
+    "50128": {
+      "id": 50128,
+      "name": "DTR FASHION"
+    },
+    "50129": {
+      "id": 50129,
+      "name": "Ducati"
+    },
+    "50130": {
+      "id": 50130,
+      "name": "Duke"
+    },
+    "50131": {
+      "id": 50131,
+      "name": "Easybuy"
+    },
+    "50132": {
+      "id": 50132,
+      "name": "Eco Rise"
+    },
+    "50133": {
+      "id": 50133,
+      "name": "Electrolux"
+    },
+    "50134": {
+      "id": 50134,
+      "name": "ELOQUI"
+    },
+    "50135": {
+      "id": 50135,
+      "name": "Empica"
+    },
+    "50136": {
+      "id": 50136,
+      "name": "Epson"
+    },
+    "50137": {
+      "id": 50137,
+      "name": "Eureka Forbes"
+    },
+    "50138": {
+      "id": 50138,
+      "name": "Everest"
+    },
+    "50139": {
+      "id": 50139,
+      "name": "EVERLANE"
+    },
+    "50140": {
+      "id": 50140,
+      "name": "Exide"
+    },
+    "50141": {
+      "id": 50141,
+      "name": "EZVIZ"
+    },
+    "50142": {
+      "id": 50142,
+      "name": "F&D"
+    },
+    "50143": {
+      "id": 50143,
+      "name": "Faber-castell"
+    },
+    "50144": {
+      "id": 50144,
+      "name": "FabIndia"
+    },
+    "50145": {
+      "id": 50145,
+      "name": "Factor"
+    },
+    "50146": {
+      "id": 50146,
+      "name": "Fantac"
+    },
+    "50147": {
+      "id": 50147,
+      "name": "FARM RIO"
+    },
+    "50148": {
+      "id": 50148,
+      "name": "FCUK"
+    },
+    "50149": {
+      "id": 50149,
+      "name": "FILA"
+    },
+    "50150": {
+      "id": 50150,
+      "name": "Fisher-price"
+    },
+    "50151": {
+      "id": 50151,
+      "name": "Flair"
+    },
+    "50152": {
+      "id": 50152,
+      "name": "Flipkart Smartbuy"
+    },
+    "50153": {
+      "id": 50153,
+      "name": "FOREVER 21"
+    },
+    "50154": {
+      "id": 50154,
+      "name": "Fox"
+    },
+    "50155": {
+      "id": 50155,
+      "name": "Fruit of the loom"
+    },
+    "50156": {
+      "id": 50156,
+      "name": "Fujifilm"
+    },
+    "50157": {
+      "id": 50157,
+      "name": "Funko"
+    },
+    "50158": {
+      "id": 50158,
+      "name": "Funskool"
+    },
+    "50159": {
+      "id": 50159,
+      "name": "Fusion"
+    },
+    "50160": {
+      "id": 50160,
+      "name": "FutureX"
+    },
+    "50161": {
+      "id": 50161,
+      "name": "Gadget"
+    },
+    "50162": {
+      "id": 50162,
+      "name": "GANNI"
+    },
+    "50163": {
+      "id": 50163,
+      "name": "GAP"
+    },
+    "50164": {
+      "id": 50164,
+      "name": "Generic"
+    },
+    "50165": {
+      "id": 50165,
+      "name": "Genus"
+    },
+    "50166": {
+      "id": 50166,
+      "name": "Gigabyte"
+    },
+    "50167": {
+      "id": 50167,
+      "name": "Gini and jony"
+    },
+    "50168": {
+      "id": 50168,
+      "name": "Gionee"
+    },
+    "50169": {
+      "id": 50169,
+      "name": "Global Desi"
+    },
+    "50170": {
+      "id": 50170,
+      "name": "Globus"
+    },
+    "50171": {
+      "id": 50171,
+      "name": "Godrej"
+    },
+    "50172": {
+      "id": 50172,
+      "name": "GOOD AMERICAN"
+    },
+    "50173": {
+      "id": 50173,
+      "name": "Good Knights"
+    },
+    "50174": {
+      "id": 50174,
+      "name": "Google"
+    },
+    "50175": {
+      "id": 50175,
+      "name": "Google Home"
+    },
+    "50176": {
+      "id": 50176,
+      "name": "GoPro"
+    },
+    "50177": {
+      "id": 50177,
+      "name": "Goti"
+    },
+    "50178": {
+      "id": 50178,
+      "name": "GRIFFEL"
+    },
+    "50179": {
+      "id": 50179,
+      "name": "GRITSTONES"
+    },
+    "50180": {
+      "id": 50180,
+      "name": "GUESS"
+    },
+    "50181": {
+      "id": 50181,
+      "name": "H&M"
+    },
+    "50182": {
+      "id": 50182,
+      "name": "Haier"
+    },
+    "50183": {
+      "id": 50183,
+      "name": "Harvard"
+    },
+    "50184": {
+      "id": 50184,
+      "name": "HASBRO"
+    },
+    "50185": {
+      "id": 50185,
+      "name": "Hatchimals"
+    },
+    "50186": {
+      "id": 50186,
+      "name": "Havells"
+    },
+    "50187": {
+      "id": 50187,
+      "name": "HCL"
+    },
+    "50188": {
+      "id": 50188,
+      "name": "HIGHLANDER"
+    },
+    "50189": {
+      "id": 50189,
+      "name": "Himalaya"
+    },
+    "50190": {
+      "id": 50190,
+      "name": "Hindware"
+    },
+    "50191": {
+      "id": 50191,
+      "name": "Hitachi"
+    },
+    "50192": {
+      "id": 50192,
+      "name": "Honor"
+    },
+    "50193": {
+      "id": 50193,
+      "name": "Hopscotch"
+    },
+    "50194": {
+      "id": 50194,
+      "name": "HotWheels"
+    },
+    "50195": {
+      "id": 50195,
+      "name": "HP"
+    },
+    "50196": {
+      "id": 50196,
+      "name": "HRX"
+    },
+    "50197": {
+      "id": 50197,
+      "name": "HTC"
+    },
+    "50198": {
+      "id": 50198,
+      "name": "Huawei"
+    },
+    "50199": {
+      "id": 50199,
+      "name": "Huggies"
+    },
+    "50200": {
+      "id": 50200,
+      "name": "Hyundai"
+    },
+    "50201": {
+      "id": 50201,
+      "name": "iBall"
+    },
+    "50202": {
+      "id": 50202,
+      "name": "iBell"
+    },
+    "50203": {
+      "id": 50203,
+      "name": "IFB"
+    },
+    "50204": {
+      "id": 50204,
+      "name": "IFITech"
+    },
+    "50205": {
+      "id": 50205,
+      "name": "Ikall"
+    },
+    "50206": {
+      "id": 50206,
+      "name": "Inalsa"
+    },
+    "50207": {
+      "id": 50207,
+      "name": "Indian Terrain"
+    },
+    "50208": {
+      "id": 50208,
+      "name": "Infinity"
+    },
+    "50209": {
+      "id": 50209,
+      "name": "Intel"
+    },
+    "50210": {
+      "id": 50210,
+      "name": "Intex"
+    },
+    "50211": {
+      "id": 50211,
+      "name": "iQoo"
+    },
+    "50212": {
+      "id": 50212,
+      "name": "iStorage"
+    },
+    "50213": {
+      "id": 50213,
+      "name": "Istore"
+    },
+    "50214": {
+      "id": 50214,
+      "name": "Ivory"
+    },
+    "50215": {
+      "id": 50215,
+      "name": "Jack & Jones"
+    },
+    "50216": {
+      "id": 50216,
+      "name": "JADE BLUE"
+    },
+    "50217": {
+      "id": 50217,
+      "name": "JBL"
+    },
+    "50218": {
+      "id": 50218,
+      "name": "Jhingalala"
+    },
+    "50219": {
+      "id": 50219,
+      "name": "jio"
+    },
+    "50220": {
+      "id": 50220,
+      "name": "JK"
+    },
+    "50221": {
+      "id": 50221,
+      "name": "Jmart"
+    },
+    "50222": {
+      "id": 50222,
+      "name": "Jockey"
+    },
+    "50223": {
+      "id": 50223,
+      "name": "John Pride"
+    },
+    "50224": {
+      "id": 50224,
+      "name": "Johnson & Johnson"
+    },
+    "50225": {
+      "id": 50225,
+      "name": "Johnson's"
+    },
+    "50226": {
+      "id": 50226,
+      "name": "JSM"
+    },
+    "50227": {
+      "id": 50227,
+      "name": "kalt"
+    },
+    "50228": {
+      "id": 50228,
+      "name": "Kangaro"
+    },
+    "50229": {
+      "id": 50229,
+      "name": "Karbonn"
+    },
+    "50230": {
+      "id": 50230,
+      "name": "Kenstar"
+    },
+    "50231": {
+      "id": 50231,
+      "name": "Kent"
+    },
+    "50232": {
+      "id": 50232,
+      "name": "Khaitan"
+    },
+    "50233": {
+      "id": 50233,
+      "name": "Kingston"
+    },
+    "50234": {
+      "id": 50234,
+      "name": "Kittu"
+    },
+    "50235": {
+      "id": 50235,
+      "name": "Kodak"
+    },
+    "50236": {
+      "id": 50236,
+      "name": "Kopila"
+    },
+    "50237": {
+      "id": 50237,
+      "name": "Koryo"
+    },
+    "50238": {
+      "id": 50238,
+      "name": "LA CAUSA"
+    },
+    "50239": {
+      "id": 50239,
+      "name": "Lapcare"
+    },
+    "50240": {
+      "id": 50240,
+      "name": "Lava"
+    },
+    "50241": {
+      "id": 50241,
+      "name": "Leatherworld"
+    },
+    "50242": {
+      "id": 50242,
+      "name": "Lee"
+    },
+    "50243": {
+      "id": 50243,
+      "name": "Lee Cooper"
+    },
+    "50244": {
+      "id": 50244,
+      "name": "LEGO"
+    },
+    "50245": {
+      "id": 50245,
+      "name": "Lenovo"
+    },
+    "50246": {
+      "id": 50246,
+      "name": "Levis"
+    },
+    "50247": {
+      "id": 50247,
+      "name": "LG"
+    },
+    "50248": {
+      "id": 50248,
+      "name": "Lifekrafts"
+    },
+    "50249": {
+      "id": 50249,
+      "name": "Linc"
+    },
+    "50250": {
+      "id": 50250,
+      "name": "linksys"
+    },
+    "50251": {
+      "id": 50251,
+      "name": "Little Angel"
+    },
+    "50252": {
+      "id": 50252,
+      "name": "Little's"
+    },
+    "50253": {
+      "id": 50253,
+      "name": "Livfast"
+    },
+    "50254": {
+      "id": 50254,
+      "name": "Livpure"
+    },
+    "50255": {
+      "id": 50255,
+      "name": "Lloyd"
+    },
+    "50256": {
+      "id": 50256,
+      "name": "Logitech"
+    },
+    "50257": {
+      "id": 50257,
+      "name": "Lombard"
+    },
+    "50258": {
+      "id": 50258,
+      "name": "Lotto"
+    },
+    "50259": {
+      "id": 50259,
+      "name": "Lotus"
+    },
+    "50260": {
+      "id": 50260,
+      "name": "LOUIS CARON"
+    },
+    "50261": {
+      "id": 50261,
+      "name": "Louis Philippe"
+    },
+    "50262": {
+      "id": 50262,
+      "name": "Luminous"
+    },
+    "50263": {
+      "id": 50263,
+      "name": "LumX"
+    },
+    "50264": {
+      "id": 50264,
+      "name": "Luvlap"
+    },
+    "50265": {
+      "id": 50265,
+      "name": "Lux Lyra"
+    },
+    "50266": {
+      "id": 50266,
+      "name": "Luxor"
+    },
+    "50267": {
+      "id": 50267,
+      "name": "LYF"
+    },
+    "50268": {
+      "id": 50268,
+      "name": "MADEWELL"
+    },
+    "50269": {
+      "id": 50269,
+      "name": "Mamaearth"
+    },
+    "50270": {
+      "id": 50270,
+      "name": "MamyPoco"
+    },
+    "50271": {
+      "id": 50271,
+      "name": "Mango"
+    },
+    "50272": {
+      "id": 50272,
+      "name": "Maniac"
+    },
+    "50273": {
+      "id": 50273,
+      "name": "Manish Creations"
+    },
+    "50274": {
+      "id": 50274,
+      "name": "Manyavar"
+    },
+    "50275": {
+      "id": 50275,
+      "name": "Maquare"
+    },
+    "50276": {
+      "id": 50276,
+      "name": "Marvel"
+    },
+    "50277": {
+      "id": 50277,
+      "name": "Maskey"
+    },
+    "50278": {
+      "id": 50278,
+      "name": "Mass"
+    },
+    "50279": {
+      "id": 50279,
+      "name": "Mast & Harbour"
+    },
+    "50280": {
+      "id": 50280,
+      "name": "max"
+    },
+    "50281": {
+      "id": 50281,
+      "name": "Mboss"
+    },
+    "50282": {
+      "id": 50282,
+      "name": "Mee Mee"
+    },
+    "50283": {
+      "id": 50283,
+      "name": "MeeMee"
+    },
+    "50284": {
+      "id": 50284,
+      "name": "Mellissa & Doug"
+    },
+    "50285": {
+      "id": 50285,
+      "name": "Mercusys"
+    },
+    "50286": {
+      "id": 50286,
+      "name": "MI"
+    },
+    "50287": {
+      "id": 50287,
+      "name": "Micromax"
+    },
+    "50288": {
+      "id": 50288,
+      "name": "Microsoft"
+    },
+    "50289": {
+      "id": 50289,
+      "name": "Microtech"
+    },
+    "50290": {
+      "id": 50290,
+      "name": "Miss & Chief"
+    },
+    "50291": {
+      "id": 50291,
+      "name": "Mistubishi"
+    },
+    "50292": {
+      "id": 50292,
+      "name": "Mitashi"
+    },
+    "50293": {
+      "id": 50293,
+      "name": "Mivi"
+    },
+    "50294": {
+      "id": 50294,
+      "name": "Moicrotek"
+    },
+    "50295": {
+      "id": 50295,
+      "name": "MONOCHROME"
+    },
+    "50296": {
+      "id": 50296,
+      "name": "Morphy Richards"
+    },
+    "50297": {
+      "id": 50297,
+      "name": "Mothercare"
+    },
+    "50298": {
+      "id": 50298,
+      "name": "Motorola"
+    },
+    "50299": {
+      "id": 50299,
+      "name": "MSI"
+    },
+    "50300": {
+      "id": 50300,
+      "name": "Msquare"
+    },
+    "50301": {
+      "id": 50301,
+      "name": "MTV"
+    },
+    "50302": {
+      "id": 50302,
+      "name": "Mufti"
+    },
+    "50303": {
+      "id": 50303,
+      "name": "Munix"
+    },
+    "50304": {
+      "id": 50304,
+      "name": "Nataraj"
+    },
+    "50305": {
+      "id": 50305,
+      "name": "Navneet"
+    },
+    "50306": {
+      "id": 50306,
+      "name": "Nerf"
+    },
+    "50307": {
+      "id": 50307,
+      "name": "Nestle"
+    },
+    "50308": {
+      "id": 50308,
+      "name": "Netgear"
+    },
+    "50309": {
+      "id": 50309,
+      "name": "New Balance"
+    },
+    "50310": {
+      "id": 50310,
+      "name": "Nexus"
+    },
+    "50311": {
+      "id": 50311,
+      "name": "Nike"
+    },
+    "50312": {
+      "id": 50312,
+      "name": "Nikon"
+    },
+    "50313": {
+      "id": 50313,
+      "name": "Noise"
+    },
+    "50314": {
+      "id": 50314,
+      "name": "Nokia"
+    },
+    "50315": {
+      "id": 50315,
+      "name": "NOVEX"
+    },
+    "50316": {
+      "id": 50316,
+      "name": "Oculus"
+    },
+    "50317": {
+      "id": 50317,
+      "name": "Ofixo"
+    },
+    "50318": {
+      "id": 50318,
+      "name": "Ogeneral"
+    },
+    "50319": {
+      "id": 50319,
+      "name": "Olympus"
+    },
+    "50320": {
+      "id": 50320,
+      "name": "omax"
+    },
+    "50321": {
+      "id": 50321,
+      "name": "Omtex"
+    },
+    "50322": {
+      "id": 50322,
+      "name": "Oneplus"
+    },
+    "50323": {
+      "id": 50323,
+      "name": "Onida"
+    },
+    "50324": {
+      "id": 50324,
+      "name": "only"
+    },
+    "50325": {
+      "id": 50325,
+      "name": "Oppo"
+    },
+    "50326": {
+      "id": 50326,
+      "name": "Orbit"
+    },
+    "50327": {
+      "id": 50327,
+      "name": "Orico"
+    },
+    "50328": {
+      "id": 50328,
+      "name": "Orient"
+    },
+    "50329": {
+      "id": 50329,
+      "name": "Orpat"
+    },
+    "50330": {
+      "id": 50330,
+      "name": "Ortem"
+    },
+    "50331": {
+      "id": 50331,
+      "name": "Oscar"
+    },
+    "50332": {
+      "id": 50332,
+      "name": "Oxolloxo"
+    },
+    "50333": {
+      "id": 50333,
+      "name": "Pampers"
+    },
+    "50334": {
+      "id": 50334,
+      "name": "Panasonic"
+    },
+    "50335": {
+      "id": 50335,
+      "name": "Pantaloons"
+    },
+    "50336": {
+      "id": 50336,
+      "name": "Pantum"
+    },
+    "50337": {
+      "id": 50337,
+      "name": "Paperkraft"
+    },
+    "50338": {
+      "id": 50338,
+      "name": "Papimo"
+    },
+    "50339": {
+      "id": 50339,
+      "name": "Parker"
+    },
+    "50340": {
+      "id": 50340,
+      "name": "Pentonic"
+    },
+    "50341": {
+      "id": 50341,
+      "name": "Pepe Jeans"
+    },
+    "50342": {
+      "id": 50342,
+      "name": "Peter England"
+    },
+    "50343": {
+      "id": 50343,
+      "name": "Philip"
+    },
+    "50344": {
+      "id": 50344,
+      "name": "Philips"
+    },
+    "50345": {
+      "id": 50345,
+      "name": "Phontron"
+    },
+    "50346": {
+      "id": 50346,
+      "name": "photron"
+    },
+    "50347": {
+      "id": 50347,
+      "name": "PI World"
+    },
+    "50348": {
+      "id": 50348,
+      "name": "Pierre"
+    },
+    "50349": {
+      "id": 50349,
+      "name": "Pigeon"
+    },
+    "50350": {
+      "id": 50350,
+      "name": "Pilot"
+    },
+    "50351": {
+      "id": 50351,
+      "name": "Poco"
+    },
+    "50352": {
+      "id": 50352,
+      "name": "portronics"
+    },
+    "50353": {
+      "id": 50353,
+      "name": "Predator"
+    },
+    "50354": {
+      "id": 50354,
+      "name": "Prestige"
+    },
+    "50355": {
+      "id": 50355,
+      "name": "Presto"
+    },
+    "50356": {
+      "id": 50356,
+      "name": "Prezzie"
+    },
+    "50357": {
+      "id": 50357,
+      "name": "puma"
+    },
+    "50358": {
+      "id": 50358,
+      "name": "PUNK"
+    },
+    "50359": {
+      "id": 50359,
+      "name": "Pureit"
+    },
+    "50360": {
+      "id": 50360,
+      "name": "Purple Feather"
+    },
+    "50361": {
+      "id": 50361,
+      "name": "Quantum QHM"
+    },
+    "50362": {
+      "id": 50362,
+      "name": "Qubo"
+    },
+    "50363": {
+      "id": 50363,
+      "name": "Quechua"
+    },
+    "50364": {
+      "id": 50364,
+      "name": "Rainbow"
+    },
+    "50365": {
+      "id": 50365,
+      "name": "Raymond"
+    },
+    "50366": {
+      "id": 50366,
+      "name": "Raynolds"
+    },
+    "50367": {
+      "id": 50367,
+      "name": "Realme"
+    },
+    "50368": {
+      "id": 50368,
+      "name": "Red Chief"
+    },
+    "50369": {
+      "id": 50369,
+      "name": "Red Tape"
+    },
+    "50370": {
+      "id": 50370,
+      "name": "Redmi"
+    },
+    "50371": {
+      "id": 50371,
+      "name": "Reebok"
+    },
+    "50372": {
+      "id": 50372,
+      "name": "Relaxo"
+    },
+    "50373": {
+      "id": 50373,
+      "name": "Reliance"
+    },
+    "50374": {
+      "id": 50374,
+      "name": "Reynolds"
+    },
+    "50375": {
+      "id": 50375,
+      "name": "Roar"
+    },
+    "50376": {
+      "id": 50376,
+      "name": "RockWell"
+    },
+    "50377": {
+      "id": 50377,
+      "name": "Samrat"
+    },
+    "50378": {
+      "id": 50378,
+      "name": "Samsung"
+    },
+    "50379": {
+      "id": 50379,
+      "name": "SanDisk"
+    },
+    "50380": {
+      "id": 50380,
+      "name": "Sansui"
+    },
+    "50381": {
+      "id": 50381,
+      "name": "sanyo"
+    },
+    "50382": {
+      "id": 50382,
+      "name": "Scriz"
+    },
+    "50383": {
+      "id": 50383,
+      "name": "Seagate"
+    },
+    "50384": {
+      "id": 50384,
+      "name": "Sebamed"
+    },
+    "50385": {
+      "id": 50385,
+      "name": "SHEIN"
+    },
+    "50386": {
+      "id": 50386,
+      "name": "Shift"
+    },
+    "50387": {
+      "id": 50387,
+      "name": "Shopee"
+    },
+    "50388": {
+      "id": 50388,
+      "name": "SHOWOFF"
+    },
+    "50389": {
+      "id": 50389,
+      "name": "Siemens"
+    },
+    "50390": {
+      "id": 50390,
+      "name": "Sigma"
+    },
+    "50391": {
+      "id": 50391,
+      "name": "Silicon Power"
+    },
+    "50392": {
+      "id": 50392,
+      "name": "Simba"
+    },
+    "50393": {
+      "id": 50393,
+      "name": "Sinfin"
+    },
+    "50394": {
+      "id": 50394,
+      "name": "SINGLE"
+    },
+    "50395": {
+      "id": 50395,
+      "name": "Skulcandy"
+    },
+    "50396": {
+      "id": 50396,
+      "name": "SKULT"
+    },
+    "50397": {
+      "id": 50397,
+      "name": "Skyfun"
+    },
+    "50398": {
+      "id": 50398,
+      "name": "skyvik"
+    },
+    "50399": {
+      "id": 50399,
+      "name": "Sony"
+    },
+    "50400": {
+      "id": 50400,
+      "name": "Speedo"
+    },
+    "50401": {
+      "id": 50401,
+      "name": "Spice"
+    },
+    "50402": {
+      "id": 50402,
+      "name": "Sports"
+    },
+    "50403": {
+      "id": 50403,
+      "name": "SPYKAR"
+    },
+    "50404": {
+      "id": 50404,
+      "name": "SS Prime"
+    },
+    "50405": {
+      "id": 50405,
+      "name": "Stalkbuylove"
+    },
+    "50406": {
+      "id": 50406,
+      "name": "STAUD"
+    },
+    "50407": {
+      "id": 50407,
+      "name": "Storeit"
+    },
+    "50408": {
+      "id": 50408,
+      "name": "Strontium"
+    },
+    "50409": {
+      "id": 50409,
+      "name": "Styska"
+    },
+    "50410": {
+      "id": 50410,
+      "name": "SUPERDOWN"
+    },
+    "50411": {
+      "id": 50411,
+      "name": "Superfan"
+    },
+    "50412": {
+      "id": 50412,
+      "name": "Supples"
+    },
+    "50413": {
+      "id": 50413,
+      "name": "Swipe"
+    },
+    "50414": {
+      "id": 50414,
+      "name": "Syga"
+    },
+    "50415": {
+      "id": 50415,
+      "name": "Symphony"
+    },
+    "50416": {
+      "id": 50416,
+      "name": "Syska"
+    },
+    "50417": {
+      "id": 50417,
+      "name": "Tamron"
+    },
+    "50418": {
+      "id": 50418,
+      "name": "Tata Swach"
+    },
+    "50419": {
+      "id": 50419,
+      "name": "Techgear"
+    },
+    "50420": {
+      "id": 50420,
+      "name": "TEDIBAR"
+    },
+    "50421": {
+      "id": 50421,
+      "name": "Tenda"
+    },
+    "50422": {
+      "id": 50422,
+      "name": "Thomson"
+    },
+    "50423": {
+      "id": 50423,
+      "name": "Tiffany & Co."
+    },
+    "50424": {
+      "id": 50424,
+      "name": "TNPL"
+    },
+    "50425": {
+      "id": 50425,
+      "name": "Tommy Hilfiger"
+    },
+    "50426": {
+      "id": 50426,
+      "name": "TOPSHOP"
+    },
+    "50427": {
+      "id": 50427,
+      "name": "Toshiba"
+    },
+    "50428": {
+      "id": 50428,
+      "name": "Toss"
+    },
+    "50429": {
+      "id": 50429,
+      "name": "Tp-Link"
+    },
+    "50430": {
+      "id": 50430,
+      "name": "Transcend"
+    },
+    "50431": {
+      "id": 50431,
+      "name": "True-Ally"
+    },
+    "50432": {
+      "id": 50432,
+      "name": "U.S. Polo"
+    },
+    "50433": {
+      "id": 50433,
+      "name": "Ubon"
+    },
+    "50434": {
+      "id": 50434,
+      "name": "UNDER ARMOUR"
+    },
+    "50435": {
+      "id": 50435,
+      "name": "Uniball"
+    },
+    "50436": {
+      "id": 50436,
+      "name": "Unique Creatiion"
+    },
+    "50437": {
+      "id": 50437,
+      "name": "United Colors of benetton"
+    },
+    "50438": {
+      "id": 50438,
+      "name": "Unomax"
+    },
+    "50439": {
+      "id": 50439,
+      "name": "Urbano Juniors"
+    },
+    "50440": {
+      "id": 50440,
+      "name": "URBN"
+    },
+    "50441": {
+      "id": 50441,
+      "name": "Urbon"
+    },
+    "50442": {
+      "id": 50442,
+      "name": "Usha"
+    },
+    "50443": {
+      "id": 50443,
+      "name": "V-Guard"
+    },
+    "50444": {
+      "id": 50444,
+      "name": "Vaio"
+    },
+    "50445": {
+      "id": 50445,
+      "name": "Van Heusen"
+    },
+    "50446": {
+      "id": 50446,
+      "name": "VEGA"
+    },
+    "50447": {
+      "id": 50447,
+      "name": "Videocon"
+    },
+    "50448": {
+      "id": 50448,
+      "name": "VIMAL"
+    },
+    "50449": {
+      "id": 50449,
+      "name": "Vitsa"
+    },
+    "50450": {
+      "id": 50450,
+      "name": "Vivo"
+    },
+    "50451": {
+      "id": 50451,
+      "name": "VMS"
+    },
+    "50452": {
+      "id": 50452,
+      "name": "Vodafone"
+    },
+    "50453": {
+      "id": 50453,
+      "name": "Voltas"
+    },
+    "50454": {
+      "id": 50454,
+      "name": "Vu"
+    },
+    "50455": {
+      "id": 50455,
+      "name": "W for Woman"
+    },
+    "50456": {
+      "id": 50456,
+      "name": "Wacom"
+    },
+    "50457": {
+      "id": 50457,
+      "name": "WD"
+    },
+    "50458": {
+      "id": 50458,
+      "name": "WeCool"
+    },
+    "50459": {
+      "id": 50459,
+      "name": "WESTSIDE"
+    },
+    "50460": {
+      "id": 50460,
+      "name": "Whirlpool"
+    },
+    "50461": {
+      "id": 50461,
+      "name": "Wildcraft"
+    },
+    "50462": {
+      "id": 50462,
+      "name": "Wizards"
+    },
+    "50463": {
+      "id": 50463,
+      "name": "Wonderchef"
+    },
+    "50464": {
+      "id": 50464,
+      "name": "WROGN"
+    },
+    "50465": {
+      "id": 50465,
+      "name": "WROGN ACTIVE"
+    },
+    "50466": {
+      "id": 50466,
+      "name": "Xiaomi"
+    },
+    "50467": {
+      "id": 50467,
+      "name": "Xolo"
+    },
+    "50468": {
+      "id": 50468,
+      "name": "ZARA"
+    },
+    "50469": {
+      "id": 50469,
+      "name": "Zeal"
+    },
+    "50470": {
+      "id": 50470,
+      "name": "Zebronics"
+    },
+    "50471": {
+      "id": 50471,
+      "name": "ZesTale"
+    },
+    "50472": {
+      "id": 50472,
+      "name": "ZIDO"
+    },
+    "50473": {
+      "id": 50473,
+      "name": "Zook"
+    },
+    "50474": {
+      "id": 50474,
+      "name": "ZTE"
+    }
+  }

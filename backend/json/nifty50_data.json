@@ -1,0 +1,302 @@
+[
+  {
+    "name": "INDUSINDBK-EQ",
+    "token": "5258",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ITC-EQ",
+    "token": "1660",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "JSWSTEEL-EQ",
+    "token": "11723",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "DRREDDY-EQ",
+    "token": "881",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "KOTAKBANK-EQ",
+    "token": "1922",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "BAJAJFINSV-EQ",
+    "token": "16675",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "TECHM-EQ",
+    "token": "13538",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "TATAMOTORS-EQ",
+    "token": "3456",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "TATASTEEL-EQ",
+    "token": "3499",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "TITAN-EQ",
+    "token": "3506",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ICICIBANK-EQ",
+    "token": "4963",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "TCS-EQ",
+    "token": "11536",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "LTIM-EQ",
+    "token": "17818",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "EICHERMOT-EQ",
+    "token": "910",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "NTPC-EQ",
+    "token": "11630",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "BAJFINANCE-EQ",
+    "token": "317",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "HDFCLIFE-EQ",
+    "token": "467",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "HINDUNILVR-EQ",
+    "token": "1394",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "NESTLEIND-EQ",
+    "token": "17963",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ADANIENT-EQ",
+    "token": "25",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "AXISBANK-EQ",
+    "token": "5900",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "WIPRO-EQ",
+    "token": "3787",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "BRITANNIA-EQ",
+    "token": "547",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "POWERGRID-EQ",
+    "token": "14977",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "HEROMOTOCO-EQ",
+    "token": "1348",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "SBILIFE-EQ",
+    "token": "21808",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "MARUTI-EQ",
+    "token": "10999",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "SBIN-EQ",
+    "token": "3045",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "CIPLA-EQ",
+    "token": "694",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ONGC-EQ",
+    "token": "2475",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "INFY-EQ",
+    "token": "1594",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "BHARTIARTL-EQ",
+    "token": "10604",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "TATACONSUM-EQ",
+    "token": "3432",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "RELIANCE-EQ",
+    "token": "2885",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "BAJAJ-AUTO-EQ",
+    "token": "16669",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ADANIPORTS-EQ",
+    "token": "15083",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "APOLLOHOSP-EQ",
+    "token": "157",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "BPCL-EQ",
+    "token": "526",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ASIANPAINT-EQ",
+    "token": "236",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "ULTRACEMCO-EQ",
+    "token": "11532",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "HCLTECH-EQ",
+    "token": "7229",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "M&M-EQ",
+    "token": "2031",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "LT-EQ",
+    "token": "11483",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "DIVISLAB-EQ",
+    "token": "10940",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "GRASIM-EQ",
+    "token": "1232",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "HINDALCO-EQ",
+    "token": "1363",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "COALINDIA-EQ",
+    "token": "20374",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "SUNPHARMA-EQ",
+    "token": "3351",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "UPL-EQ",
+    "token": "11287",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  },
+  {
+    "name": "HDFCBANK-EQ",
+    "token": "1333",
+    "exchangeType": 1,
+    "subCategory": "Mega"
+  }
+]
