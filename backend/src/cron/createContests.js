@@ -6,6 +6,7 @@ import models from '../../../database/models';
 
 import CronJobController from '../controllers/CronJobController';
 
+
 import priceDistribution from '../utils/contestPriceDistributions';
 
 require('dotenv').config();
@@ -323,6 +324,8 @@ module.exports = () => {
     '0 30 09 * * *',
     () => {
       // * Create Live Contests
+
+     
     },
     {
       name: 'Create-Live-Contest',

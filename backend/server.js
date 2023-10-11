@@ -30,6 +30,7 @@ import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 import updateCoupnsCronJobs from './src/cron/updateCoupons';
+import { liveContestCronJobs } from './src/cron/liveContestCronJobs';
 
 // const chatWSServer = require('./chatWS');
 
@@ -46,6 +47,7 @@ const { User, UserRole, Role, Wallet, CommonWallet, CouponRewards, Rewards } =
 import liveContestRouter from './src/routes/liveContest';
 import bankDetailRouter from './src/routes/bankDetail';
 import faqRouter from './src/routes/faq';
+
 
 // const findMatch = require('./src/socketfiles/findMatch');
 // const joinLiveContest = require('./src/socketfiles/joinLiveContest');
@@ -375,6 +377,8 @@ app.listen(port, () => {
   declareWinnersCronJobs();
   botsJoinContestsCronJobs();
   updateCoupnsCronJobs();
+  liveContestCronJobs();
+  
 });
 
 // httpServer.on('error', (err) => {
