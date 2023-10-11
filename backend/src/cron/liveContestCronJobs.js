@@ -29,7 +29,7 @@ function liveContestCronJobs () {
         }
     )
     cron.schedule(
-        '30 14 * * *',
+        '59 14 * * *',
         () =>{
             async function closeLiveContestEntry(){
 
@@ -43,7 +43,7 @@ function liveContestCronJobs () {
         }
     )
     cron.schedule(
-        '30 9 * * *',
+        '15 9 * * *',
         () =>{
             async function openLiveContests(){
                 await LiveContestCronJobController.openLiveContests()
