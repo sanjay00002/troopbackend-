@@ -37,6 +37,8 @@ export default {
           pricePool: contest?.pricePool,
           createdBy: userId,
           slots: contest?.slots,
+          isActive: true,
+          canJoin: true
         });
 
         const newContestId = await newContest.get('id');
@@ -49,6 +51,7 @@ export default {
                 rankStart: contest?.priceDistribution[i].rankStart,
                 rankEnd: contest?.priceDistribution[i].rankEnd,
                 priceAmount: contest?.priceDistribution[i].priceAmount,
+                
               });
             }
           }
@@ -431,4 +434,30 @@ export default {
       console.error('Error while inserting offers: ', error);
     }
   },
+
+  closeAllContestEntry: async function () {
+    try {
+      console.log("Closing all contest entry")
+      const allContests = await Contest.update({
+        canJoin: false
+      },{
+        where: {}
+      })
+    } catch (error) {
+      console.log("Error closing all contests entry:  ", error)
+    }
+  },
+
+  closeAllContests: async function(){
+    try {
+      const allContests = await Contest.update({
+        isActive: false
+      },
+      {
+        where: {}
+      })
+    } catch (error) {
+      console.log("Error closing all contests for the day:  ", error)
+    }
+  }
 };

@@ -31,6 +31,7 @@ import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 import updateCoupnsCronJobs from './src/cron/updateCoupons';
 import { liveContestCronJobs } from './src/cron/liveContestCronJobs';
+import { contestClosingCronJobs } from './src/cron/contestClosingCronJobs';
 
 // const chatWSServer = require('./chatWS');
 
@@ -378,6 +379,7 @@ app.listen(port, () => {
   botsJoinContestsCronJobs();
   updateCoupnsCronJobs();
   liveContestCronJobs();
+  contestClosingCronJobs();
   
 });
 

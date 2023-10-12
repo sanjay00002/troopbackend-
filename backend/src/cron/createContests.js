@@ -21,9 +21,10 @@ const scheduleOptions = {
 module.exports = () => {
   // * Normal contest
   cron.schedule(
-    '0 15 09 * * *',
+    '0 15 9 * * *',
     () => {
       async function createContest() {
+        console.log("creating contests")
         // * Create Contests
         // * Special - Penny, Gaint Stocks, Practice | Sectoral - Nifty 50, IT, Auto, Bank, Practice | Mega - Mega
         // * Fetch the admin user
