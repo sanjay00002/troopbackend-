@@ -42,12 +42,15 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       "running"
     ]);
     
-
-    console.log("Match beginning socket event fired")
+    setTimeout(()=>{console.log("Match beginning socket event fired")
     socket.emit("match-beginning", userToMatchWith.userId);
+    
     socket.broadcast
       .to(userToMatchWith.socketId)
       .emit("match-beginning", currentUser.userId);
+
+    }, 5000)
+    
   
     if(isBotMatch==false){
     const deletionQuery =
