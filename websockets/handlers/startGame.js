@@ -41,9 +41,10 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       opponentSocketId,
       "running"
     ]);
+    
 
     console.log("Match beginning socket event fired")
-    socket.emit("match-beginning", userToMatchWith.userId); 
+    socket.emit("match-beginning", userToMatchWith.userId);
     socket.broadcast
       .to(userToMatchWith.socketId)
       .emit("match-beginning", currentUser.userId);

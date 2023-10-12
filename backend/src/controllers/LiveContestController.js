@@ -89,7 +89,8 @@ export default {
     try {
       const contests = await LiveContest.findAll({
         where: {
-          isLive: true,
+          isActive: true,
+          canJoin: true
         },
       });
       if (contests) {

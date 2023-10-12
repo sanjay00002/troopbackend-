@@ -65,6 +65,7 @@ liveContest.on("connection", (socket) => {
 
 
   socket.on("25-seconds-done", (user) => {
+    console.log("25-seconds-done event fired")
     matchWithBot(io, socket,pool,user)
   });
 });
