@@ -12,6 +12,8 @@ export default async function joinLiveContest(socket, pool, user) {
       console.log(typeof(stockId))
       const stockValue = user.stock_value;
       const id = await nanoid(10);
+
+      
       console.log(contestId, userId, socketId);
 
       const insertQuery =

@@ -35,6 +35,6 @@
         "pg": "^8.11.2",
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.32.1",
-        "smartapi-javascript": "^1.0.15"
+        "smartapi-javascript": "^1.0.16"
     }
 }
