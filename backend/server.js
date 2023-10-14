@@ -174,6 +174,8 @@ app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
 app.use('/api/v1/stockImages', stockImagesRouter);
 app.use('/api/v1/coupon', couponRouter)
 app.use('/api/v1/kyc', kycRouter)
+app.use('/api/v1/spin', spinRewards)
+app.use('/api/v1/liveContestMatches', matchedLiveUsersRouter)
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express
