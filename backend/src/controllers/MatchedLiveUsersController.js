@@ -9,7 +9,7 @@ const { MatchedLiveUser} = model
 export default {
 
     getLiveContestMatches: async (req, res)=>{
-        const userId = req.body.userId
+        const userId = req.id
         const matches = await MatchedLiveUser.findAll({
             where:{
                 [Op.or]:[
