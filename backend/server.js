@@ -25,6 +25,7 @@ import avatarGeneratorRouter from './src/routes/avatarGenerator.routes';
 import stockImagesRouter from './src/routes/stockImages.router';
 import couponRouter from './src/routes/coupon';
 import kycRouter from './src/routes/kyc'
+import matchedLiveUsersRouter from './src/routes/matchedLiveUsers'
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
@@ -156,6 +157,7 @@ app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
 app.use('/api/v1/stockImages', stockImagesRouter);
 app.use('/api/v1/coupon', couponRouter)
 app.use('/api/v1/kyc', kycRouter)
+app.use('/api/v1/liveContestMatches', matchedLiveUsersRouter)
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express
