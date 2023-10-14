@@ -28,12 +28,13 @@ import stockImagesRouter from './src/routes/stockImages.router';
 import couponRouter from './src/routes/coupon';
 import kycRouter from './src/routes/kyc'
 import spinRewards from './src/routes/spinRewards.js'
+import matchedLiveUsersRouter from './src/routes/matchedLiveUsers'
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 import updateCoupnsCronJobs from './src/cron/updateCoupons';
-import { liveContestCronJobs } from './src/cron/liveContestCronJobs';
+
 import { contestClosingCronJobs } from './src/cron/contestClosingCronJobs';
 
 // const chatWSServer = require('./chatWS');
@@ -173,7 +174,6 @@ app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
 app.use('/api/v1/stockImages', stockImagesRouter);
 app.use('/api/v1/coupon', couponRouter)
 app.use('/api/v1/kyc', kycRouter)
-app.use('/api/v1/spin', spinRewards)
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express
@@ -396,7 +396,6 @@ app.listen(port, () => {
   declareWinnersCronJobs();
   botsJoinContestsCronJobs();
   updateCoupnsCronJobs();
-  liveContestCronJobs();
   contestClosingCronJobs();
   
 });
