@@ -21,7 +21,7 @@ const scheduleOptions = {
 module.exports = () => {
   // * Normal contest
   cron.schedule(
-    '0 15 9 * * *',
+    '0 30 15 * * *',
     () => {
       async function createContest() {
         console.log("creating contests")

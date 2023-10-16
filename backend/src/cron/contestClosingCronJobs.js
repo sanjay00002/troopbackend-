@@ -31,7 +31,7 @@ function contestClosingCronJobs () {
     }
 )
 cron.schedule(
-    '59 14 * * *',
+    '14 9 * * *',
     () =>{
         async function closeContestEntry(){
 
