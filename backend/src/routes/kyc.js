@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import getcashfreetoken from '../middleware/cashfreeverification';
 import KycController from '../controllers/KycController';
+import panimage from '../middleware/panimage'
 
 const router = Router();
 
@@ -9,6 +10,7 @@ router.route('/bankverification').post(getcashfreetoken,KycController.bankverifi
 router.route('/upiverification').post(getcashfreetoken,KycController.upiverification);
 router.route('/otpaadharverification').post(getcashfreetoken,KycController.otpaadharverification);
 router.route('/aadharverification').post(getcashfreetoken,KycController.aadharverification);
+router.route('/panverification').post(panimage,KycController.aadharverification);
 
 
 module.exports = router;

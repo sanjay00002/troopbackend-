@@ -1,7 +1,6 @@
 const axios = require('axios');
 const crypto = require('crypto');
 
-
 const baseUrl = 'https://payout-api.cashfree.com';
 
 const baseUrl2 = 'https://api.cashfree.com';
@@ -201,7 +200,7 @@ export default {
   panverification: async function (req, res){
     try{
     
-      const { front_image, verification_id } = req.body;
+      const { verification_id } = req.body;
 
       const headers = { 
         'Authorization': `Bearer ${req.authtoken.data.data.token}`,
@@ -211,19 +210,19 @@ export default {
       };
 
       const requestData = {
-        front_image: front_image,
+        front_image: req.file.buffer,
         verification_id: verification_id,
       };
-
+      console.log(res.json(req.file.buffer))
       const response = await axios.post(`${baseUrl2}/verification/document/pan`, requestData,{headers:headers});
 
       console.log(response)
 
-      // const refid = response.data.ref_id
       res.json(response.data);
     }
 
     catch (error) {
+      console.log(error)
       console.error('Error:', error.response ? error.response.data : error.message);
       res.status(500).json({ error: 'An error occurred during Pan Verification.' });
     }
