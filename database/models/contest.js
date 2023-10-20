@@ -80,6 +80,8 @@ export default (sequelize, DataTypes) => {
       likes: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 0 },
       slots: { type: DataTypes.INTEGER, allowNull: false },
       createdBy: { type: DataTypes.STRING, allowNull: false },
+      isActive: {type: DataTypes.BOOLEAN, allowNull: true},
+      canJoin: {type: DataTypes.BOOLEAN, allowNull:true}
     },
     {
       name: {

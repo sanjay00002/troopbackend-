@@ -39,32 +39,32 @@ export default (sequelize, DataTypes) => {
       });
 
          
-      models.Stocks.hasMany(LiveContest, {
-        foreignKey: "stocktoken1",
-        sourceKey: "token",
-      });
+      // models.Stocks.hasMany(LiveContest, {
+      //   foreignKey: "stocktoken1",
+      //   sourceKey: "token",
+      // });
 
-      LiveContest.belongsTo(models.Stocks, {
-        foreignKey: "stocktoken1",
-        targetKey: "token",
-        constraints: true,
-        keyType: DataTypes.INTEGER,
-        uniqueKey: "stock1token_livecontest_fk_constraint",
-      });
+      // LiveContest.belongsTo(models.Stocks, {
+      //   foreignKey: "stocktoken1",
+      //   targetKey: "token",
+      //   constraints: true,
+      //   keyType: DataTypes.INTEGER,
+      //   uniqueKey: "stock1token_livecontest_fk_constraint",
+      // });
 
 
-      models.Stocks.hasMany(LiveContest, {
-        foreignKey: "stocktoken2",
-        sourceKey: "token",
-      });
+      // models.Stocks.hasMany(LiveContest, {
+      //   foreignKey: "stocktoken2",
+      //   sourceKey: "token",
+      // });
 
-      LiveContest.belongsTo(models.Stocks, {
-        foreignKey: "stocktoken2",
-        targetKey: "token",
-        constraints: true,
-        keyType: DataTypes.INTEGER,
-        uniqueKey: "stocktoken2_livecontest_fk_constraint",
-      });
+      // LiveContest.belongsTo(models.Stocks, {
+      //   foreignKey: "stocktoken2",
+      //   targetKey: "token",
+      //   constraints: true,
+      //   keyType: DataTypes.INTEGER,
+      //   uniqueKey: "stocktoken2_livecontest_fk_constraint",
+      // });
       models.User.hasMany(LiveContest, {
         foreignKey: "createdBy",
         sourceKey: "id",
@@ -83,9 +83,11 @@ export default (sequelize, DataTypes) => {
     {
       stock1Id: { type: DataTypes.INTEGER, allowNull: false },
       stock2Id: { type: DataTypes.INTEGER, allowNull: false },
-      entryAmount: { type: DataTypes.DOUBLE, allowNull: false },
-      isLive: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+      entryAmount: { type: DataTypes.ARRAY(DataTypes.FLOAT), allowNull: false },
+      isActive: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
       createdBy: { type: DataTypes.STRING, allowNull: false },
+      canJoin: {type: DataTypes.BOOLEAN, allowNull: false},
+      contestDate: {type: DataTypes.DATE, allowNull: false}
     },
     {
       sequelize,

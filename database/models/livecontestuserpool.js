@@ -52,12 +52,14 @@ export default (sequelize, DataTypes) => {
   }
   LiveContestUserPool.init(
     {
-      constestId: { type: DataTypes.STRING, allowNull: false },
+      contestId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
       socketId: { type: DataTypes.STRING, allowNull: false },
       stockId: { type: DataTypes.INTEGER, allowNull: true },
-      stockValue: { type: DataTypes.INTEGER, allowNull: true },
+      stockValue: { type: DataTypes.FLOAT, allowNull: true },
       matched: { type: DataTypes.BOOLEAN, allowNull: true },
+      isBot: { type: DataTypes.BOOLEAN, allowNull: true},
+      contestEntryPrice: { type: DataTypes.INTEGER, allowNull:true},
     },
     {
       sequelize,

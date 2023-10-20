@@ -9,6 +9,8 @@ import { Sequelize } from 'sequelize';
 // import { Server } from 'socket.io';
 import momentTimezone from 'moment-timezone';
 import moment from 'moment/moment';
+import path from 'path'
+import fs from 'fs'
 // import chat from './chatWS';
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
@@ -25,11 +27,15 @@ import avatarGeneratorRouter from './src/routes/avatarGenerator.routes';
 import stockImagesRouter from './src/routes/stockImages.router';
 import couponRouter from './src/routes/coupon';
 import kycRouter from './src/routes/kyc'
+import spinRewards from './src/routes/spinRewards.js'
+import matchedLiveUsersRouter from './src/routes/matchedLiveUsers'
 
 import createContestsCronJobs from './src/cron/createContests';
 import declareWinnersCronJobs from './src/cron/declareWinners';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 import updateCoupnsCronJobs from './src/cron/updateCoupons';
+
+import { contestClosingCronJobs } from './src/cron/contestClosingCronJobs';
 
 // const chatWSServer = require('./chatWS');
 
@@ -46,6 +52,7 @@ const { User, UserRole, Role, Wallet, CommonWallet, CouponRewards, Rewards } =
 import liveContestRouter from './src/routes/liveContest';
 import bankDetailRouter from './src/routes/bankDetail';
 import faqRouter from './src/routes/faq';
+
 
 // const findMatch = require('./src/socketfiles/findMatch');
 // const joinLiveContest = require('./src/socketfiles/joinLiveContest');
@@ -135,6 +142,20 @@ sequelize
     console.error('Unable to connect to the database:', error);
   });
 
+app.use('/images', express.static(path.join(__dirname, 'Photos')));
+
+app.get('/api/v1/all-images', (req, res) => {
+  const imageDirectory = path.join(__dirname, 'Photos');
+  const imageFiles = fs.readdirSync(imageDirectory);
+  const imageResponses = [];  // Create an array to store the image file data
+  for (const imageFile of imageFiles) {
+    const imagePath = path.join(imageDirectory, imageFile);
+    const imageBinary = fs.readFileSync(imagePath);    // Read the image file as binary data
+    imageResponses.push({name: imageFile,data: imageBinary,});    // Add the image data to the array
+  }
+  res.json(imageResponses);
+});
+
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/contest', contestRouter);
@@ -153,6 +174,8 @@ app.use('/api/v1/avatarGeneratorUser', avatarGeneratorRouter);
 app.use('/api/v1/stockImages', stockImagesRouter);
 app.use('/api/v1/coupon', couponRouter)
 app.use('/api/v1/kyc', kycRouter)
+app.use('/api/v1/spin', spinRewards)
+app.use('/api/v1/liveContestMatches', matchedLiveUsersRouter)
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express
@@ -375,6 +398,8 @@ app.listen(port, () => {
   declareWinnersCronJobs();
   botsJoinContestsCronJobs();
   updateCoupnsCronJobs();
+  contestClosingCronJobs();
+  
 });
 
 // httpServer.on('error', (err) => {

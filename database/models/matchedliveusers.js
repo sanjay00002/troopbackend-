@@ -82,15 +82,27 @@ export default (sequelize, DataTypes) => {
       selfId: { type: DataTypes.STRING, allowNull: false },
       opponentId: { type: DataTypes.STRING, allowNull: false },
       selfSelectedStockId: { type: DataTypes.INTEGER, allowNull: false },
-      selfStockOpenValue: { type: DataTypes.INTEGER, allowNull: true },
-      selfStockCloseValue: { type: DataTypes.INTEGER, allowNull: true },
+      selfStockOpenValue: { type: DataTypes.FLOAT, allowNull: true },
+      selfStockCloseValue: { type: DataTypes.FLOAT, allowNull: true },
       opponnetSelectedStockId: { type: DataTypes.INTEGER, allowNull: false },
-      opponentStockOpenValue: { type: DataTypes.INTEGER, allowNull: true },
-      opponentStockCloseValue: { type: DataTypes.INTEGER, allowNull: true },
+      opponentStockOpenValue: { type: DataTypes.FLOAT, allowNull: true },
+      opponentStockCloseValue: { type: DataTypes.FLOAT, allowNull: true },
       contestId: { type: DataTypes.STRING, allowNull: false },
+      contestEntryPrice: { type: DataTypes.INTEGER, allowNull:true},
       winner: {
-        type: DataTypes.ENUM(["Self", "Opponent"]),
+        type: DataTypes.STRING, allowNull: true,
       },
+      matchStatus: {
+        type: DataTypes.ENUM('running', 'completed'), allowNull: true
+      },
+      selfSocketId: {
+        type: DataTypes.STRING, allowNull: true
+      },
+      opponentSocketId: {
+        type: DataTypes.STRING, allowNull: true
+      }
+      
+
     },
     {
       sequelize,

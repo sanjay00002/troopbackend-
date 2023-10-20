@@ -2,7 +2,7 @@ import { Model } from 'sequelize';
 // import("nanoid/async").then((nanoid) => nanoid.nanoid);
 import { generateUserId } from '../../lib/generateId';
 
-import('@faker-js/faker/locale/en_IN').then((faker) => faker.faker);
+import { faker } from '@faker-js/faker';
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
@@ -71,6 +71,7 @@ export default (sequelize, DataTypes) => {
           !!user?.dataValues.username === false
         ) {
           import('@faker-js/faker/locale/en_IN').then((fakerModule) => {
+            
             const username = fakerModule.faker.internet.userName({
               firstName: user.dataValues.firstName,
               lastName: user.dataValues.lastName,

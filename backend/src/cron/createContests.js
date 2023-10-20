@@ -6,6 +6,7 @@ import models from '../../../database/models';
 
 import CronJobController from '../controllers/CronJobController';
 
+
 import priceDistribution from '../utils/contestPriceDistributions';
 
 require('dotenv').config();
@@ -20,9 +21,10 @@ const scheduleOptions = {
 module.exports = () => {
   // * Normal contest
   cron.schedule(
-    '0 15 09 * * *',
+    '0 30 15 * * *',
     () => {
       async function createContest() {
+        console.log("creating contests")
         // * Create Contests
         // * Special - Penny, Gaint Stocks, Practice | Sectoral - Nifty 50, IT, Auto, Bank, Practice | Mega - Mega
         // * Fetch the admin user
@@ -323,6 +325,8 @@ module.exports = () => {
     '0 30 09 * * *',
     () => {
       // * Create Live Contests
+
+     
     },
     {
       name: 'Create-Live-Contest',

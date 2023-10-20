@@ -18,7 +18,7 @@ const headers = {
 //   console.log(process.env.CASHFREE_API_KEY)
 //   console.log(process.env.CASHFREE_API_SECRET)
 try {
-  const authtoken = await post(`${baseUrl}/payout/v1/authorize`,{},{headers}) 
+  const authtoken = await post(`${baseUrl}/payout/v1/authorize`, {}, {headers}) 
   console.log(authtoken.data)
   req.authtoken = authtoken
   next()
