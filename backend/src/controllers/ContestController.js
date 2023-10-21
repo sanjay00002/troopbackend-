@@ -332,9 +332,11 @@ export default {
      */
 
     try {
+      // Validate the portfolio data
       validatePortfolio(contestDetails?.portfolio?.stocks);
-
+    
       if (contestDetails?.id) {
+        // Find the contest by ID
         const existingContest = await Contest.findByPk(contestDetails?.id, {
           include: {
             model: ContestCategories,
@@ -342,80 +344,82 @@ export default {
             attributes: { exclude: ['createdAt', 'updatedAt'] },
           },
         });
-
+    
         console.log('Existing Contest: ', existingContest);
-
-        // * Check if contest exists
+    
         if (existingContest) {
           const contestStatus = getContestStatus(existingContest);
-
-          // * Check if the contest has not started yet
-          if (contestStatus === 'live') {
+    
+          if (!existingContest.get('canJoin')) {
             return res.status(403).json({
-              message: 'Contest is live! Cannot join!',
+              message: 'Contest is not active! Cannot join!',
             });
-          } else if (contestStatus === 'completed') {
+          } 
+          else if (!existingContest.get('isActive')) {
             return res.status(403).json({
               message: 'Contest has ended',
             });
           }
+    
           const exisitngContestId = await existingContest.get('id');
-
-          // * Check if there is an available slot to join
+    
+          const canJoin = await existingContest.get('canJoin');
+    
+          if (!canJoin) {
+            return res.status(403).json({
+              message: 'Cannot join this contest at the moment',
+            });
+          }
+    
+          // Count the total participants in the contest
           const totalParticipants = await ContestParticipants.findAndCountAll({
             where: { contestId: exisitngContestId },
           });
-
-          if (totalParticipants >= (await existingContest.get('slots'))) {
+    
+          if (totalParticipants.count >= (await existingContest.get('slots'))) {
             return res.status(400).json({
-              message: 'Slot are full, no more slots available!',
+              message: 'Slots are full, no more slots available!',
             });
           }
-
-          // * Check if he has participated 20 times in the same contest
+    
+          // Count the user's maximum participation in the contest
           const maxParticipation = await ContestParticipants.findAndCountAll({
-            where: { userId: userId, contestId: exisitngContestId },
+            where: { userId, contestId: exisitngContestId },
           });
-
+    
           if (maxParticipation.count >= 20) {
             return res.status(403).json({
               message: 'Player has reached the limit of maximum participation',
             });
           }
-
-          // * Add User to the ContestParticipants Table
+    
+          // Create a new participant in the contest
           const newParticipant = await ContestParticipants.create({
             userId,
             contestId: exisitngContestId,
           });
-
+    
           if (newParticipant) {
-            // * Create a Portfolio and add Stocks to PortfolioStocks OR Select a portfolio
-
+            // Find an existing portfolio
             const existingPortfolio = await Portfolio.findByPk(
-              contestDetails?.portfolio?.id,
+              contestDetails?.portfolio?.id
             );
-
+    
             if (existingPortfolio?.id) {
-              // * Insert Contest id and portfolio id into ContestPortfolios Table if portfolio selected already exists
+              // Insert Contest ID and Portfolio ID into ContestPortfolios Table if the portfolio selected already exists
               await ContestPortfolios.create({
                 contestId: exisitngContestId,
                 portfolioId: existingPortfolio.id,
               });
             } else {
-              // * Create new portfolio for the user with the stocks selected
-              // * Will recieve a list of object of stocks containing the stockId, action, and captain and viceCaptian fields
+              // Create a new portfolio for the user with the selected stocks
               const portfolio = await Portfolio.create({
                 name: contestDetails?.portfolio?.name ?? null,
                 userId: userId,
                 subCategoryId: await existingContest.get('subCategoryId'),
               });
-
-              for (
-                let i = 0;
-                i < contestDetails?.portfolio?.stocks.length;
-                i++
-              ) {
+    
+              for (let i = 0; i < contestDetails?.portfolio?.stocks.length; i++) {
                 const stock = contestDetails?.portfolio?.stocks[i];
                 await PortfolioStocks.create({
                   portfolioId: await portfolio.get('id'),
@@ -425,13 +429,13 @@ export default {
                   viceCaptain: stock?.viceCaptain,
                 });
               }
-
+    
               await ContestPortfolios.create({
                 contestId: exisitngContestId,
                 portfolioId: await portfolio.get('id'),
               });
             }
-
+    
             return res.status(200).json({
               message: 'Join Contest Successful',
             });
@@ -452,7 +456,7 @@ export default {
         error: 'Something went wrong while joining the contest by id',
         errorMessage: error.message,
       });
-    }
+    }    
   },
 
   fetchJoinedContest: async function (req, res) {
