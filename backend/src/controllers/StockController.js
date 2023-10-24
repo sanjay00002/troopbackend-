@@ -34,6 +34,7 @@ export default {
         name,
         token,
         exchangeType,
+        subCategory,
       });
 
       if (newStock) {
@@ -76,6 +77,7 @@ export default {
           name: stock.name,
           token: stock.token,
           exchangeType: stock.exchangeType,
+          subCategory: stock.subCategory
         });
 
         if (newStock) {

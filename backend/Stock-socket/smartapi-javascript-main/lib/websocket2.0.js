@@ -7,149 +7,149 @@ let triggers = {
 	tick: [],
 };
 
-let WebSocketV2 = function (params) {
-	try {
-		let { clientcode, jwttoken, apikey, feedtype } = params;
-		let self = this;
-		let ws = null;
-		let headers = {
-			'x-client-code': clientcode,
-			Authorization: jwttoken,
-			'x-api-key': apikey,
-			'x-feed-token': feedtype,
-		};
-		const url = CONSTANTS?.websocketURL;
-		let ping_Interval = CONSTANTS?.Interval;
-		let timeStamp;
-		let stopInterval;
-		let subscribeData = [];
-		let reset;
-		let open = 1;
-
-		this.connect = function () {
-			try {
-				return new Promise((resolve, reject) => {
-					if (
-						headers?.['x-client-code'] === null ||
-						headers?.['x-feed-token'] === null ||
-						headers?.['x-api-key'] === null ||
-						headers?.Authorization === null
-					) {
-						return 'client_code or jwt_token or api_key or feed_token is missing';
-					}
-					ws = new WebSocket(url, { headers });
-
-					ws.onopen = function onOpen(evt) {
-						if (subscribeData.length > 0) {
-							let reSubscribe = subscribeData;
-							subscribeData = [];
-							reSubscribe.map((data) => {
-								self.fetchData(data);
-							});
-						}
-						reset = setInterval(function () {
-							ws.send('ping');
-						}, ping_Interval);
-						resolve();
-					};
-
-					ws.onmessage = function (evt) {
-						let result = evt.data;
-						timeStamp = Math.floor(Date.now() / 1000);
-						const buf = Buffer.from(result);
-						const receivedData = setResponse(buf, result);
-						trigger('tick', [receivedData]);
-						resolve(result);
-					};
-
-					stopInterval = setInterval(function () {
-						let currentTimeStamp = Math.floor(Date.now() / 1000);
-						let lastMessageTimeStamp = currentTimeStamp - timeStamp;
-						if (lastMessageTimeStamp > 20) {
-							if (ws?._readyState === open) {
-								ws.close();
-							}
-							clearInterval(reset);
-							clearInterval(stopInterval);
-							self.connect();
-						}
-					}, 5000);
-
-					ws.onerror = function (evt) {
-						if (evt.message.match(/\d{3}/) && evt.message.match(/\d{3}/)[0]  == 401){
-							throw new Error(evt.message);
-						}
-						try {
-							if (ws?._readyState === open) {
-								ws.close();
-							}
-							clearInterval(reset);
-						} catch (error) {
-							throw new Error(error);
-						}
-					};
-					ws.onclose = function (evt) {};
-				});
-			} catch (error) {
-				throw new Error(error);
-			}
-		};
-
-		this.fetchData = function (json_req) {
-			subscribeData.push(json_req);
-			const { correlationID, action, mode, exchangeType, tokens } = json_req;
-			if (action !== ACTION.Subscribe && action !== ACTION.Unsubscribe) {
-				throw new Error('Invalid Action value passed');
-			}
-			if (mode !== MODE.LTP && mode !== MODE.Quote && mode !== MODE.SnapQuote) {
-				throw new Error('Invalid Mode value passed');
-			}
-
-			if (
-				exchangeType !== EXCHANGES.bse_cm &&
-				exchangeType !== EXCHANGES.bse_fo &&
-				exchangeType !== EXCHANGES.cde_fo &&
-				exchangeType !== EXCHANGES.mcx_fo &&
-				exchangeType !== EXCHANGES.ncx_fo &&
-				exchangeType !== EXCHANGES.nse_cm &&
-				exchangeType !== EXCHANGES.nse_fo
-			) {
-				throw new Error('Invalid Exchange type pased');
-			}
-			let reqBody = {
-				action,
-				params: {
-					mode,
-					tokenList: [
-						{
-							exchangeType,
-							tokens,
-						},
-					],
-				},
+class WebSocketV2 {
+	constructor(params) {
+		try {
+			let { clientcode, jwttoken, apikey, feedtype } = params;
+			let self = this;
+			let ws = null;
+			let headers = {
+				'x-client-code': clientcode,
+				Authorization: jwttoken,
+				'x-api-key': apikey,
+				'x-feed-token': feedtype,
 			};
-			if (correlationID) {
-				reqBody.correlationID = correlationID;
-			}
-			if (ws?._readyState === open) {
-				ws.send(JSON.stringify(reqBody));
-			}
-		};
+			const url = CONSTANTS?.websocketURL;
+			let ping_Interval = CONSTANTS?.Interval;
+			let timeStamp;
+			let stopInterval;
+			let subscribeData = [];
+			let reset;
+			let open = 1;
 
-		this.on = function (e, callback) {
-			if (triggers.hasOwnProperty(e)) {
-				triggers[e].push(callback);
-			}
-		};
+			this.connect = function () {
+				try {
+					return new Promise((resolve, reject) => {
+						if (headers?.['x-client-code'] === null ||
+							headers?.['x-feed-token'] === null ||
+							headers?.['x-api-key'] === null ||
+							headers?.Authorization === null) {
+							return 'client_code or jwt_token or api_key or feed_token is missing';
+						}
+						ws = new WebSocket(url, { headers });
+						// console.log('nt');
 
-		this.close = function () {
-			clearInterval(stopInterval);
-			ws.close();
-		};
-	} catch (error) {
-		throw new Error(error);
+						ws.onopen = function onOpen(evt) {
+							if (subscribeData.length > 0) {
+								let reSubscribe = subscribeData;
+								subscribeData = [];
+								reSubscribe.map((data) => {
+									self.fetchData(data);
+								});
+							}
+							reset = setInterval(function () {
+								ws.send('ping');
+							}, ping_Interval);
+							resolve();
+						};
+						// console.log('nt2');
+
+						ws.onmessage = function (evt) {
+							let result = evt.data;
+							timeStamp = Math.floor(Date.now() / 1000);
+							const buf = Buffer.from(result);
+							const receivedData = setResponse(buf, result);
+							trigger('tick', [receivedData]);
+							resolve(result);
+						};
+
+						stopInterval = setInterval(function () {
+							let currentTimeStamp = Math.floor(Date.now() / 1000);
+							let lastMessageTimeStamp = currentTimeStamp - timeStamp;
+							if (lastMessageTimeStamp > 20) {
+								if (ws?._readyState === open) {
+									ws.close();
+								}
+								clearInterval(reset);
+								clearInterval(stopInterval);
+								self.connect();
+							}
+						}, 5000);
+						// console.log('nt3');
+						ws.onerror = function (evt) {
+							if (evt.message.match(/\d{3}/) && evt.message.match(/\d{3}/)[0] == 401) {
+								throw new Error(evt.message);
+							}
+							try {
+								if (ws?._readyState === open) {
+									ws.close();
+								}
+								clearInterval(reset);
+							} catch (error) {
+								throw new Error(error);
+							}
+						};
+						ws.onclose = function (evt) { };
+					});
+				} catch (error) {
+					throw new Error(error);
+				}
+			};
+
+			this.fetchData = function (json_req) {
+				subscribeData.push(json_req);
+				const { correlationID, action, mode, exchangeType, tokens } = json_req;
+				if (action !== ACTION.Subscribe && action !== ACTION.Unsubscribe) {
+					throw new Error('Invalid Action value passed');
+				}
+				if (mode !== MODE.LTP && mode !== MODE.Quote && mode !== MODE.SnapQuote) {
+					throw new Error('Invalid Mode value passed');
+				}
+
+				if (exchangeType !== EXCHANGES.bse_cm &&
+					exchangeType !== EXCHANGES.bse_fo &&
+					exchangeType !== EXCHANGES.cde_fo &&
+					exchangeType !== EXCHANGES.mcx_fo &&
+					exchangeType !== EXCHANGES.ncx_fo &&
+					exchangeType !== EXCHANGES.nse_cm &&
+					exchangeType !== EXCHANGES.nse_fo) {
+					throw new Error('Invalid Exchange type pased');
+				}
+				let reqBody = {
+					action,
+					params: {
+						mode,
+						tokenList: [
+							{
+								exchangeType,
+								tokens,
+							},
+						],
+					},
+				};
+				if (correlationID) {
+					reqBody.correlationID = correlationID;
+				}
+				if (ws?._readyState === open) {
+					ws.send(JSON.stringify(reqBody));
+				}
+			};
+
+			this.on = function (e, callback) {
+				if (triggers.hasOwnProperty(e)) {
+					triggers[e].push(callback);
+				}
+			};
+
+			this.close = function () {
+				clearInterval(stopInterval);
+				ws.close();
+			};
+		} catch (error) {
+			throw new Error(error);
+		}
 	}
-};
+}
 
 function trigger(e, args) {
 	if (!triggers[e]) return;

@@ -78,6 +78,7 @@ export default {
       });
 
       const stock_data = await getStocks('io', 'socket', token_list, false);
+      // console.log('hello')
 
       const stockPricesToBeUpdated = [];
 
@@ -89,43 +90,34 @@ export default {
         });
       }
 
-      const stockTokens = await stockPricesToBeUpdated.map(
+      const stockTokens = stockPricesToBeUpdated.map(
         (stock) => stock.token,
       );
 
-      // * Bulk Updating the stock prices
-      await Stocks.update(
+      // * Bulk Updating the stock prices   
+  const updatePromises = stockPricesToBeUpdated.map((stock) =>
+      Stocks.update(
         {
-          open_price: Sequelize.literal(
-            `CASE ${stockPricesToBeUpdated
-              .map(
-                (stock) =>
-                  `WHEN token='${stock.token}' THEN ${stock.open_price}`,
-              )
-              .join(' ')} END`,
-          ),
-
-          close_price: Sequelize.literal(
-            `CASE ${stockPricesToBeUpdated
-              .map(
-                (stock) =>
-                  `WHEN token='${stock.token}' THEN ${stock.close_price}`,
-              )
-              .join(' ')} END`,
-          ),
+          open_price: stock.open_price,
+          close_price: stock.close_price,
         },
         {
-          where: { token: { [Op.in]: stockTokens } },
-        },
-      ).then((updatedRows) =>
-        console.log(`${updatedRows} Stock Prices updated`),
-      );
+          where: { token: stock.token },
+        }
+      )
+    );
 
-      let timeEnd = performance.now() - start;
+    Promise.all(updatePromises).then((results) => {
+      const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
+      console.log(`${updatedRows} Stock Prices updated`);
+      
+      const timeEnd = performance.now() - start;
       console.log('Time taken: ', timeEnd);
+    });
     } catch (error) {
-      console.error('Error while fetching stock data:', error);
-    }
+    console.error('Error while updating stock data:', error);
+    } 
+    // console.log("update2")
   },
 
   calculatePortfolioScore: async function () {

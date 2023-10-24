@@ -112,7 +112,7 @@ export default {
         },
       );
 
-      console.log('Constest: ', contest);
+      // console.log('Constest: ', contest);
 
       if (contest) {
         // * Fetch the stocks related to the subCategory
@@ -198,7 +198,7 @@ export default {
               where: { contestId: await contest.get('id') },
             });
 
-            console.log('Participants: ', participants.count);
+            // console.log('Participants: ', participants.count);
 
             const stocks = await StocksSubCategories.findAll({
               where: {
@@ -266,7 +266,7 @@ export default {
 
           contestWithParticipants[i].participants = participants.count;
 
-          console.log('Participants: ', participants.count);
+          // console.log('Participants: ', participants.count);
         }
 
         const stocksORM = await StocksSubCategories.findAll({
@@ -330,13 +330,14 @@ export default {
      *  Check if there is an available slot to join
      *    Add User to the ContestParticipants Table
      */
-
+    console.log(contestDetails)
     try {
       // Validate the portfolio data
       validatePortfolio(contestDetails?.portfolio?.stocks);
     
       if (contestDetails?.id) {
         // Find the contest by ID
+
         const existingContest = await Contest.findByPk(contestDetails?.id, {
           include: {
             model: ContestCategories,

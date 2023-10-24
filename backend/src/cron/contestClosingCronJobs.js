@@ -17,11 +17,14 @@ const scheduleOptions = {
 
 function contestClosingCronJobs () {
   cron.schedule(
-    '30 15 * * *',
+    // '30 15 * * *',
+    '30 16 * * *',
+    // '0 2 * * * *',
     () =>{
         async function closeAllContests(){
             console.log("close all normal contests")
             await CronJobController.closeAllContests()
+            await CronJobController.updateStockPrices()
         }
         closeAllContests()
     },
@@ -31,7 +34,9 @@ function contestClosingCronJobs () {
     }
 )
 cron.schedule(
-    '14 9 * * *',
+    // '14 9 * * *',
+    // '59 14 * * *',
+    '50 17 * * *',
     () =>{
         async function closeContestEntry(){
 
