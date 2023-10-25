@@ -24,7 +24,7 @@ module.exports = () => {
     // '0 15 9 * * *',
     // '31 15 * * * *',
     // '* * * * *',
-    '33 17 * * *',
+    '0 9 * * *',
     () => {
       async function createContest() {
         console.log("creating contests")
@@ -55,264 +55,264 @@ module.exports = () => {
         });
 
         // * Create 3 Contest in Nifty IT
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 2,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 11,
-        //   pricePool: priceDistribution.niftyIT[0][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyIT[0],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 11,
+          pricePool: priceDistribution.niftyIT[0][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyIT[0],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 2,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 99,
-        //   pricePool: priceDistribution.niftyIT[1][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyIT[1],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 99,
+          pricePool: priceDistribution.niftyIT[1][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyIT[1],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 2,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 199,
-        //   pricePool: priceDistribution.niftyIT[2][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyIT[2],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 199,
+          pricePool: priceDistribution.niftyIT[2][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyIT[2],
+        });
 
-        // // * Creates 2 Practice Contest in Nifty IT
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 2,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        // * Creates 2 Practice Contest in Nifty IT
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 2,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 2,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // // * Create 3 Contest in Nifty Auto
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 3,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 11,
-        //   pricePool: priceDistribution.niftyAuto[0][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyAuto[0],
-        // });
+        // * Create 3 Contest in Nifty Auto
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 11,
+          pricePool: priceDistribution.niftyAuto[0][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyAuto[0],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 3,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 99,
-        //   pricePool: priceDistribution.niftyAuto[1][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyAuto[1],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 99,
+          pricePool: priceDistribution.niftyAuto[1][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyAuto[1],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 3,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 199,
-        //   pricePool: priceDistribution.niftyAuto[2][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyAuto[2],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 199,
+          pricePool: priceDistribution.niftyAuto[2][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyAuto[2],
+        });
 
-        // // * Create 2 Practice Contest in Nifty Auto
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 3,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        // * Create 2 Practice Contest in Nifty Auto
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 3,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 3,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // // * Create 3 Contest in Nifty Bank
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 4,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 11,
-        //   pricePool: priceDistribution.niftyBank[0][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyBank[0],
-        // });
+        // * Create 3 Contest in Nifty Bank
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 11,
+          pricePool: priceDistribution.niftyBank[0][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyBank[0],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 4,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 99,
-        //   pricePool: priceDistribution.niftyBank[1][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyBank[1],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 99,
+          pricePool: priceDistribution.niftyBank[1][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyBank[1],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 3,
-        //   subCategoryId: 4,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 199,
-        //   pricePool: priceDistribution.niftyBank[2][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.niftyBank[2],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 3,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 199,
+          pricePool: priceDistribution.niftyBank[2][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.niftyBank[2],
+        });
 
-        // // * Create 2 Practice Contest for Nifty Bank
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 4,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        // * Create 2 Practice Contest for Nifty Bank
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 4,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 4,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // // * Create 3 Gaint Stock Contests
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 2,
-        //   subCategoryId: 6,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 99,
-        //   pricePool: priceDistribution.gaintStocks[0][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.gaintStocks[0],
-        // });
+        // * Create 3 Gaint Stock Contests
+        await CronJobController.createContest(adminId, {
+          categoryId: 2,
+          subCategoryId: 6,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 99,
+          pricePool: priceDistribution.gaintStocks[0][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.gaintStocks[0],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 2,
-        //   subCategoryId: 6,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 299,
-        //   pricePool: priceDistribution.gaintStocks[1][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.gaintStocks[1],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 2,
+          subCategoryId: 6,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 299,
+          pricePool: priceDistribution.gaintStocks[1][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.gaintStocks[1],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 2,
-        //   subCategoryId: 6,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 499,
-        //   pricePool: priceDistribution.gaintStocks[2][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.gaintStocks[2],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 2,
+          subCategoryId: 6,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 499,
+          pricePool: priceDistribution.gaintStocks[2][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.gaintStocks[2],
+        });
 
-        // // * Create 2 Practice Contest for Gaint Stocks
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 6,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        // * Create 2 Practice Contest for Gaint Stocks
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 6,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 6,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 6,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // // * Create 3 Penny Stocks Contests
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 2,
-        //   subCategoryId: 5,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 2,
-        //   pricePool: priceDistribution.pennyStocks[0][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.pennyStocks[0],
-        // });
+        // * Create 3 Penny Stocks Contests
+        await CronJobController.createContest(adminId, {
+          categoryId: 2,
+          subCategoryId: 5,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 2,
+          pricePool: priceDistribution.pennyStocks[0][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.pennyStocks[0],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 2,
-        //   subCategoryId: 5,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 5,
-        //   pricePool: priceDistribution.pennyStocks[1][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.pennyStocks[1],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 2,
+          subCategoryId: 5,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 5,
+          pricePool: priceDistribution.pennyStocks[1][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.pennyStocks[1],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 2,
-        //   subCategoryId: 5,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 10,
-        //   pricePool: priceDistribution.pennyStocks[2][0].priceAmount,
-        //   slots: 500,
-        //   priceDistribution: priceDistribution.pennyStocks[2],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 2,
+          subCategoryId: 5,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 10,
+          pricePool: priceDistribution.pennyStocks[2][0].priceAmount,
+          slots: 500,
+          priceDistribution: priceDistribution.pennyStocks[2],
+        });
 
-        // // * Create 2 Practice Contest for Penny Stocks
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 5,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        // * Create 2 Practice Contest for Penny Stocks
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 5,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
 
-        // await CronJobController.createContest(adminId, {
-        //   categoryId: 5,
-        //   subCategoryId: 5,
-        //   date: today.format('YYYY-MM-DD'),
-        //   entryAmount: 0,
-        //   pricePool: 0,
-        //   slots: 500,
-        //   priceDistribution: [],
-        // });
+        await CronJobController.createContest(adminId, {
+          categoryId: 5,
+          subCategoryId: 5,
+          date: today.format('YYYY-MM-DD'),
+          entryAmount: 0,
+          pricePool: 0,
+          slots: 500,
+          priceDistribution: [],
+        });
         await CronJobController.updateStockPrices()
       }
 

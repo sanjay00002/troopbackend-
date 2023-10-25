@@ -19,7 +19,8 @@ module.exports = () => {
   cron.schedule(
     // '0 05 09 * * *',
     // '50 14 * * *',
-    '6 17 * * *',
+    // '6 17 * * *',
+    '45 8 * * *',
     () => {
       // * Creating bots 10 mins before the contest starts
       /*
