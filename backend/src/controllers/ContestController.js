@@ -539,7 +539,7 @@ export default {
     }
   },
 
-   fetchJoinedContestByStatus: async function (req, res) {
+  fetchJoinedContestByStatus: async function (req, res) {
     const userId = req.id;
 
     /*
