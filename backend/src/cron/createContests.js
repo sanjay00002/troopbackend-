@@ -25,6 +25,7 @@ module.exports = () => {
     // '31 15 * * * *',
     // '* * * * *',
     '0 9 * * *',
+    // '06 12 * * *',
     () => {
       async function createContest() {
         console.log("creating contests")
