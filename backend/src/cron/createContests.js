@@ -21,7 +21,10 @@ const scheduleOptions = {
 module.exports = () => {
   // * Normal contest
   cron.schedule(
-    '0 0 9 * * *',
+    // '0 15 9 * * *',
+    // '31 15 * * * *',
+    // '* * * * *',
+    '0 9 * * *',
     () => {
       async function createContest() {
         console.log("creating contests")
@@ -46,9 +49,9 @@ module.exports = () => {
           categoryId: 1,
           subCategoryId: 1,
           date: today.format('YYYY-MM-DD'),
-          entryAmount: 99,
+          entryAmount: 380,
           pricePool: priceDistribution.mega[0].priceAmount,
-          slots: 500,
+          slots: 200,
           priceDistribution: priceDistribution.mega,
         });
 
@@ -311,6 +314,7 @@ module.exports = () => {
           slots: 500,
           priceDistribution: [],
         });
+        await CronJobController.updateStockPrices()
       }
 
       createContest();

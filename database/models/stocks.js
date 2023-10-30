@@ -17,6 +17,7 @@ export default (sequelize, DataTypes) => {
       exchangeType: { type: DataTypes.INTEGER, allowNull: false },
       open_price: { type: DataTypes.DOUBLE, allowNull: true, defaultValue: 0},
       close_price: { type: DataTypes.DOUBLE, allowNull: true, defaultValue: 0},
+      subCategory: { type: DataTypes.STRING, allowNull: false },
       status: {
         type: DataTypes.ENUM(['active', 'inactive']),
         defaultValue: 'active',

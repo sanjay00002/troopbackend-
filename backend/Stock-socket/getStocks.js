@@ -12,6 +12,7 @@ const smart_api = new SmartAPI({
 
 module.exports = function (io, socket, stock_token, isLive) {
   try {
+    console.log('try')
     return new Promise((resolve, reject) => {
       const web_socket = new WebSocketV2({
         clientcode: process.env.SMARTAPI_CLIENT_CODE,
@@ -24,10 +25,12 @@ module.exports = function (io, socket, stock_token, isLive) {
           ? smart_api?.feed_token
           : process.env.SMARTAPI_FEED_TOKEN,
       });
-
+      console.log('socket created')
       if (stock_token[0]) {
+        console.log('stock token')
         try {
           web_socket.connect().then(() => {
+            console.log('gg')
             const json_req = {
               correlationID: 'abcde12345',
               action: 1,
@@ -35,14 +38,16 @@ module.exports = function (io, socket, stock_token, isLive) {
               exchangeType: 1,
               tokens: stock_token,
             };
-
+            console.log('1')
             web_socket.fetchData(json_req);
+            console.log('2')
 
             web_socket.on('tick', receiveTick);
 
             // console.log(socket.nsp.name);
             const stock_data = [];
-
+            console.log('3')
+            
             function receiveTick(data) {
               // console.log("socket file");
               // console.log('receiveTick:::::', data);
@@ -51,6 +56,7 @@ module.exports = function (io, socket, stock_token, isLive) {
                 io.of('/normalContest').emit('get-live-data', data);
               } else {
                 stock_data.push(data);
+                console.log('false')
                 if (stock_data.length === stock_token.length) {
                   web_socket.close();
                   console.log('Connection closed');
