@@ -80,13 +80,19 @@ export default (sequelize, DataTypes) => {
   MatchedLiveUser.init(
     {
       selfId: { type: DataTypes.STRING, allowNull: false },
+      selfUserName: { type: DataTypes.STRING, allowNull: true },
       opponentId: { type: DataTypes.STRING, allowNull: false },
+      opponentUserName: { type: DataTypes.STRING, allowNull: true },
       selfSelectedStockId: { type: DataTypes.INTEGER, allowNull: false },
+      selfSelectedStockToken: { type: DataTypes.INTEGER, allowNull: false },
       selfStockOpenValue: { type: DataTypes.FLOAT, allowNull: true },
       selfStockCloseValue: { type: DataTypes.FLOAT, allowNull: true },
+      selfStockPercentageChange: { type: DataTypes.FLOAT, allowNull: true },
       opponnetSelectedStockId: { type: DataTypes.INTEGER, allowNull: false },
+      opponentSelectedStockToken: { type: DataTypes.INTEGER, allowNull: false },
       opponentStockOpenValue: { type: DataTypes.FLOAT, allowNull: true },
       opponentStockCloseValue: { type: DataTypes.FLOAT, allowNull: true },
+      opponentStockPercentageChange: { type: DataTypes.FLOAT, allowNull: true },
       contestId: { type: DataTypes.STRING, allowNull: false },
       contestEntryPrice: { type: DataTypes.INTEGER, allowNull:true},
       winner: {

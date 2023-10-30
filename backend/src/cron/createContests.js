@@ -21,7 +21,7 @@ const scheduleOptions = {
 module.exports = () => {
   // * Normal contest
   cron.schedule(
-    '0 30 15 * * *',
+    '0 0 9 * * *',
     () => {
       async function createContest() {
         console.log("creating contests")
@@ -39,6 +39,7 @@ module.exports = () => {
         const adminId = await adminUser.get('userId');
 
         const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
+        const tomorrow = today.clone().add(1, 'day');
 
         // * Create 1 Mega Contest
         await CronJobController.createContest(adminId, {

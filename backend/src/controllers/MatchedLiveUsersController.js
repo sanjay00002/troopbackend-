@@ -18,8 +18,20 @@ export default {
                 ],
             }
         })
-        console.log(matches[0])
-        res.send(matches)
+
+
+
+        // arrayOfMatches.forEach(element => {
+        //     element["selfUserName"] = "hello"
+        //     element["opponentUserName"] = "hello"
+        //     element["selfStockPercentageChange"] = ""
+        //     element["opponentStockPercentageChange"] = ""
+        //     element["dateOfMatch"] = element.createdAt
+        //     element["selfStockToken"] = ""
+        //     element["opponentStockToken"] = ""
+            
+        // });
+        res.send(matches)   
         
     }
 }

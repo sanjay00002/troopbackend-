@@ -21,6 +21,9 @@ export default {
           stock2Id: contest?.stock2Id,
           entryAmount: contest?.entryAmount,
           createdBy: userId,
+          canJoin: true,
+          contestDate: moment.tz('Asia/Calcutta'),
+          entryAmount: [50,100,150]
           // stocktoken1: stock1?.token,
           // stocktoken2: stock2?.token,
         });
