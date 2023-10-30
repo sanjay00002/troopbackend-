@@ -31,8 +31,10 @@ const pool = new Pool({
 
 io.on("connection", (socket) => {
   chat(io);
-  console.log("Connection Established!");
+  console.log("Connection Established!: ");
   socket.on("send-stock-tokens", (stock_token) => {
+    console.log("send stock token event recieved")
+    console.log(stock_token)
     getStocks(io, socket, stock_token, true);
   });
 });
@@ -40,6 +42,7 @@ io.on("connection", (socket) => {
 const normalContest = io.of("/normalContest");
 
 normalContest.on("connection", (socket) => {
+
   // socket connection to show the live contest joined users
   socket.on("user-count", (contests) => {
     // here the contest id list is fetched from the frontend

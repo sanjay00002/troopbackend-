@@ -430,10 +430,13 @@ export default {
   closeAllContestEntry: async function () {
     try {
       console.log("Closing all contest entry")
+      const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
       const allContests = await Contest.update({
         canJoin: false
       },{
-        where: {}
+        where: {
+          date: today
+        }
       })
     } catch (error) {
       console.log("Error closing all contests entry:  ", error)
@@ -442,11 +445,14 @@ export default {
 
   closeAllContests: async function(){
     try {
+      const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
       const allContests = await Contest.update({
         isActive: false
       },
       {
-        where: {}
+        where: {
+          date: today
+        }
       })
     } catch (error) {
       console.log("Error closing all contests for the day:  ", error)

@@ -34,7 +34,7 @@ function contestClosingCronJobs () {
     }
 )
 cron.schedule(
-    '59 8 * * *',
+    '25 9 * * *',
     // '14 9 * * *',
     // '59 14 * * *',
     // '50 17 * * *',

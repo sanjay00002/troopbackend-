@@ -48,7 +48,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 1,
           subCategoryId: 1,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 380,
           pricePool: priceDistribution.mega[0].priceAmount,
           slots: 200,
@@ -59,7 +59,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 2,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
           pricePool: priceDistribution.niftyIT[0][0].priceAmount,
           slots: 500,
@@ -69,7 +69,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 2,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 99,
           pricePool: priceDistribution.niftyIT[1][0].priceAmount,
           slots: 500,
@@ -79,7 +79,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 2,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 199,
           pricePool: priceDistribution.niftyIT[2][0].priceAmount,
           slots: 500,
@@ -90,7 +90,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 2,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -100,7 +100,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 2,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -111,7 +111,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 3,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
           pricePool: priceDistribution.niftyAuto[0][0].priceAmount,
           slots: 500,
@@ -121,7 +121,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 3,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 99,
           pricePool: priceDistribution.niftyAuto[1][0].priceAmount,
           slots: 500,
@@ -131,7 +131,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 3,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 199,
           pricePool: priceDistribution.niftyAuto[2][0].priceAmount,
           slots: 500,
@@ -142,7 +142,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 3,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -152,7 +152,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 3,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -163,7 +163,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 4,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
           pricePool: priceDistribution.niftyBank[0][0].priceAmount,
           slots: 500,
@@ -173,7 +173,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 4,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 99,
           pricePool: priceDistribution.niftyBank[1][0].priceAmount,
           slots: 500,
@@ -183,7 +183,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 3,
           subCategoryId: 4,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 199,
           pricePool: priceDistribution.niftyBank[2][0].priceAmount,
           slots: 500,
@@ -194,7 +194,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 4,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -204,7 +204,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 4,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -215,7 +215,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 2,
           subCategoryId: 6,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 99,
           pricePool: priceDistribution.gaintStocks[0][0].priceAmount,
           slots: 500,
@@ -225,7 +225,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 2,
           subCategoryId: 6,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 299,
           pricePool: priceDistribution.gaintStocks[1][0].priceAmount,
           slots: 500,
@@ -235,7 +235,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 2,
           subCategoryId: 6,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 499,
           pricePool: priceDistribution.gaintStocks[2][0].priceAmount,
           slots: 500,
@@ -246,7 +246,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 6,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -256,7 +256,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 6,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -267,7 +267,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 2,
           subCategoryId: 5,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 2,
           pricePool: priceDistribution.pennyStocks[0][0].priceAmount,
           slots: 500,
@@ -277,7 +277,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 2,
           subCategoryId: 5,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 5,
           pricePool: priceDistribution.pennyStocks[1][0].priceAmount,
           slots: 500,
@@ -287,7 +287,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 2,
           subCategoryId: 5,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 10,
           pricePool: priceDistribution.pennyStocks[2][0].priceAmount,
           slots: 500,
@@ -298,7 +298,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 5,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
@@ -308,7 +308,7 @@ module.exports = () => {
         await CronJobController.createContest(adminId, {
           categoryId: 5,
           subCategoryId: 5,
-          date: today.format('YYYY-MM-DD'),
+          date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 0,
           pricePool: 0,
           slots: 500,
