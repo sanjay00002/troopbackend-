@@ -1,7 +1,10 @@
 import { nanoid } from "nanoid";
+import model from '../../database/models'
 import getStockTokenFromId from "../helpers/getStockTokenFromId";
 
 import getStockLTPFromToken from "../helpers/getStockLTPFromToken";
+
+const { User} = model
 
 export async function startGame(currentUser, userToMatchWith, pool, io , socket, isBotMatch) {
     const uniqueId = nanoid(10);
@@ -19,19 +22,33 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     const opponentSocketId = userToMatchWith.socketId;
     const currentUserLiveContestUserPoolId = currentUser.id
     const opponentLiveContestUserPoolId = userToMatchWith.id
+    const selfSelectedStockToken = await getStockTokenFromId(selfSelectedStockId);
+      const opponentSelectedStockToken = await getStockTokenFromId(
+        opponnetSelectedStockId
+      );
+
+    const selfObj = await User.findByPk(selfId)
+    const selfUserName = selfObj.username
+    const opponentObj = await User.findByPk(opponentId)
+    const opponentUserName = opponentObj.username
+
 
     
   
   
     const insertQuery =
-      'INSERT INTO public."MatchedLiveUsers" ("id", "selfId", "opponentId", "selfSelectedStockId", "selfStockOpenValue", "opponnetSelectedStockId", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice", "selfSocketId", "opponentSocketId", "matchStatus") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)';
+      'INSERT INTO public."MatchedLiveUsers" ("id", "selfId","selfUserName", "opponentId","opponentUserName", "selfSelectedStockId","selfSelectedStockToken", "selfStockOpenValue", "opponnetSelectedStockId","opponentSelectedStockToken", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice", "selfSocketId", "opponentSocketId", "matchStatus") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)';
     const insertResult = await pool.query(insertQuery, [
       uniqueId,
       selfId,
+      selfUserName,
       opponentId,
+      opponentUserName,
       selfSelectedStockId,
+      selfSelectedStockToken,
       selfStockOpenValue,
       opponnetSelectedStockId,
+      opponentSelectedStockToken,
       opponentStockOpenValue,
       contestId,
       createdAt,
@@ -64,30 +81,25 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     const deletionResult = await pool.query(deletionQuery, [currentUserLiveContestUserPoolId])
   }
   
-    // Start game for 10 seconds. Change to 30 minutes in production
+    // Start game for 15 seconds. Change to 30 minutes in production
   
     setTimeout(async () => {
       console.log("Set timeout started")
 
-      
-
-      const selfStockToken = await getStockTokenFromId(selfSelectedStockId);
-      const opponentStockToken = await getStockTokenFromId(
-        opponnetSelectedStockId
-      );
-  
-      const selfStockCloseValue = await getStockLTPFromToken(selfStockToken)
-      const opponentStockCloseValue = await getStockLTPFromToken(opponentStockToken)
-      console.log("stock LTP")
+      const selfStockCloseValue = await getStockLTPFromToken(selfSelectedStockToken)
+      const opponentStockCloseValue = await getStockLTPFromToken(opponentSelectedStockToken)
+      console.log("stock LTP successfulyl fetched")
       
       console.log("Updating")
       const winner = getWinner(selfStockOpenValue, selfStockCloseValue, opponentStockOpenValue, opponentStockCloseValue, selfId, opponentId)
-      const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3, "matchStatus" = $4  WHERE "id" = $5'
-      const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, "completed", uniqueId])
+      const selfStockPercentageChange = ((selfStockCloseValue-selfStockOpenValue)/selfStockOpenValue)* 100
+      const opponentStockPercentageChange = ((opponentStockCloseValue - opponentStockOpenValue)/ opponentStockOpenValue)* 100
+      const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3, "matchStatus" = $4, "opponentStockPercentageChange"= $5, "selfStockPercentageChange" = $6 WHERE "id" = $7'
+      const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, "completed", selfStockPercentageChange, opponentStockPercentageChange, uniqueId])
   
       socket.emit('match-done', uniqueId) //not sure on this code
       socket.broadcast.to(opponentSocketId).emit('match-done', uniqueId)
-    }, 10000);
+    }, 15000);
   }
 
 

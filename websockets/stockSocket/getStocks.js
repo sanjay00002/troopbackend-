@@ -13,6 +13,7 @@ const smart_api = new SmartAPI({
 module.exports = function (io, socket, stock_token, isLive) {
   try {
     return new Promise((resolve, reject) => {
+      console.log("get Stocks function running")
       const web_socket = new WebSocketV2({
         clientcode: process.env.SMARTAPI_CLIENT_CODE,
         jwttoken:
@@ -24,9 +25,11 @@ module.exports = function (io, socket, stock_token, isLive) {
           ? smart_api?.feed_token
           : process.env.SMARTAPI_FEED_TOKEN,
       });
+      
       if (stock_token[0]) {
         try {
           web_socket.connect().then(() => {
+            console.log("web_socket.connect() ran once")
             const json_req = {
               correlationID: 'abcde12345',
               action: 1,
@@ -45,8 +48,7 @@ module.exports = function (io, socket, stock_token, isLive) {
             function receiveTick(data) {
               // console.log("socket file");
               // console.log('receiveTick:::::', data);
-              console.log(data)
-              console.log("working")
+              // console.log(data)
               if (isLive) {
                 io.of('/liveContest').emit('get-live-data', data);
                 io.of('/normalContest').emit('get-live-data', data);
