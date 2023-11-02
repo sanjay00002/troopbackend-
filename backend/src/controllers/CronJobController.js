@@ -446,6 +446,7 @@ export default {
   closeAllContests: async function(){
     try {
       const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
+      console.log("today is:  ")
       const allContests = await Contest.update({
         isActive: false
       },
