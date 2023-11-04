@@ -37,6 +37,20 @@ export default (sequelize, DataTypes) => {
         uniqueKey: "matchedlive_opponent_fk_constraint",
       });
 
+
+      models.User.hasMany(MatchedLiveUser, {
+        foreignKey: "opponentProfileImg",
+        sourceKey: "profileImage",
+      });
+
+      MatchedLiveUser.belongsTo(models.User, {
+        foreignKey: "opponentProfileImg",
+        targetKey: "profileImage",
+        constraints: true,
+        keyType: DataTypes.STRING,
+        uniqueKey: "matchedlive_opponent_fk_constraint",
+      });
+
       models.Stocks.hasMany(MatchedLiveUser, {
         foreignKey: "selfSelectedStockId",
         sourceKey: "id",
@@ -82,6 +96,7 @@ export default (sequelize, DataTypes) => {
       selfId: { type: DataTypes.STRING, allowNull: false },
       selfUserName: { type: DataTypes.STRING, allowNull: true },
       opponentId: { type: DataTypes.STRING, allowNull: false },
+      opponentProfileImg:{ type: DataTypes.STRING, allowNull: false },
       opponentUserName: { type: DataTypes.STRING, allowNull: true },
       selfSelectedStockId: { type: DataTypes.INTEGER, allowNull: false },
       selfSelectedStockToken: { type: DataTypes.INTEGER, allowNull: false },
