@@ -22,6 +22,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.ENUM(['active', 'inactive']),
         defaultValue: 'active',
       },
+      globalDataFeedsIdentifier: { type: DataTypes.STRING, allowNull: true}
     },
     {
       name: {
