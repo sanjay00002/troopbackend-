@@ -32,12 +32,14 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     const opponentObj = await User.findByPk(opponentId)
     const opponentUserName = opponentObj.username
 
+    const opponentProfileImg = opponentObj.profileImage;
+
 
     
   
   
     const insertQuery =
-      'INSERT INTO public."MatchedLiveUsers" ("id", "selfId","selfUserName", "opponentId","opponentUserName", "selfSelectedStockId","selfSelectedStockToken", "selfStockOpenValue", "opponnetSelectedStockId","opponentSelectedStockToken", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice", "selfSocketId", "opponentSocketId", "matchStatus") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)';
+      'INSERT INTO public."MatchedLiveUsers" ("id", "selfId","selfUserName", "opponentId","opponentUserName", "selfSelectedStockId","selfSelectedStockToken", "selfStockOpenValue", "opponnetSelectedStockId","opponentSelectedStockToken", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice", "selfSocketId", "opponentSocketId", "matchStatus", "opponentProfileImg") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)';
     const insertResult = await pool.query(insertQuery, [
       uniqueId,
       selfId,
@@ -56,7 +58,8 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       contestEntryPrice,
       selfSocketId,
       opponentSocketId,
-      "running"
+      "running",
+      opponentProfileImg
     ]);
     
     setTimeout(()=>{console.log("Match beginning socket event fired")
