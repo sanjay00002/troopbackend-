@@ -6,7 +6,7 @@ const router = Router();
 
 router
   .route('/getBySubCategory')
-  .get(validate, PortfolioController.fetchPortfoliosBySubCategory);
+  .post(validate, PortfolioController.fetchPortfoliosBySubCategory);
 
 router.route('/').put(validate, PortfolioController.updatePortfolioById);
 
