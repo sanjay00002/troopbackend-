@@ -23,6 +23,8 @@ router
 
 router.route('/join').post(validate, ContestController.joinContestById);
 
+router.route('/joinbots').post(ContestController.joinBots);
+
 router
   .route('/joinedContests')
   .post(validate, ContestController.fetchJoinedContest);
