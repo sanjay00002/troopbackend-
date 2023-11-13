@@ -27,6 +27,8 @@ export default async function joinLiveContest(socket, pool, user) {
             console.error("Error saving contest:", error);
             reject(error); // Reject the Promise on error
           } else {
+
+            deleteEntryAfterInterval(id, pool)
             console.log("Person saved successfully with stock information");
             // Resolve the Promise with any relevant data
             resolve(result);
@@ -37,4 +39,19 @@ export default async function joinLiveContest(socket, pool, user) {
       reject(error); // Reject the Promise if an exception occurs
     }
   });
+}
+
+function deleteEntryAfterInterval(id, pool){
+  setTimeout(async () => {
+    try {
+      console.log("35 seconds done");
+
+      const deleteQuery = 'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1';
+      const result = await pool.query(deleteQuery, [id]);
+      console.log("Below entry was deleted")
+      console.log(result);
+    } catch (error) {
+      console.error('Error deleting entry:', error.message);
+    }
+  }, 35000);
 }
