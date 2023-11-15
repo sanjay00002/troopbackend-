@@ -22,7 +22,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.ENUM(['active', 'inactive']),
         defaultValue: 'active',
       },
-      globalDataFeedsIdentifier: { type: DataTypes.STRING, allowNull: true}
+      globalDataFeedsIdentifier: { type: DataTypes.STRING, allowNull: true},
+      zerodhaInstrumentToken: { type: DataTypes.STRING, allowNull: true},
+      zerodhaInstrumentTType: { type: DataTypes.STRING, allowNull: true},
+      exchange: { type: DataTypes.STRING, allowNull: true},
     },
     {
       name: {
