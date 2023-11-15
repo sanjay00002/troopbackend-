@@ -788,7 +788,7 @@ export default {
 
   getStockStats: async function (req, res) {
     const { contestId, stockId } = req.body;
-
+  
     try {
       const subQuery = await ContestPortfolios.findAll({
         attributes: ['portfolioId'],
@@ -800,59 +800,68 @@ export default {
           required: true,
         },
       });
-
+  
       const portfolioIds = subQuery.map((row) => row.portfolioId);
-
+  
       const stockActionCount = await PortfolioStocks.findAll({
-        attributes: [
-          [Sequelize.fn('COUNT', Sequelize.col('*')), 'actionCount'],
-          'stockId',
-          'action',
-        ],
+        attributes: ['stockId', 'action'],
         where: {
           portfolioId: { [Op.in]: portfolioIds },
           stockId: stockId,
         },
-        group: ['stockId', 'action'],
+        raw: true, 
       });
-
-      console.log('Stock Action: ', stockActionCount);
-
+  
+      const countMap = new Map();
+  
+      stockActionCount.forEach((row) => {
+        const key = `${row.stockId}_${row.action}`;
+        countMap.set(key, (countMap.get(key) || 0) + 1);
+      });
+  
+      const result = Array.from(countMap.entries()).map(([key, count]) => {
+        const [stockId, action] = key.split('_');
+        return {
+          stockId,
+          action,
+          actionCount: count,
+        };
+      });
+  
+      console.log('Stock Action: ', result);
+  
       const participants = await ContestParticipants.findAndCountAll({
         where: { contestId },
       });
-
+  
       const totalParticipants = participants.count;
-
+  
       console.log('Total Participants: ', totalParticipants);
-
+  
       const percentage = {
         buy: 0,
         sell: 0,
         noTrade: 0,
       };
-
-      for (let index = 0; index < stockActionCount.length; index++) {
-        const stock = stockActionCount[index];
-        const actionCount = Number(await stock.get('actionCount'));
+  
+      result.forEach((stock) => {
+        const actionCount = stock.actionCount;
+        const actionPercentage = (actionCount / totalParticipants) * 100;
+  
         switch (stock.action) {
           case 'Buy':
-            percentage.buy = Number(
-              ((actionCount / totalParticipants) * 100).toFixed(2),
-            );
+            percentage.buy = Number(actionPercentage.toFixed(2));
             break;
           case 'Sell':
-            percentage.sell = Number(
-              ((actionCount / totalParticipants) * 100).toFixed(2),
-            );
+            percentage.sell = Number(actionPercentage.toFixed(2));
             break;
           default:
             break;
         }
-
-        percentage.noTrade = 100 - (percentage.buy + percentage.sell);
-      }
-
+      });
+  
+      percentage.noTrade = 100 - (percentage.buy + percentage.sell);
+  
       console.log('Percentage: ', percentage);
 
       return res.status(200).json(percentage);
@@ -1072,4 +1081,39 @@ export default {
       });
     }
   },
-};
+ StockChangePercentage: async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const stock = await Stocks.findOne({
+      where: { token: token },
+    });
+
+    if (!stock) {
+      return res.status(404).json({
+        error: 'Stock not found',
+      });
+    }
+
+    const openPrice = (stock.open_price) / 100;
+    const closePrice = (stock.close_price) / 100;
+
+    const priceDifference = closePrice - openPrice;
+    const percentageChange = ((closePrice - openPrice) / openPrice) * 100;
+
+    return res.status(200).json({
+      token: stock.token,
+      openPrice,
+      closePrice,
+      priceDifference,
+      percentageChange,
+    });
+  } catch (error) {
+    console.error('Error while calculating stock change percentage: ', error);
+    return res.status(500).json({
+      error: 'Something went wrong while calculating stock change percentage',
+      errorMessage: error.message,
+    });
+  }
+},
+}
