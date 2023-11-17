@@ -37,14 +37,13 @@ module.exports = function (io, socket, stock_token, isLive) {
               exchangeType: 1,
               tokens: stock_token,
             };
-
+            console.log("data Fetching")
             web_socket.fetchData(json_req);
 
-            web_socket.on('tick', receiveTick);
-
+           
             // console.log(socket.nsp.name);
             const stock_data = [];
-
+            console.log("data Received")
             function receiveTick(data) {
               // console.log("socket file");
               // console.log('receiveTick:::::', data);
@@ -61,6 +60,8 @@ module.exports = function (io, socket, stock_token, isLive) {
                 }
               }
             }
+            web_socket.on('tick', receiveTick);
+            console.log("GGs")
           });
         } catch (error) {
           console.log('Error while fetching data', error);

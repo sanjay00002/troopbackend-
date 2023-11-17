@@ -1081,39 +1081,44 @@ export default {
       });
     }
   },
- StockChangePercentage: async (req, res) => {
-  const { token } = req.params;
-
-  try {
-    const stock = await Stocks.findOne({
-      where: { token: token },
-    });
-
-    if (!stock) {
-      return res.status(404).json({
-        error: 'Stock not found',
+  StockChangePercentage: async (req, res) => {
+    const { subCategory } = req.params;
+  
+    try {
+      const stocks = await Stocks.findAll({
+        where: { subCategory: subCategory },
+      });
+  
+      if (stocks.length === 0) {
+        return res.status(404).json({
+          error: 'No stocks found for the given subCategory',
+        });
+      }
+  
+      const stockData = stocks.map((stock) => {
+        const openPrice = stock.open_price / 100;
+        const closePrice = stock.close_price / 100;
+        const priceDifference = (closePrice - openPrice).toFixed(2);
+        const percentageChange = (((closePrice - openPrice) / openPrice) * 100).toFixed(2);
+  
+        return {
+          stockName: stock.name,
+          token: stock.token,
+          openPrice,
+          closePrice,
+          priceDifference,
+          percentageChange,
+        };
+      });
+  
+      return res.status(200).json(stockData);
+    } catch (error) {
+      console.error('Error while calculating stock change percentage: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while calculating stock change percentage',
+        errorMessage: error.message,
       });
     }
-
-    const openPrice = (stock.open_price) / 100;
-    const closePrice = (stock.close_price) / 100;
-
-    const priceDifference = closePrice - openPrice;
-    const percentageChange = ((closePrice - openPrice) / openPrice) * 100;
-
-    return res.status(200).json({
-      token: stock.token,
-      openPrice,
-      closePrice,
-      priceDifference,
-      percentageChange,
-    });
-  } catch (error) {
-    console.error('Error while calculating stock change percentage: ', error);
-    return res.status(500).json({
-      error: 'Something went wrong while calculating stock change percentage',
-      errorMessage: error.message,
-    });
-  }
-},
+  },
+  
 }

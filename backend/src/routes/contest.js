@@ -34,7 +34,7 @@ router
   .post(validate, ContestController.fetchJoinedContestByStatus);
 
 router.route('/stockStats').post(ContestController.getStockStats);
-router.route('/stockStatsPercentage/:token').get(ContestController.StockChangePercentage);
+router.route('/stockStatsPercentage/:subCategory').get(ContestController.StockChangePercentage);
 
 router
   .route('/getWinnerbyContestId')

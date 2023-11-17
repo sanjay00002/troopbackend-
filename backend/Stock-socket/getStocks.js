@@ -29,6 +29,7 @@ module.exports = function (io, socket, stock_token, isLive) {
       if (stock_token[0]) {
         console.log('stock token')
         try {
+          console.log('gg1')
           web_socket.connect().then(() => {
             console.log('gg')
             const json_req = {
@@ -42,7 +43,7 @@ module.exports = function (io, socket, stock_token, isLive) {
             web_socket.fetchData(json_req);
             console.log('2')
 
-            web_socket.on('tick', receiveTick);
+            
 
             // console.log(socket.nsp.name);
             const stock_data = [];
@@ -64,6 +65,8 @@ module.exports = function (io, socket, stock_token, isLive) {
                 }
               }
             }
+            web_socket.on('tick', receiveTick);
+            console.log("data received")
           });
         } catch (error) {
           console.log('Error while fetching data', error);

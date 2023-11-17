@@ -20,7 +20,7 @@ const smart_api = new SmartAPI({
 const client_id = process.env.SMARTAPI_CLIENT_CODE;
 const client_password = process.env.SMARTAPI_CLIENT_PASSWORD;
 smart_api
-  .generateSession(client_id, client_password, "941892")
+  .generateSession(client_id, client_password, "555185")
   .then((data) => {
     // jwt = data.data.jwtToken;
     console.log("Tokens: ", data.data);

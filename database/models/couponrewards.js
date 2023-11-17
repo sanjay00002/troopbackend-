@@ -48,6 +48,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING(1024),
         allowNull: true,
       },
+      couponType: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       startDate: {
         type: DataTypes.DATEONLY,
         allowNull: true,
