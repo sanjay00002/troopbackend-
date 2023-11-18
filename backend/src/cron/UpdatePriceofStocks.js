@@ -16,9 +16,11 @@ const scheduleOptions = {
 module.exports = () => {
     cron.schedule(
         '*/1 0-15 * * *',
+        // '38 13 * * *',
       () => {
         async function updateAllStockPrices() {
           try {
+            console.log('Error while updating stock prices')
             await CronJobController.updateStockPrices();
           } catch (error) {
             console.error(
