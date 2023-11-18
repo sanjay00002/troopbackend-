@@ -1102,6 +1102,7 @@ export default {
         const percentageChange = (((closePrice - openPrice) / openPrice) * 100).toFixed(2);
   
         return {
+          stockId: stock.id,
           stockName: stock.name,
           token: stock.token,
           openPrice,

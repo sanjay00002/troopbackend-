@@ -9,5 +9,6 @@ router
   .post(validate, PortfolioController.fetchPortfoliosBySubCategory);
 
 router.route('/').put(validate, PortfolioController.updatePortfolioById);
+router.route('/PortfolioStockPercentage/:portfolioId').get(PortfolioController.PortfolioStockPercentage);
 
 module.exports = router;

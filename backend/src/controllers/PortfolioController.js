@@ -5,7 +5,21 @@ import { validatePortfolio } from '../lib/portfolio';
 
 // const { Portfolio } = require('../../../database/models/portfolio')
 // const { PortfolioStocks } = require('../../../database/models/portfoliostocks') 
-const { Portfolio, PortfolioStocks } = model;
+
+const {
+  ContestCategories,
+  Contest,
+  ContestPriceDistribution,
+  ContestWinners,
+  ContestParticipants,
+  ContestPortfolios,
+  Portfolio,
+  PortfolioStocks,
+  User,
+  StocksSubCategories,
+  Stocks,
+  SubCategories,
+} = model;
 
 export default {
   // fetchPortfoliosBySubCategory: async function (req, res) {
@@ -145,4 +159,57 @@ export default {
       });
     }
   },
+  PortfolioStockPercentage: async (req, res) => {
+    const { portfolioId } = req.params;
+
+    try {
+        const portfolioStocks = await PortfolioStocks.findAll({
+            where: { portfolioId: portfolioId },
+        });
+
+        if (portfolioStocks.length === 0) {
+            return res.status(404).json({
+                error: 'No stocks found for the given portfolioId',
+            });
+        }
+
+        const stockIds = portfolioStocks.map((portfolioStock) => portfolioStock.stockId);
+
+        const stocks = await Stocks.findAll({
+            where: { id: stockIds },
+        });
+
+        if (stocks.length === 0) {
+            return res.status(404).json({
+                error: 'No stocks found for the given portfolioId',
+            });
+        }
+
+        const stockData = stocks.map((stock) => {
+            const openPrice = stock.open_price / 100;
+            const closePrice = stock.close_price / 100;
+            const priceDifference = (closePrice - openPrice).toFixed(2);
+            const percentageChange = (((closePrice - openPrice) / openPrice) * 100).toFixed(2);
+
+            return {
+                stockId: stock.id,
+                stockName: stock.name,
+                token: stock.token,
+                openPrice,
+                closePrice,
+                priceDifference,
+                percentageChange,
+            };
+        });
+
+        return res.status(200).json(stockData);
+    } catch (error) {
+        console.error('Error while calculating stock change percentage: ', error);
+        return res.status(500).json({
+            error: 'Something went wrong while calculating stock change percentage',
+            errorMessage: error.message,
+        });
+    }
+},
+
 };
