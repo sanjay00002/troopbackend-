@@ -24,7 +24,7 @@ export default (sequelize, DataTypes) => {
       },
       globalDataFeedsIdentifier: { type: DataTypes.STRING, allowNull: true},
       zerodhaInstrumentToken: { type: DataTypes.STRING, allowNull: true},
-      zerodhaInstrumentTType: { type: DataTypes.STRING, allowNull: true},
+      zerodhaInstrumentType: { type: DataTypes.STRING, allowNull: true},
       exchange: { type: DataTypes.STRING, allowNull: true},
     },
     {
