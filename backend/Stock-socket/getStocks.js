@@ -28,7 +28,6 @@ module.exports = function (io, socket, stock_token, isLive) {
       console.log('socket created')
       if (stock_token[0]) {
         console.log('stock token')
-        console.log(stock_token)
         try {
           web_socket.connect().then(() => {
             console.log('gg')
