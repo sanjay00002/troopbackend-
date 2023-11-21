@@ -16,13 +16,27 @@ const {
 const getStock = require('../../Stock-socket/getStocks');
 
 export default {
+  getZerodhaStockInstruments: async (req, res) => {
+
+	const stockIdArray = req.body.stockIdArray
+	let zerodhaInstrumentArray = []
+	for(var i=0;i<stockIdArray.length;i++){
+		const value = await Stocks.findByPk(stockIdArray[i])
+		zerodhaInstrumentArray.push({
+			"stockId": stockIdArray[i],
+			"zerodhaInstrumentToken": value.zerodhaInstrumentToken
+		})
+	}
+    res.send(zerodhaInstrumentArray);
+  },
+
   enterStockData: async function (req, res) {
     const { name, token, exchangeType, subCategory } = req.body;
 
     try {
       const existSubCategory = await SubCategories.findOne({
         where: { name: subCategory },
-      }); 
+      });
 
       if (!existSubCategory) {
         return res.status(400).json({
@@ -77,7 +91,7 @@ export default {
           name: stock.name,
           token: stock.token,
           exchangeType: stock.exchangeType,
-          subCategory: stock.subCategory
+          subCategory: stock.subCategory,
         });
 
         if (newStock) {

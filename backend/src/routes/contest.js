@@ -23,6 +23,8 @@ router
 
 router.route('/join').post(validate, ContestController.joinContestById);
 
+router.route('/joinbots').post(ContestController.joinBots);
+
 router
   .route('/joinedContests')
   .post(validate, ContestController.fetchJoinedContest);
@@ -32,6 +34,7 @@ router
   .post(validate, ContestController.fetchJoinedContestByStatus);
 
 router.route('/stockStats').post(ContestController.getStockStats);
+router.route('/stockStatsPercentage/:subCategory').get(ContestController.StockChangePercentage);
 
 router
   .route('/getWinnerbyContestId')

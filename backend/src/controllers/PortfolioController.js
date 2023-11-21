@@ -1,11 +1,25 @@
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 import { Op } from 'sequelize';
 import model from '../../../database/models';
 import { validatePortfolio } from '../lib/portfolio';
 
 // const { Portfolio } = require('../../../database/models/portfolio')
-// const { PortfolioStocks } = require('../../../database/models/portfoliostocks') 
-const { Portfolio, PortfolioStocks } = model;
+// const { PortfolioStocks } = require('../../../database/models/portfoliostocks')
+
+const {
+  ContestCategories,
+  Contest,
+  ContestPriceDistribution,
+  ContestWinners,
+  ContestParticipants,
+  ContestPortfolios,
+  Portfolio,
+  PortfolioStocks,
+  User,
+  StocksSubCategories,
+  Stocks,
+  SubCategories,
+} = model;
 
 export default {
   // fetchPortfoliosBySubCategory: async function (req, res) {
@@ -58,30 +72,34 @@ export default {
   //         'Something went wrong while fetching portfolios for the sub category',
   //       errorMessage: error.message,
   //     });
-  //   }  
+  //   }
   // },
   fetchPortfoliosBySubCategory: async function (req, res) {
     const userId = req.id;
     const { portfolioId } = req.body; // Also add portfolioId to the request
-  try{
-    const stocks = await PortfolioStocks.findAll({
-      where: {
-                [Op.and]: [
-                  { portfolioId  },
-                ],
-              },
-    })
-    if (stocks){
-      return res.status(200).json(stocks);
-    } else {
-      return res.status(404).json({message: 'No portfolios found for the specified user',});
+    try {
+      const stocks = await PortfolioStocks.findAll({
+        where: {
+          [Op.and]: [{ portfolioId }],
+        },
+      });
+      if (stocks) {
+        return res.status(200).json(stocks);
+      } else {
+        return res
+          .status(404)
+          .json({ message: 'No portfolios found for the specified user' });
+      }
+    } catch (error) {
+      console.error('Error while fetching portfolios: ', error);
+      return res
+        .status(500)
+        .json({
+          error: 'Something went wrong while fetching portfolios',
+          errorMessage: error.message,
+        });
     }
-  }
-   catch (error) {
-    console.error('Error while fetching portfolios: ', error);
-    return res.status(500).json({error: 'Something went wrong while fetching portfolios',errorMessage: error.message,});
-  }
-},
+  },
   updatePortfolioById: async function (req, res) {
     const { id, name, stocks } = req.body;
 
@@ -141,6 +159,112 @@ export default {
       console.error('Error while updating portfolio by id: ', error);
       return res.status(500).json({
         error: 'Something went wrong while updating portfolio by id',
+        errorMessage: error.message,
+      });
+    }
+  },
+  PortfolioStockPercentage: async (req, res) => {
+    const { portfolioId } = req.params;
+
+    try {
+      const portfolioStocks = await PortfolioStocks.findAll({
+        where: { portfolioId: portfolioId },
+      });
+
+      if (portfolioStocks.length === 0) {
+        return res.status(404).json({
+          error: 'No stocks found for the given portfolioId',
+        });
+      }
+
+      const stockIds = portfolioStocks.map(
+        (portfolioStock) => portfolioStock.stockId,
+      );
+
+      const stocks = await Stocks.findAll({
+        where: { id: stockIds },
+      });
+
+      if (stocks.length === 0) {
+        return res.status(404).json({
+          error: 'No stocks found for the given portfolioId',
+        });
+      }
+
+      const stockData = stocks.map((stock) => {
+        const openPrice = stock.open_price / 100;
+        const closePrice = stock.close_price / 100;
+        const priceDifference = (closePrice - openPrice).toFixed(2);
+        const percentageChange = (
+          ((closePrice - openPrice) / openPrice) *
+          100
+        ).toFixed(2);
+
+        return {
+          stockId: stock.id,
+          stockName: stock.name,
+          token: stock.token,
+          openPrice,
+          closePrice,
+          priceDifference,
+          percentageChange,
+        };
+      });
+
+      return res.status(200).json(stockData);
+    } catch (error) {
+      console.error('Error while calculating stock change percentage: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while calculating stock change percentage',
+        errorMessage: error.message,
+      });
+    }
+  },
+
+  myTroops: async function (req, res) {
+    const { portfolioId, subCategory } = req.params;
+    console.log('Request Body:', req.params);
+
+    try {
+      const portfolioStocks = await PortfolioStocks.findAll({
+        where: { portfolioId: portfolioId },
+      });
+
+      if (portfolioStocks.length === 0) {
+        return res.status(404).json({
+          error: 'No stocks found for the given portfolioId',
+        });
+      }
+
+      const stockIds = portfolioStocks.map(
+        (portfolioStock) => portfolioStock.stockId,
+      );
+
+      const stocks = await Stocks.findAll({
+        where: { id: stockIds, subCategory: subCategory },
+      });
+
+      if (stocks.length === 0) {
+        return res.status(404).json({
+          error: 'No stocks found for the given portfolioId and subCategory',
+        });
+      }
+
+      const stockData = stocks.map((stock) => {
+        return {
+          stockId: stock.id,
+          stockName: stock.name,
+          token: stock.token,
+        };
+      });
+
+      return res.status(200).json({
+        stockData: stockData,
+      });
+    } catch (error) {
+      console.error('Error while fetching subCategories:', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching subCategories.',
         errorMessage: error.message,
       });
     }

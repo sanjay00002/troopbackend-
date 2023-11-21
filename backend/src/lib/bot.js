@@ -49,9 +49,6 @@ export async function* generateNBotDetails() {
 // generatorFn.next().then((value, done) => console.log(value.value));
 // generatorFn.next().then((value, done) => console.log(value));
 
-function randomIndex(array) {
-  return Math.floor(Math.random() * array.length);
-}
 
 export function createPortfolioForBot(stockIdList) {
   try {
@@ -82,24 +79,24 @@ export function createPortfolioForBot(stockIdList) {
       count++;
     }
 
-    // * Choose the captain and viceCaptain
-    const selectedCopy = [...selectedStocks];
-    const captainIndex = randomIndex(selectedCopy);
-    const captain = selectedCopy[captainIndex];
-    selectedCopy.splice(captainIndex, 1);
-    const viceCaptainIndex = randomIndex(selectedCopy);
-    const viceCaptain = selectedCopy[viceCaptainIndex];
-    selectedCopy.splice(viceCaptainIndex, 1);
+    // Choose the captain and viceCaptain
+    const captainIndex = randomIndex(selectedStocks);
+    let viceCaptainIndex = randomIndex(selectedStocks);
 
-    selectedStocks[
-      selectedStocks.findIndex((stock) => stock.stockId === captain.stockId)
-    ].captain = true;
-    selectedStocks[
-      selectedStocks.findIndex((stock) => stock.stockId === viceCaptain.stockId)
-    ].viceCaptain = true;
+    // Ensure that the viceCaptain is a different stock than the captain
+    while (viceCaptainIndex === captainIndex) {
+      viceCaptainIndex = randomIndex(selectedStocks);
+    }
+
+    selectedStocks[captainIndex].captain = true;
+    selectedStocks[viceCaptainIndex].viceCaptain = true;
 
     return selectedStocks;
   } catch (error) {
     console.error('Error while creating portfolio for Bot: ', error);
   }
+}
+
+function randomIndex(array) {
+  return Math.floor(Math.random() * array.length);
 }
