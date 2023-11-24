@@ -83,11 +83,12 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     const deletionQuery = 'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1'
     const deletionResult = await pool.query(deletionQuery, [currentUserLiveContestUserPoolId])
   }
+  console.log("Match started for 10 seconds")
   
-    // Start game for 10 minutes. Change to 30 minutes in production
+    // Start game for 10 seconds. Change to 30 minutes in production
   
     setTimeout(async () => {
-      console.log("Match started for 10 minutes")
+
 
       const selfStockCloseValue = await getStockLTPFromToken(selfSelectedStockToken)
       const opponentStockCloseValue = await getStockLTPFromToken(opponentSelectedStockToken)
@@ -102,7 +103,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
   
       socket.emit('match-done', uniqueId) //not sure on this code
       socket.broadcast.to(opponentSocketId).emit('match-done', uniqueId)
-    }, 600000);
+    }, 10000);
   }
 
 

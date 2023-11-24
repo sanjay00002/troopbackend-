@@ -8,13 +8,10 @@ const { Stocks} = model
 
 const getStockTokenFromId = async (stockId) => {
     const stockobj = await Stocks.findByPk(stockId)
-    return stockobj.dataValues.token
-}
-
-const getZerodhaInstrumentsFromId = async (stockId)=>{
-    const stockobj = await Stocks.findByPk(stockId)
     return stockobj.dataValues.zerodhaInstrumentToken
 }
+
+
 
 
 export default getStockTokenFromId;
