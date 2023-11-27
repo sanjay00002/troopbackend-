@@ -29,15 +29,14 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
-io.on("connection", (socket) => {
-  chat(io);
-  console.log("Connection Established!: ");
-  socket.on("send-stock-tokens", (stock_token) => {
-    console.log("send stock token event recieved")
-    console.log(stock_token)
-    getStocks(io, socket, stock_token, true);
-  });
-});
+// io.on("connection", (socket) => {
+//   chat(io);
+//   console.log("Connection Established!: ");
+//   socket.on("send-stock-tokens", (stock_token) => {
+//     console.log("Someone is hitting deprecated send stocks event")
+//     // getStocks(io, socket, stock_token, true);
+//   });
+// });
 
 const normalContest = io.of("/normalContest");
 
