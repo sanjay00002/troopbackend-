@@ -99,7 +99,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       const selfStockPercentageChange = ((selfStockCloseValue-selfStockOpenValue)/selfStockOpenValue)* 100
       const opponentStockPercentageChange = ((opponentStockCloseValue - opponentStockOpenValue)/ opponentStockOpenValue)* 100
       const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3, "matchStatus" = $4, "opponentStockPercentageChange"= $5, "selfStockPercentageChange" = $6 WHERE "id" = $7'
-      const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, "completed", selfStockPercentageChange, opponentStockPercentageChange, uniqueId])
+      const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, "completed", opponentStockPercentageChange, selfStockPercentageChange, uniqueId])
   
       socket.emit('match-done', uniqueId) //not sure on this code
       socket.broadcast.to(opponentSocketId).emit('match-done', uniqueId)
