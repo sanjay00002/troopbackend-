@@ -38,18 +38,18 @@ const pool = new Pool({
 //   });
 // });
 
-const normalContest = io.of("/normalContest");
+// const normalContest = io.of("/normalContest");
 
-normalContest.on("connection", (socket) => {
+// normalContest.on("connection", (socket) => {
 
-  // socket connection to show the live contest joined users
-  socket.on("user-count", (contests) => {
-    // here the contest id list is fetched from the frontend
-    contests.forEach((contest) => {
-      currentUserCount(io, socket, pool, contest);
-    });
-  });
-});
+//   // socket connection to show the live contest joined users
+//   socket.on("user-count", (contests) => {
+//     // here the contest id list is fetched from the frontend
+//     contests.forEach((contest) => {
+//       currentUserCount(io, socket, pool, contest);
+//     });
+//   });
+// });
 
 // Creating a namespace for handling all the socket connections for live econtests
 
