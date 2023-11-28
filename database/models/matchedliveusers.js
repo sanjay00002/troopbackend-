@@ -121,9 +121,13 @@ export default (sequelize, DataTypes) => {
       },
       opponentSocketId: {
         type: DataTypes.STRING, allowNull: true
-      }
-      
-
+      },
+      selfStockName: {
+        type: DataTypes.STRING, allowNull: true
+      },
+      opponentStockName: {
+        type: DataTypes.STRING, allowNull: true
+      },
     },
     {
       sequelize,
