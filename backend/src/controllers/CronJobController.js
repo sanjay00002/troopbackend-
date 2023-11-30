@@ -30,6 +30,7 @@ export default {
       // * Check if the sub category provided exists
       if (subCategory) {
         const newContest = await Contest.create({
+          name:contest?.name,
           date: contest?.date,
           entryAmount: contest?.entryAmount,
           categoryId: contest?.categoryId,
