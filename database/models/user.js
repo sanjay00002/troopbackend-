@@ -1,8 +1,8 @@
-import { Model } from 'sequelize';
+import { Model } from "sequelize";
 // import("nanoid/async").then((nanoid) => nanoid.nanoid);
-import { generateUserId } from '../../lib/generateId';
-
-import { faker } from '@faker-js/faker';
+import { generateUserId } from "../../lib/generateId";
+import randomIndianName from "random-indian-name";
+import { faker } from "@faker-js/faker";
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
       firstName: { type: DataTypes.STRING, allowNull: true },
       lastName: { type: DataTypes.STRING, allowNull: true },
       gender: {
-        type: DataTypes.ENUM(['Male', 'Female', 'Other']),
+        type: DataTypes.ENUM(["Male", "Female", "Other"]),
         allowNull: true,
       },
       dob: { type: DataTypes.DATEONLY, allowNull: true },
@@ -48,10 +48,10 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'User',
+      modelName: "User",
     }
   );
-  User.beforeValidate(async (user, option) => {
+  User.beforeValidate(async (user) => {
     if (user.isNewRecord) {
       const id = user.dataValues.isBot
         ? `Bot-${await generateUserId()}`
@@ -59,43 +59,66 @@ export default (sequelize, DataTypes) => {
       user.id = id;
 
       if (user?.dataValues?.isBot === false) {
-        if (
-          !!user?.dataValues.firstName === false &&
-          !!user?.dataValues.lastName === false
-        ) {
-          user.username = 'Trooper-' + user?.id.split('-')[1];
+        if (!user?.dataValues.firstName && !user?.dataValues.lastName) {
+          user.username = "Trooper-" + user?.id.split("-")[1];
         }
+
         if (
           user?.dataValues.firstName &&
           user?.dataValues.lastName &&
-          !!user?.dataValues.username === false
+          !user?.dataValues.username === false
         ) {
-          import('@faker-js/faker/locale/en_IN').then((fakerModule) => {
-            
-            const username = fakerModule.faker.internet.userName({
-              firstName: user.dataValues.firstName,
-              lastName: user.dataValues.lastName,
-            });
+          const randomFullName = randomIndianName();
+          user.firstName = randomFullName.split(" ")[0];
+          user.lastName = randomFullName.split(" ")[1];
+          const randomCondition = Math.floor(Math.random() * 3);
 
-            user.username = username;
-          });
+          switch (randomCondition) {
+            case 0:
+              user.username = `${user.firstName}-${user.lastName}`;
+              break;
+            case 1:
+              user.username = `${user.firstName}${Math.floor(
+                Math.random() * 100
+              )}`;
+              break;
+            case 2:
+              user.username = `${user.firstName}${user.lastName}${Math.floor(
+                Math.random() * 100
+              )}`;
+              break;
+            default:
+              break;
+          }
         }
       }
 
-      // * Added this here because of unique validation of username field
       if (user?.dataValues?.isBot === true) {
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-        const username = faker.internet.userName({
-          firstName: firstName,
-          lastName: lastName,
-        });
+        const randomFullName = randomIndianName();
+        user.firstName = randomFullName.split(" ")[0];
+        user.lastName = randomFullName.split(" ")[1];
+        const randomCondition = Math.floor(Math.random() * 3);
 
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.username = username;
+        switch (randomCondition) {
+          case 0:
+            user.username = `${user.firstName}-${user.lastName}`;
+            break;
+          case 1:
+            user.username = `${user.firstName}${Math.floor(
+              Math.random() * 100
+            )}`;
+            break;
+          case 2:
+            user.username = `${user.firstName}${user.lastName}${Math.floor(
+              Math.random() * 100
+            )}`;
+            break;
+          default:
+            break;
+        }
       }
     }
   });
+
   return User;
 };
