@@ -182,7 +182,7 @@ updateStockClosePrices: async function () {
       token_list.push(stock.zerodhaInstrumentToken);
     });
 
-    const response = await axios.post('https://redis-stocks-server.onrender.com/api/getStockLTP', {
+    const response = await axios.post(process.env.STOCKS_PRICE_API_LINK, {
       stockInstrumentArray: token_list,
     });
 
