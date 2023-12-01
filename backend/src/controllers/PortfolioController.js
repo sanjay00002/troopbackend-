@@ -269,4 +269,27 @@ export default {
       });
     }
   },
+  LeaderBoard: async function (req, res){
+    const { contestId } = req.params;
+    try {
+      const LeaderBoard = await Portfolio.findAll({
+        where: { contestId: contestId},
+      });
+
+      if (LeaderBoard.length === 0) {
+        return res.status(404).json({
+          error: 'No data found for the given contestId',
+        });
+      }
+    return res.status(200).json({
+    LeaderBoard: LeaderBoard,
+    });
+    } catch (error) {
+      console.error('Error while fetching subCategories:', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching LeaderBoard.',
+        errorMessage: error.message,
+      });
+    }
+  },
 };

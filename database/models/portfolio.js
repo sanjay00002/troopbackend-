@@ -9,6 +9,45 @@ export default (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
+      models.Contest.hasMany(Portfolio, {
+        foreignKey: 'contestId',
+        sourceKey: 'id',
+      });
+
+      Portfolio.belongsTo(models.Contest, {
+        foreignKey: 'contestId',
+        targetKey: 'id',
+        keyType: DataTypes.STRING,
+        constraints: true,
+        uniqueKey: 'user_portfolio_fk_constraint',
+      });
+
+      // models.PortfolioStocks.hasMany(Portfolio, {
+      //   foreignKey: 'portfolioId',
+      //   sourceKey: 'id',
+      // });
+
+      // Portfolio.belongsTo(models.Contest, {
+      //   foreignKey: 'portfolioId',
+      //   targetKey: 'id',
+      //   keyType: DataTypes.STRING,
+      //   constraints: true,
+      //   uniqueKey: 'user_portfolio_fk_constraint',
+      // });
+
+      models.Contest.hasMany(Portfolio, {
+        foreignKey: 'name',
+        sourceKey: 'id',
+      });
+
+      Portfolio.belongsTo(models.Contest, {
+        foreignKey: 'name',
+        targetKey: 'id',
+        keyType: DataTypes.STRING,
+        constraints: true,
+        uniqueKey: 'user_portfolio_fk_constraint',
+      });
+
       models.User.hasMany(Portfolio, {
         foreignKey: 'userId',
         sourceKey: 'id',
@@ -39,6 +78,8 @@ export default (sequelize, DataTypes) => {
   Portfolio.init(
     {
       name: { type: DataTypes.STRING, allowNull: true },
+      contestId: { type: DataTypes.STRING, allowNull: true },
+      // portfolioId: { type: DataTypes.STRING, allowNull: true },
       userId: { type: DataTypes.STRING, allowNull: false },
       score: { type: DataTypes.DECIMAL(25, 10), defaultValue: 0 },
       subCategoryId: { type: DataTypes.INTEGER, allowNull: false },

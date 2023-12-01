@@ -415,9 +415,13 @@ export default {
             } else {
               // Create a new portfolio for the user with the selected stocks
               const portfolio = await Portfolio.create({
-                name: contestDetails?.portfolio?.name ?? null,
+                name:existingContest.name,
+                // name: contestDetails?.portfolio?.name ?? null,
                 userId: userId,
                 subCategoryId: await existingContest.get('subCategoryId'),
+                // contestId: await exisitngContestId.get('contestId'),
+                contestId: exisitngContestId,
+                // portfolioId: await portfolio.get('id'),
               });
     
               for (let i = 0; i < contestDetails?.portfolio?.stocks.length; i++) {

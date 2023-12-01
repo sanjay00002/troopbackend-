@@ -11,5 +11,6 @@ router
 router.route('/').put(validate, PortfolioController.updatePortfolioById);
 router.route('/PortfolioStockPercentage/:portfolioId').get(PortfolioController.PortfolioStockPercentage);
 router.route('/myTroops/:portfolioId/:subCategory').get(PortfolioController.myTroops);
+router.route('/LeaderBoard/:contestId').get(PortfolioController.LeaderBoard);
 
 module.exports = router;

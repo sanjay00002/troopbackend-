@@ -15,7 +15,7 @@ const scheduleOptions = {
 module.exports = () => {
   cron.schedule(
     // '30 15 * * *',
-    '*/30 0-14,15 * * *',
+    '*/10 0-14,15 * * *',
     () => {
       // * Close Contest
       // * Declare Winners
