@@ -31,9 +31,11 @@ import spinRewards from './src/routes/spinRewards.js'
 import matchedLiveUsersRouter from './src/routes/matchedLiveUsers'
 
 import createContestsCronJobs from './src/cron/createContests';
-import declareWinnersCronJobs from './src/cron/declareWinners';
+import updateAllPortfolioScoresCronJobs from './src/cron/updatePortfolioScores.js';
 import botsJoinContestsCronJobs from './src/cron/bots/joinContests';
 import updateCoupnsCronJobs from './src/cron/updateCoupons';
+import updateAllStockPricesCronJobs from './src/cron/UpdatePriceofStocks'
+import declareWinnersCronJobs from './src/cron/declareWinners';
 
 import { contestClosingCronJobs } from './src/cron/contestClosingCronJobs';
 
@@ -399,7 +401,8 @@ app.listen(port, () => {
   botsJoinContestsCronJobs();
   updateCoupnsCronJobs();
   contestClosingCronJobs();
-  
+  updateAllStockPricesCronJobs();
+  updateAllPortfolioScoresCronJobs();
 });
 
 // httpServer.on('error', (err) => {

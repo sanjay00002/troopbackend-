@@ -6,6 +6,8 @@ import momentTimezone from 'moment-timezone';
 import getStocks from '../../Stock-socket/getStocks';
 import { getAllOffers } from '../api/rewards/rewards';
 import { getAllCoupons } from '../api/rewards/coupons';
+import client from '../api/client';
+import axios from 'axios';
 
 const {
   Contest,
@@ -67,59 +69,155 @@ export default {
     }
   },
 
+  // updateStockPrices: async function () {
+  //   try {
+  //     let start = performance.now();
+
+  //     const token_list = [];
+  //     const stocks = await Stocks.findAll();
+
+  //     stocks.forEach((stock) => {
+  //       token_list.push(stock.token);
+  //     });
+
+  //     const stock_data = await getStocks('io', 'socket', token_list, false);
+  //     // console.log('hello')
+
+  //     const stockPricesToBeUpdated = [];
+
+  //     for (const stock of stock_data) {
+  //       stockPricesToBeUpdated.push({
+  //         token: stock.token.replace(/\D/g, ''),
+  //         open_price: stock.open_price_day,
+  //         close_price: stock.close_price,
+  //       });
+  //     }
+
+  //     const stockTokens = stockPricesToBeUpdated.map(
+  //       (stock) => stock.token,
+  //     );
+
+  //     // * Bulk Updating the stock prices   
+  // const updatePromises = stockPricesToBeUpdated.map((stock) =>
+  //     Stocks.update(
+  //       {
+  //         open_price: stock.open_price,
+  //         close_price: stock.close_price,
+  //       },
+  //       {
+  //         where: { token: stock.token },
+  //       }
+  //     )
+  //   );
+
+  //   Promise.all(updatePromises).then((results) => {
+  //     const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
+  //     console.log(`${updatedRows} Stock Prices updated`);
+      
+  //     const timeEnd = performance.now() - start;
+  //     console.log('Time taken: ', timeEnd);
+  //   });
+  //   } catch (error) {
+  //   console.error('Error while updating stock data:', error);
+  //   } 
+  //   // console.log("update2")
+  // },
+
+  
   updateStockPrices: async function () {
     try {
       let start = performance.now();
-
+  
       const token_list = [];
       const stocks = await Stocks.findAll();
-
+  
       stocks.forEach((stock) => {
-        token_list.push(stock.token);
+        token_list.push(stock.zerodhaInstrumentToken);
+      });
+  
+      const response = await axios.post('https://redis-stocks-server.onrender.com/api/getStockLTP', {
+        stockInstrumentArray: token_list,
       });
 
-      const stock_data = await getStocks('io', 'socket', token_list, false);
-      // console.log('hello')
+    console.log(response.data);
 
-      const stockPricesToBeUpdated = [];
+    const stockPricesToBeUpdated = response.data;
 
-      for (const stock of stock_data) {
-        stockPricesToBeUpdated.push({
-          token: stock.token.replace(/\D/g, ''),
-          open_price: stock.open_price_day,
-          close_price: stock.close_price,
-        });
-      }
+    const updatePromises = stockPricesToBeUpdated.map((stockData) => {
+      const token = Object.keys(stockData)[0]; 
+      const open_price = parseFloat(stockData[token]);
 
-      const stockTokens = stockPricesToBeUpdated.map(
-        (stock) => stock.token,
-      );
-
-      // * Bulk Updating the stock prices   
-  const updatePromises = stockPricesToBeUpdated.map((stock) =>
-      Stocks.update(
+      return Stocks.update(
         {
-          open_price: stock.open_price,
-          close_price: stock.close_price,
+          open_price: open_price,
         },
         {
-          where: { token: stock.token },
+          where: { zerodhaInstrumentToken: token },
         }
-      )
-    );
+      ).catch((updateError) => {
+        console.error(`Error updating stock with token ${token}:`, updateError);
+        return 0; // Treat the failed update as 0 affected rows
+      });
+    });
 
     Promise.all(updatePromises).then((results) => {
       const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
       console.log(`${updatedRows} Stock Prices updated`);
-      
+
       const timeEnd = performance.now() - start;
       console.log('Time taken: ', timeEnd);
     });
-    } catch (error) {
-    console.error('Error while updating stock data:', error);
-    } 
-    // console.log("update2")
-  },
+  } catch (error) {
+    console.error('Error while updating stock data:', error.response.status, error.response.data);
+  }
+},
+updateStockClosePrices: async function () {
+  try {
+    let start = performance.now();
+
+    const token_list = [];
+    const stocks = await Stocks.findAll();
+
+    stocks.forEach((stock) => {
+      token_list.push(stock.zerodhaInstrumentToken);
+    });
+
+    const response = await axios.post('https://redis-stocks-server.onrender.com/api/getStockLTP', {
+      stockInstrumentArray: token_list,
+    });
+
+  console.log(response.data);
+
+  const stockPricesToBeUpdated = response.data;
+
+  const updatePromises = stockPricesToBeUpdated.map((stockData) => {
+    const token = Object.keys(stockData)[0]; 
+    const close_price = parseFloat(stockData[token]);
+
+    return Stocks.update(
+      {
+        close_price: close_price,
+      },
+      {
+        where: { zerodhaInstrumentToken: token },
+      }
+    ).catch((updateError) => {
+      console.error(`Error updating stock with token ${token}:`, updateError);
+      return 0; // Treat the failed update as 0 affected rows
+    });
+  });
+
+  Promise.all(updatePromises).then((results) => {
+    const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
+    console.log(`${updatedRows} Stock Prices updated`);
+
+    const timeEnd = performance.now() - start;
+    console.log('Time taken: ', timeEnd);
+  });
+} catch (error) {
+  console.error('Error while updating stock data:', error.response.status, error.response.data);
+}
+},
 
   calculatePortfolioScore: async function () {
     try {

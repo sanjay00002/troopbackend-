@@ -10,5 +10,6 @@ router.route('/enter').post(validate, StockController.enterStockData);
 router.route('/enterBulk').post(validate, StockController.enterBulkStockData);
 
 router.route('/getZerodhaInstruments').get(StockController.getZerodhaStockInstruments)
+router.route('/updateStockPrices').post(CronJobController.updateStockPrices)
 
 module.exports = router;
