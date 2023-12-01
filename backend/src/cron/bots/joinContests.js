@@ -127,7 +127,7 @@ const scheduleOptions = {
 
 module.exports = () => {
   cron.schedule(
-    '47 15 * * *',
+    '30 7 * * *',
     async () => {
       async function joinBotsToContests() {
         try {
