@@ -45,6 +45,7 @@ export default (sequelize, DataTypes) => {
       accessToken: { type: DataTypes.STRING, allowNull: true },
       refreshToken: { type: DataTypes.STRING, allowNull: true },
       loggedInAt: { type: DataTypes.DATE, allowNull: true },
+      appCoins: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0}
     },
     {
       sequelize,
@@ -52,6 +53,9 @@ export default (sequelize, DataTypes) => {
     }
   );
   User.beforeValidate(async (user, option) => {
+    if (user.changed('appCoins') && user.appCoins < 0) {
+      throw new Error('appCoins cannot go below 0');
+  }
     if (user.isNewRecord) {
       const id = user.dataValues.isBot
         ? `Bot-${await generateUserId()}`

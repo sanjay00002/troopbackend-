@@ -77,6 +77,7 @@ export default {
           updatedAt: await user.get('updatedAt'),
           role: await user.get('UserRoles')[0]?.Role?.get('role'),
           wallet: await user.get('wallet')?.get(),
+          appCoins: await user.get('appCoins'),
         };
         return res.status(200).json(result);
       } else {
@@ -194,4 +195,46 @@ export default {
       });
     }
   },
+
+  deductCoins: async function (req, res) {
+    try {
+		const userId = req.id;
+		const coinsToDeduct = req.body.coinsToDeduct
+		const user = await User.findByPk(userId)
+		if(user){
+			await user.decrement('appCoins', {by: coinsToDeduct})
+			res.status(201).json({ message: 'AppCoins decremented successfully!' })
+		}
+		else{
+			console.log("User not found")
+			res.status(404).json({ error: 'User not found.' });
+		}
+
+    } catch (error) {
+		console.error('Error decrementing appCoins:', error);
+    	res.status(500).json({ error: 'Internal Server Error' });
+	}
+  },
+
+  addCoins: async function (req, res) {
+    try {
+		const userId = req.id;
+		const coinsToAdd = req.body.coinsToAdd
+		const user = await User.findByPk(userId)
+		if(user){
+			await user.increment('appCoins', {by: coinsToAdd})
+			res.status(201).json({ message: 'AppCoins incremented successfully!' })
+		}
+		else{
+			console.log("User not found")
+			res.status(404).json({ error: 'User not found.' });
+		}
+
+    } catch (error) {
+		console.error('Error incrementing appCoins:', error);
+    	res.status(500).json({ error: 'Internal Server Error' });
+	}
+  },
+
+  
 };
