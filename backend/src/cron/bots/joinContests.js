@@ -136,55 +136,64 @@ module.exports = () => {
             attributes: ['id'],
           });
 
-          console.log('Wow:', bots);
+          // console.log('Wow:', bots);
 
           if (bots.length > 0) {
             for (const botInstance of bots) {
               const bot = botInstance.dataValues;
               const userId = bot.id;
 
-              console.log('Wow2:', bot.id);
+              // console.log('Wow2:', bot.id);
 
               const categories = await client
                 .get('/contest/categories')
                 .then((response) => response.data);
 
-              for (const category of categories.data) {
-                if (category.name !== 'Private') {
-                  const contests = await client
-                    .post('/contest/contestsByCategory', {
-                      category: category.name,
-                    })
-                    .then((response) => response.data);
-
-                  for (const contest of contests) {
-                    const nonParticipantCount =
-                      contest.slots - Number(contest.participants);
-
-                    if (nonParticipantCount > 0) {
-                      const stocksList = await StocksSubCategories.findAll({
-                        where: {
-                          subCategoryId: contest.subCategoryId,
-                        },
-                        attributes: { include: ['stockId'] },
-                      });
-
-                      const stockIdList = stocksList.map((stock) =>
-                        stock.get('stockId'),
-                      );
-                      const stocks = createPortfolioForBot(stockIdList);
-
-                      const joinContestObj = {
-                        userId: userId,
-                        id: contest.id,
-                        portfolio: { stocks },
-                      };
-
-                      await client.post('/contest/joinBots', joinContestObj);
+                for (const category of categories.data) {
+                  if (category.name !== 'Private') {
+                    const contests = await client
+                      .post('/contest/contestsByCategory', {
+                        category: category.name,
+                      })
+                      .then((response) => response.data);
+                
+                    for (const contest of contests) {
+                      const nonParticipantCount = contest.slots - Number(contest.participants);
+                
+                      if (nonParticipantCount > 0 && contest.canJoin) {
+                        const stocksList = await StocksSubCategories.findAll({
+                          where: {
+                            subCategoryId: contest.subCategoryId,
+                          },
+                          attributes: { include: ['stockId'] },
+                        });
+                
+                        // console.log('Stocks List:', stocksList);
+                
+                        const stockIdList = stocksList.map((stock) =>
+                          stock.get('stockId'),
+                        );
+                
+                        if (stockIdList && stockIdList.length > 0) {
+                          console.log('StockId List:', stockIdList);
+                
+                          const stocks = createPortfolioForBot(stockIdList);
+                          // console.log('Generated Stocks:', stocks);
+                
+                          const joinContestObj = {
+                            userId: userId,
+                            id: contest.id,
+                            portfolio: { stocks },
+                          };
+                
+                          await client.post('/contest/joinBots', joinContestObj);
+                        } else {
+                          console.log('StockId List is empty or undefined. Skipping.');
+                        }
+                      }
                     }
                   }
                 }
-              }
             }
           } else {
             console.log('No bots found.');
