@@ -393,7 +393,14 @@ export default {
               message: 'Player has reached the limit of maximum participation',
             });
           }
+
+          const user = await User.findByPk(userId, {
+            attributes: ['username'],
+          });
     
+          const username = user ? user.get('username') : null;
+          console.log('Username:', username);
+
           // Create a new participant in the contest
           const newParticipant = await ContestParticipants.create({
             userId,
@@ -415,6 +422,7 @@ export default {
             } else {
               // Create a new portfolio for the user with the selected stocks
               const portfolio = await Portfolio.create({
+                username: username,
                 name:existingContest.name,
                 // name: contestDetails?.portfolio?.name ?? null,
                 userId: userId,

@@ -22,6 +22,19 @@ export default (sequelize, DataTypes) => {
         uniqueKey: 'user_portfolio_fk_constraint',
       });
 
+      models.User.hasMany(Portfolio, {
+        foreignKey: 'username',
+        sourceKey: 'id',
+      });
+
+      Portfolio.belongsTo(models.User, {
+        foreignKey: 'username',
+        targetKey: 'id',
+        keyType: DataTypes.STRING,
+        constraints: true,
+        uniqueKey: 'user_portfolio_fk_constraint',
+      });
+
       // models.PortfolioStocks.hasMany(Portfolio, {
       //   foreignKey: 'portfolioId',
       //   sourceKey: 'id',
