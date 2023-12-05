@@ -772,22 +772,18 @@ export default {
           contestId: { [Op.in]: [...setOfContests] },}
       })
 
-      // console.log(portfolioOftheUser)
+      console.log("hello" , portfolioOftheUser)
       // console.log(contestData)
 
-      const portfolioMap = new Map();
-      portfolioOftheUser.forEach((portfolio) => {
-        portfolioMap.set(portfolio.contestId, portfolio);
-      });
-      
       const joinedContest = contestData.map((contest) => {
-        const portfolio = portfolioMap.get(contest.id);
+        const matchingPortfolios = portfolioOftheUser.filter((portfolio) => portfolio.contestId === contest.id);
         return {
           ...contest.toJSON(),
-          portfolio: portfolio || null, 
+          portfolios: matchingPortfolios.length > 0 ? matchingPortfolios : null,
         };
       });
 
+      console.log("hello2" ,joinedContest)
       const upcoming = [],
         live = [],
         completed = [];
