@@ -1115,8 +1115,8 @@ export default {
       const stockData = stocks.map((stock) => {
         const openPrice = stock.open_price;
         const closePrice = stock.close_price;
-        const priceDifference = (closePrice - openPrice).toFixed(2);
-        const percentageChange = (((closePrice - openPrice) / openPrice) * 100).toFixed(2);
+        const priceDifference = (openPrice - closePrice).toFixed(2);
+        const percentageChange = ((priceDifference / openPrice) * 100).toFixed(2);
   
         return {
           stockId: stock.id,
