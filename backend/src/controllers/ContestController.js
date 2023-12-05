@@ -751,7 +751,7 @@ export default {
         participatedContests.map((contest) => contest.contestId),
       );
 
-      const joinedContest = await Contest.findAll({
+      const contestData = await Contest.findAll({
         where: {
           id: { [Op.in]: [...setOfContests] },
         },
@@ -764,11 +764,28 @@ export default {
             model: ContestCategories,
             required: true,
           },
-          {
-            model: ContestPortfolios,
-            required: true,
-          },
         ],
+      });
+      
+      const portfolioOftheUser = await Portfolio.findAll({
+        where:{ userId ,
+          contestId: { [Op.in]: [...setOfContests] },}
+      })
+
+      // console.log(portfolioOftheUser)
+      // console.log(contestData)
+
+      const portfolioMap = new Map();
+      portfolioOftheUser.forEach((portfolio) => {
+        portfolioMap.set(portfolio.contestId, portfolio);
+      });
+      
+      const joinedContest = contestData.map((contest) => {
+        const portfolio = portfolioMap.get(contest.id);
+        return {
+          ...contest.toJSON(),
+          portfolio: portfolio || null, 
+        };
       });
 
       const upcoming = [],
