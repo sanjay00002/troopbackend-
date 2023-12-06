@@ -751,7 +751,7 @@ export default {
         participatedContests.map((contest) => contest.contestId),
       );
 
-      const joinedContest = await Contest.findAll({
+      const contestData = await Contest.findAll({
         where: {
           id: { [Op.in]: [...setOfContests] },
         },
@@ -764,13 +764,26 @@ export default {
             model: ContestCategories,
             required: true,
           },
-          {
-            model: ContestPortfolios,
-            required: true,
-          },
         ],
       });
+      
+      const portfolioOftheUser = await Portfolio.findAll({
+        where:{ userId ,
+          contestId: { [Op.in]: [...setOfContests] },}
+      })
 
+      console.log("hello" , portfolioOftheUser)
+      // console.log(contestData)
+
+      const joinedContest = contestData.map((contest) => {
+        const matchingPortfolios = portfolioOftheUser.filter((portfolio) => portfolio.contestId === contest.id);
+        return {
+          ...contest.toJSON(),
+          portfolios: matchingPortfolios.length > 0 ? matchingPortfolios : null,
+        };
+      });
+
+      console.log("hello2" ,joinedContest)
       const upcoming = [],
         live = [],
         completed = [];
