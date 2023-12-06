@@ -74,7 +74,7 @@ router.route('/responseHandler').post(async (req, res)=>{
 			id: extractedData.merchant_param1
 		}
 	})
-    res.send("Success")
+    res.send("You can now close this page")
 })
 
 
