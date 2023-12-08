@@ -16,6 +16,9 @@ router.route('/requestHandler').post(validate, (req, res) => {
 	const amount = req.body.amount;
     const billing_tel = req.body.billing_tel
     const troop_user_id = req.body.troop_user_id
+	if(!troop_user_id){
+		res.status(400).send({"message": "No user id sent in the request"})
+	}
 	console.log(amount);
 
 	const plainText =
