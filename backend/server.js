@@ -54,7 +54,7 @@ const { User, UserRole, Role, Wallet, CommonWallet, CouponRewards, Rewards } =
 import liveContestRouter from './src/routes/liveContest';
 import bankDetailRouter from './src/routes/bankDetail';
 import faqRouter from './src/routes/faq';
-
+import ccavenueRouter from './src/routes/ccavenue'
 
 // const findMatch = require('./src/socketfiles/findMatch');
 // const joinLiveContest = require('./src/socketfiles/joinLiveContest');
@@ -65,7 +65,7 @@ import faqRouter from './src/routes/faq';
 // const { createAdapter } = require('@socket.io/postgres-adapter');
 // const { Pool } = require('pg');
 // require('dotenv').config({ path: './.env.local' });
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({ path: './.env' ,override:true});
 const app = express();
 // const httpServer = createServer(app);
 
@@ -132,6 +132,7 @@ const port = process.env.PORT || 2100;
 
 app.use(cors());
 app.use(json());
+app.use(express.urlencoded({ extended: true }));
 
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
@@ -178,6 +179,7 @@ app.use('/api/v1/coupon', couponRouter)
 app.use('/api/v1/kyc', kycRouter)
 app.use('/api/v1/spin', spinRewards)
 app.use('/api/v1/liveContestMatches', matchedLiveUsersRouter)
+app.use('/api/v1/ccavenue', ccavenueRouter)
 
 // io.adapter(createAdapter(pool));
 // server started using socket rather than express

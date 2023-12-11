@@ -34,6 +34,7 @@
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "faker": "^6.6.6",
+    "generate-unique-id": "^2.0.3",
     "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
