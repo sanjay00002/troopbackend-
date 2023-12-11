@@ -24,7 +24,7 @@ function contestClosingCronJobs () {
         async function closeAllContests(){
             console.log("close all normal contests")
             await CronJobController.closeAllContests()
-            await CronJobController.updateStockPrices()
+            // await CronJobController.updateStockPrices()
         }
         closeAllContests()
     },

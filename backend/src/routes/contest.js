@@ -36,6 +36,7 @@ router
 router.route('/stockStats').post(ContestController.getStockStats);
 router.route('/stockStatsPercentage/:subCategory').get(ContestController.StockChangePercentage);
 
+
 router
   .route('/getWinnerbyContestId')
   .post(ContestController.getWinnerbyContestId);
@@ -52,4 +53,6 @@ router
   .route('/private/update')
   .patch(validate, ContestController.updatePrivateContestDetails);
 
+  router.route('/priceDistribution/:contestId').get(ContestController.priceDistribution);
+  router.route('/WinnerBoard/:contestId').get(ContestController.WinnerBoard);
 module.exports = router;
