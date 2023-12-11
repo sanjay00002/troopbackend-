@@ -30,7 +30,7 @@ module.exports = () => {
       async function createContest() {
         console.log("creating contests")
         // * Create Contests
-        // * Special - Penny, Gaint Stocks, Practice | Sectoral - Nifty 50, IT, Auto, Bank, Practice | Mega - Mega
+        // * Special - Penny, giant Stocks, Practice | Sectoral - Nifty 50, IT, Auto, Bank, Practice | Mega - Mega
         // * Fetch the admin user
 
         const adminUser = await UserRole.findOne({
@@ -45,18 +45,18 @@ module.exports = () => {
         const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
         const tomorrow = today.clone().add(1, 'day');
 
-        // * Create 1 Mega Contest
-        await CronJobController.createContest(adminId, {
-          name:"Mega",
-          categoryId: 1,
-          subCategoryId: 1,
-          date: tomorrow.format('YYYY-MM-DD'),
-          entryAmount: 380,
-          pricePool: priceDistribution.mega[0].priceAmount,
-          slots: 200,
-          priceDistribution: priceDistribution.mega,
-        });
-
+           // * Create 1 Mega Contest
+           await CronJobController.createContest(adminId, {
+            name:"Mega",
+            categoryId: 1,
+            subCategoryId: 1,
+            date: tomorrow.format('YYYY-MM-DD'),
+            entryAmount: 99,
+            pricePool: parseInt(priceDistribution.mega[7].originalPricePool),
+            slots: 500,
+            priceDistribution: priceDistribution.mega,
+          });
+  
         // * Create 3 Contest in Nifty IT
         await CronJobController.createContest(adminId, {
           name:"Nifty IT",
@@ -64,7 +64,7 @@ module.exports = () => {
           subCategoryId: 2,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
-          pricePool: priceDistribution.niftyIT[0][0].priceAmount,
+          pricePool:  parseInt(priceDistribution.niftyIT[0][0].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.niftyIT[0],
         });
@@ -74,7 +74,7 @@ module.exports = () => {
         //   subCategoryId: 2,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 99,
-        //   pricePool: priceDistribution.niftyIT[1][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.niftyIT[1][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.niftyIT[1],
         // });
@@ -84,7 +84,7 @@ module.exports = () => {
         //   subCategoryId: 2,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 199,
-        //   pricePool: priceDistribution.niftyIT[2][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.niftyIT[2][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.niftyIT[2],
         // });
@@ -117,7 +117,7 @@ module.exports = () => {
           subCategoryId: 3,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
-          pricePool: priceDistribution.niftyAuto[0][0].priceAmount,
+          pricePool:  parseInt(priceDistribution.niftyAuto[0][0].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.niftyAuto[0],
         });
@@ -127,7 +127,7 @@ module.exports = () => {
         //   subCategoryId: 3,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 99,
-        //   pricePool: priceDistribution.niftyAuto[1][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.niftyAuto[1][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.niftyAuto[1],
         // });
@@ -137,7 +137,7 @@ module.exports = () => {
         //   subCategoryId: 3,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 199,
-        //   pricePool: priceDistribution.niftyAuto[2][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.niftyAuto[2][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.niftyAuto[2],
         // });
@@ -170,7 +170,7 @@ module.exports = () => {
           subCategoryId: 4,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
-          pricePool: priceDistribution.niftyBank[0][0].priceAmount,
+          pricePool:  parseInt(priceDistribution.niftyBank[0][0].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.niftyBank[0],
         });
@@ -180,7 +180,7 @@ module.exports = () => {
         //   subCategoryId: 4,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 99,
-        //   pricePool: priceDistribution.niftyBank[1][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.niftyBank[1][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.niftyBank[1],
         // });
@@ -190,7 +190,7 @@ module.exports = () => {
         //   subCategoryId: 4,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 199,
-        //   pricePool: priceDistribution.niftyBank[2][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.niftyBank[2][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.niftyBank[2],
         // });
@@ -216,16 +216,16 @@ module.exports = () => {
         //   priceDistribution: [],
         // });
 
-        // * Create 3 Gaint Stock Contests
+        // * Create 3 giant Stock Contests
         await CronJobController.createContest(adminId, {
           name:"Giant Stocks",
           categoryId: 2,
           subCategoryId: 6,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 99,
-          pricePool: priceDistribution.gaintStocks[0][0].priceAmount,
+          pricePool:  parseInt(priceDistribution.giantStocks[0][0].originalPricePool),
           slots: 500,
-          priceDistribution: priceDistribution.gaintStocks[0],
+          priceDistribution: priceDistribution.giantStocks[0],
         });
 
         // await CronJobController.createContest(adminId, {
@@ -233,9 +233,9 @@ module.exports = () => {
         //   subCategoryId: 6,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 299,
-        //   pricePool: priceDistribution.gaintStocks[1][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.giantStocks[1][0].originalPricePool),
         //   slots: 500,
-        //   priceDistribution: priceDistribution.gaintStocks[1],
+        //   priceDistribution: priceDistribution.giantStocks[1],
         // });
 
         // await CronJobController.createContest(adminId, {
@@ -243,12 +243,12 @@ module.exports = () => {
         //   subCategoryId: 6,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 499,
-        //   pricePool: priceDistribution.gaintStocks[2][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.giantStocks[2][0].originalPricePool),
         //   slots: 500,
-        //   priceDistribution: priceDistribution.gaintStocks[2],
+        //   priceDistribution: priceDistribution.giantStocks[2],
         // });
 
-        // // * Create 2 Practice Contest for Gaint Stocks
+        // // * Create 2 Practice Contest for giant Stocks
         // await CronJobController.createContest(adminId, {
         //   categoryId: 5,
         //   subCategoryId: 6,
@@ -276,7 +276,7 @@ module.exports = () => {
           subCategoryId: 5,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 2,
-          pricePool: priceDistribution.pennyStocks[0][0].priceAmount,
+          pricePool:  parseInt(priceDistribution.pennyStocks[0][0].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.pennyStocks[0],
         });
@@ -286,7 +286,7 @@ module.exports = () => {
         //   subCategoryId: 5,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 5,
-        //   pricePool: priceDistribution.pennyStocks[1][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.pennyStocks[1][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.pennyStocks[1],
         // });
@@ -296,7 +296,7 @@ module.exports = () => {
         //   subCategoryId: 5,
         //   date: tomorrow.format('YYYY-MM-DD'),
         //   entryAmount: 10,
-        //   pricePool: priceDistribution.pennyStocks[2][0].priceAmount,
+        //   pricePool:  parseInt(priceDistribution.pennyStocks[2][0].originalPricePool),
         //   slots: 500,
         //   priceDistribution: priceDistribution.pennyStocks[2],
         // });
@@ -323,7 +323,6 @@ module.exports = () => {
         // });
         // await CronJobController.updateStockPrices()
       }
-
       createContest();
     },
     {

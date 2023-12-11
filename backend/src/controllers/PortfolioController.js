@@ -282,7 +282,7 @@ export default {
     LeaderBoard: LeaderBoard,
     });
     } catch (error) {
-      console.error('Error while fetching subCategories:', error);
+      console.error('Error while fetching LeaderBoard:', error);
       return res.status(500).json({
         error: 'Something went wrong while fetching LeaderBoard.',
         errorMessage: error.message,

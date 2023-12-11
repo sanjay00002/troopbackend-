@@ -15,7 +15,7 @@ const scheduleOptions = {
 
 module.exports = () => {
     cron.schedule(
-        '*/7 9-14,15 * * *',
+        '*/5 9-14,15 * * *',
         // '42 13 * * *',
       () => {
         async function updateAllStockPrices() {

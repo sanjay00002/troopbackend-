@@ -15,21 +15,23 @@ const scheduleOptions = {
 
 module.exports = () => {
   cron.schedule(
-    '30 15 * * *',
+    '25 15 * * *',
     () => {
       // * Close Contest
       // * Declare Winners
       async function declareWinners() {
         try {
-          // * Update Stock Prices
-          // await CronJobController.updateStockPrices();
-          await CronJobController.updateStockClosePrices();
+          
 
           // * Calculate the portfolio scores
           await CronJobController.calculatePortfolioScore();
 
           // * Declare winners for all the today's contest
           await CronJobController.generateWinners();
+
+          // * Update Stock Prices
+          // await CronJobController.updateStockPrices();
+          await CronJobController.updateStockClosePrices();
         } catch (error) {
           console.error(
             'Error while updating stock prices and scores of portfolios',

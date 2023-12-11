@@ -115,7 +115,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       socket.emit('match-done', uniqueId) //not sure on this code
       socket.broadcast.to(opponentSocketId).emit('match-done', uniqueId)
       
-    }, 60000);
+    }, 1800000);
   }
 
 
