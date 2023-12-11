@@ -202,7 +202,8 @@ export default {
 		const coinsToDeduct = req.body.coinsToDeduct
 		const user = await User.findByPk(userId)
 		if(user){
-			await user.decrement('appCoins', {by: coinsToDeduct})
+			user.appCoins -= coinsToDeduct;
+      await user.save();
 			res.status(201).json({ message: 'AppCoins decremented successfully!' })
 		}
 		else{

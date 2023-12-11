@@ -3,20 +3,24 @@ import model from '../../database/models'
 const { User} = model
 
 
-const deductCoinsForUser = (userId, coinsToDeduct) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const user = await User.findByPk(userId);
-            if (user) {
-                await user.decrement('appCoins', { by: coinsToDeduct });
-                resolve(`Deducted ${coinsToDeduct} coins for user ${userId}`);
+const deductCoinsForUser = async (userId, coinsToDeduct) => {
+    try {
+        const user = await User.findByPk(userId);
+
+        if (user) {
+            if (user.appCoins >= coinsToDeduct) {
+                user.appCoins -= coinsToDeduct;
+                await user.save();
+                return `Deducted ${coinsToDeduct} coins for user ${userId}`;
             } else {
-                reject(`User not found for userId ${userId} to deduct coins`);
+                throw new Error(`Insufficient coins for user ${userId} to deduct ${coinsToDeduct} coins`);
             }
-        } catch (error) {
-            reject(`Error deducting coins: ${error}`);
+        } else {
+            throw new Error(`User not found for userId ${userId} to deduct coins`);
         }
-    });
+    } catch (error) {
+        throw new Error(`Error deducting coins: ${error.message}`);
+    }
 };
 
 
