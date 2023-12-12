@@ -45,7 +45,9 @@ export default (sequelize, DataTypes) => {
       accessToken: { type: DataTypes.STRING, allowNull: true },
       refreshToken: { type: DataTypes.STRING, allowNull: true },
       loggedInAt: { type: DataTypes.DATE, allowNull: true },
-      appCoins: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0}
+      appCoins: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0},
+      winningsAmount: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0},
+      bonusCoins: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0},
     },
     {
       sequelize,

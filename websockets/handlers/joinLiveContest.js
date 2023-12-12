@@ -34,7 +34,7 @@ export default async function joinLiveContest(socket, pool, user) {
             reject(error); // Reject the Promise on error
           } else {
 
-            deleteEntryAfterInterval(id, pool, userId, contestEntryPrice)
+            deleteEntryAfterInterval(id, pool, userId, contestEntryPrice, socket)
             console.log("Person saved successfully with stock information");
             // Resolve the Promise with any relevant data
             resolve(result);
@@ -47,7 +47,7 @@ export default async function joinLiveContest(socket, pool, user) {
   });
 }
 
-function deleteEntryAfterInterval(id, pool, userId, contestEntryPrice){
+function deleteEntryAfterInterval(id, pool, userId, contestEntryPrice, socket){
   setTimeout(async () => {
     try {
       console.log("35 seconds done, deleting person from pool");
@@ -60,10 +60,10 @@ function deleteEntryAfterInterval(id, pool, userId, contestEntryPrice){
         await addCoinsForUser(userId, contestEntryPrice)
       }
 
-      
+      socket.emit("match-not-found", "Match not found for you, you have been removed from pool")
 
     } catch (error) {
       console.error('Error deleting entry:', error.message);
     }
-  }, 35000);
+  }, 30000);
 }

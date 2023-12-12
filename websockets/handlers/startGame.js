@@ -1,8 +1,9 @@
 import { nanoid } from "nanoid";
 import model from '../../database/models'
 import getStockTokenFromId from "../helpers/getStockTokenFromId";
+import addWinningsAmountForUser from "../helpers/addWinningAmounts";
 
-import deductCoinsForUser from "../helpers/deductCoinsForUser";
+
 import addCoinsForUser from "../helpers/addCoinsForUser";
 
 import getStockLTPFromToken from "../helpers/getStockLTPFromToken";
@@ -42,11 +43,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
 
     console.log("Starting match")
 
-    // await deductCoinsForUser(selfId, contestEntryPrice)
-    // await deductCoinsForUser(opponentId, contestEntryPrice)
     
-  
-  
     const insertQuery =
       'INSERT INTO public."MatchedLiveUsers" ("id", "selfId","selfUserName", "opponentId","opponentUserName", "selfSelectedStockId","selfSelectedStockToken", "selfStockOpenValue", "opponnetSelectedStockId","opponentSelectedStockToken", "opponentStockOpenValue", "contestId", "createdAt", "updatedAt", "contestEntryPrice", "selfSocketId", "opponentSocketId", "matchStatus", "opponentProfileImg", "selfStockName", "opponentStockName") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)';
     const insertResult = await pool.query(insertQuery, [
@@ -94,7 +91,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
     const deletionQuery = 'DELETE FROM public."LiveContestUserPool" WHERE "id" = $1'
     const deletionResult = await pool.query(deletionQuery, [currentUserLiveContestUserPoolId])
   }
-  console.log("Match started for 10 seconds")
+  console.log("Match started for 2 users")
   
     // Start game for 10 seconds. Change to 30 minutes in production
   
@@ -112,6 +109,7 @@ export async function startGame(currentUser, userToMatchWith, pool, io , socket,
       const updateQuery = 'UPDATE public."MatchedLiveUsers" SET "selfStockCloseValue" = $1, "opponentStockCloseValue" = $2, "winner" = $3, "matchStatus" = $4, "opponentStockPercentageChange"= $5, "selfStockPercentageChange" = $6 WHERE "id" = $7'
       const updateResult = await pool.query(updateQuery, [selfStockCloseValue, opponentStockCloseValue, winner, "completed", opponentStockPercentageChange, selfStockPercentageChange, uniqueId])
       await addCoinsForUser(winner, (parseFloat(contestEntryPrice)*2))
+      await addWinningsAmountForUser(winner, (parseFloat(contestEntryPrice)*2))
       socket.emit('match-done', uniqueId) //not sure on this code
       socket.broadcast.to(opponentSocketId).emit('match-done', uniqueId)
       
