@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
       contestId: { type: DataTypes.STRING, allowNull: false },
       rankStart: { type: DataTypes.INTEGER, allowNull: false },
       rankEnd: { type: DataTypes.INTEGER, allowNull: false },
-      priceAmount: { type: DataTypes.INTEGER, allowNull: false },
+      priceAmount: { type: DataTypes.DOUBLE, allowNull: false },
     },
     {
       name: {

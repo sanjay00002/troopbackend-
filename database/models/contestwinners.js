@@ -38,6 +38,8 @@ export default (sequelize, DataTypes) => {
       contestId: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
       rank: { type: DataTypes.INTEGER, allowNull: false },
+      winningAmount: { type: DataTypes.DOUBLE, allowNull: false },
+      username: { type: DataTypes.STRING, allowNull: false },
     },
     {
       name: {

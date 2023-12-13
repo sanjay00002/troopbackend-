@@ -198,45 +198,49 @@ export default {
     }
   },
 
-  deductCoins: async function (req, res) {
-    try {
-		const userId = req.id;
-		const coinsToDeduct = req.body.coinsToDeduct
-		const user = await User.findByPk(userId)
-		if(user){
-			await user.decrement('appCoins', {by: coinsToDeduct})
-			res.status(201).json({ message: 'AppCoins decremented successfully!' })
-		}
-		else{
-			console.log("User not found")
-			res.status(404).json({ error: 'User not found.' });
-		}
 
-    } catch (error) {
-		console.error('Error decrementing appCoins:', error);
-    	res.status(500).json({ error: 'Internal Server Error' });
-	}
-  },
+  //Below coins related api calls are to be deprecated
+  
+  // deductCoins: async function (req, res) {
+  //   try {
+	// 	const userId = req.id;
+	// 	const coinsToDeduct = req.body.coinsToDeduct
+	// 	const user = await User.findByPk(userId)
+	// 	if(user){
+	// 		user.appCoins -= coinsToDeduct;
+  //     await user.save();
+	// 		res.status(201).json({ message: 'AppCoins decremented successfully!' })
+	// 	}
+	// 	else{
+	// 		console.log("User not found")
+	// 		res.status(404).json({ error: 'User not found.' });
+	// 	}
 
-  addCoins: async function (req, res) {
-    try {
-		const userId = req.id;
-		const coinsToAdd = req.body.coinsToAdd
-		const user = await User.findByPk(userId)
-		if(user){
-			await user.increment('appCoins', {by: coinsToAdd})
-			res.status(201).json({ message: 'AppCoins incremented successfully!' })
-		}
-		else{
-			console.log("User not found")
-			res.status(404).json({ error: 'User not found.' });
-		}
+  //   } catch (error) {
+	// 	console.error('Error decrementing appCoins:', error);
+  //   	res.status(500).json({ error: 'Internal Server Error' });
+	// }
+  // },
 
-    } catch (error) {
-		console.error('Error incrementing appCoins:', error);
-    	res.status(500).json({ error: 'Internal Server Error' });
-	}
-  },
+  // addCoins: async function (req, res) {
+  //   try {
+	// 	const userId = req.id;
+	// 	const coinsToAdd = req.body.coinsToAdd
+	// 	const user = await User.findByPk(userId)
+	// 	if(user){
+	// 		await user.increment('appCoins', {by: coinsToAdd})
+	// 		res.status(201).json({ message: 'AppCoins incremented successfully!' })
+	// 	}
+	// 	else{
+	// 		console.log("User not found")
+	// 		res.status(404).json({ error: 'User not found.' });
+	// 	}
+
+  //   } catch (error) {
+	// 	console.error('Error incrementing appCoins:', error);
+  //   	res.status(500).json({ error: 'Internal Server Error' });
+	// }
+  // },
 
   
 };

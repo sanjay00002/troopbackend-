@@ -489,6 +489,7 @@ export default {
   
       if (contestDetails?.id) {
         // Find the contest by ID
+
         const existingContest = await Contest.findByPk(contestDetails?.id, {
           include: {
             model: ContestCategories,
@@ -496,67 +497,76 @@ export default {
             attributes: { exclude: ['createdAt', 'updatedAt'] },
           },
         });
-  
+    
         console.log('Existing Contest: ', existingContest);
-  
+    
         if (existingContest) {
           const contestStatus = getContestStatus(existingContest);
-  
+    
           if (!existingContest.get('canJoin')) {
             return res.status(403).json({
               message: 'Contest is not active! Cannot join!',
             });
-          } else if (!existingContest.get('isActive')) {
+          } 
+          else if (!existingContest.get('isActive')) {
             return res.status(403).json({
               message: 'Contest has ended',
             });
           }
-  
+    
           const existingContestId = await existingContest.get('id');
+    
           const canJoin = await existingContest.get('canJoin');
-  
+    
           if (!canJoin) {
             return res.status(403).json({
               message: 'Cannot join this contest at the moment',
             });
           }
-  
+    
           // Count the total participants in the contest
           const totalParticipants = await ContestParticipants.findAndCountAll({
             where: { contestId: existingContestId },
           });
-  
+    
           if (totalParticipants.count >= (await existingContest.get('slots'))) {
             return res.status(400).json({
               message: 'Slots are full, no more slots available!',
             });
           }
-  
+    
           // Count the user's maximum participation in the contest
           const maxParticipation = await ContestParticipants.findAndCountAll({
             where: { userId, contestId: existingContestId },
           });
-  
+    
           if (maxParticipation.count >= 20) {
             return res.status(403).json({
               message: 'Player has reached the limit of maximum participation',
             });
           }
-  
+
+          const user = await User.findByPk(userId, {
+            attributes: ['username'],
+          });
+    
+          const username = user ? user.get('username') : null;
+          console.log('Username:', username);
+
           // Create a new participant in the contest
           const newParticipant = await ContestParticipants.create({
             userId,
             contestId: existingContestId,
           });
-  
+    
           if (newParticipant) {
             // Find an existing portfolio
             const existingPortfolio = await Portfolio.findByPk(
               contestDetails?.portfolio?.id
             );
-  
+    
             if (existingPortfolio?.id) {
-                 // Insert Contest ID and Portfolio ID into ContestPortfolios Table if the portfolio selected already exists
+              // Insert Contest ID and Portfolio ID into ContestPortfolios Table if the portfolio selected already exists
               await ContestPortfolios.create({
                 contestId: existingContestId,
                 portfolioId: existingPortfolio.id,
@@ -564,35 +574,33 @@ export default {
             } else {
               // Create a new portfolio for the user with the selected stocks
               const portfolio = await Portfolio.create({
-                name: existingContest.name,
+                username: username,
+                name:existingContest.name,
+                // name: contestDetails?.portfolio?.name ?? null,
                 userId: userId,
                 subCategoryId: await existingContest.get('subCategoryId'),
+                // contestId: await existingContestId.get('contestId'),
                 contestId: existingContestId,
+                // portfolioId: await portfolio.get('id'),
               });
-  
+    
               for (let i = 0; i < contestDetails?.portfolio?.stocks.length; i++) {
                 const stock = contestDetails?.portfolio?.stocks[i];
-                if (stock?.stockId != null) {
-                  await PortfolioStocks.create({
-                    portfolioId: await portfolio.get('id'),
-                    stockId: stock?.stockId,
-                    action: stock?.action,
-                    captain: stock?.captain,
-                    viceCaptain: stock?.viceCaptain,
-                  });
-                } else {
-                  return res.status(422).json({
-                    error: 'StockId cannot be null or undefined',
-                  });
-                }
+                await PortfolioStocks.create({
+                  portfolioId: await portfolio.get('id'),
+                  stockId: stock?.stockId,
+                  action: stock?.action,
+                  captain: stock?.captain,
+                  viceCaptain: stock?.viceCaptain,
+                });
               }
-  
+    
               await ContestPortfolios.create({
                 contestId: existingContestId,
                 portfolioId: await portfolio.get('id'),
               });
             }
-  
+    
             return res.status(200).json({
               message: 'Join Contest Successful',
             });
@@ -613,7 +621,7 @@ export default {
         error: 'Something went wrong while joining the contest by id',
         errorMessage: error.message,
       });
-    }
+    }    
   },
   
 
@@ -1147,6 +1155,55 @@ export default {
       console.error('Error while calculating stock change percentage: ', error);
       return res.status(500).json({
         error: 'Something went wrong while calculating stock change percentage',
+        errorMessage: error.message,
+      });
+    }
+  },
+  priceDistribution: async (req, res) => {
+    const { contestId } = req.params
+
+    try {
+      const priceDistributionData = await ContestPriceDistribution.findAll({
+        where: { contestId: contestId },
+      });
+
+      if (priceDistributionData.length === 0) {
+        return res.status(404).json({
+          error: 'No PriceDistribution found for given contestId',
+        });
+      }
+      console.log(priceDistributionData)
+
+      return res.status(200).json(priceDistributionData)
+
+    }catch (error) {
+      console.error('Error while fetching the PriceDistribution for given contestd: ', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching the PriceDistribution for given contestd',
+        errorMessage: error.message,
+      });
+    }
+
+  },
+  WinnerBoard: async function (req, res){
+    const { contestId } = req.params;
+    try {
+      const WinnerBoard = await ContestWinners.findAll({
+        where: { contestId: contestId},
+      });
+
+      if (WinnerBoard.length === 0) {
+        return res.status(404).json({
+          error: 'No data found for the given contestId',
+        });
+      }
+    return res.status(200).json({
+      WinnerBoard: WinnerBoard,
+    });
+    } catch (error) {
+      console.error('Error while fetching WinnerBoard:', error);
+      return res.status(500).json({
+        error: 'Something went wrong while fetching WinnerBoard.',
         errorMessage: error.message,
       });
     }

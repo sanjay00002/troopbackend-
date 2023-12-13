@@ -10,15 +10,18 @@ import client from '../api/client';
 import axios from 'axios';
 
 const {
+  ContestCategories,
   Contest,
   ContestPriceDistribution,
-  ContestPortfolios,
   ContestWinners,
-  SubCategories,
-  Stocks,
-  PortfolioStocks,
+  ContestParticipants,
+  ContestPortfolios,
   Portfolio,
+  PortfolioStocks,
   User,
+  StocksSubCategories,
+  Stocks,
+  SubCategories,
   CouponRewards,
   Rewards,
 } = model;
@@ -32,7 +35,7 @@ export default {
       // * Check if the sub category provided exists
       if (subCategory) {
         const newContest = await Contest.create({
-          name:contest?.name,
+          name: contest?.name,
           date: contest?.date,
           entryAmount: contest?.entryAmount,
           categoryId: contest?.categoryId,
@@ -41,28 +44,33 @@ export default {
           createdBy: userId,
           slots: contest?.slots,
           isActive: true,
-          canJoin: true
+          canJoin: true,
         });
 
         const newContestId = await newContest.get('id');
 
         if (newContestId) {
+          // console.log("new contestId incoming");
           if (contest?.priceDistribution) {
+            // console.log("priceDistribution running");
             for (let i = 0; i < contest?.priceDistribution?.length; i++) {
-              await ContestPriceDistribution.create({
-                contestId: newContestId,
-                rankStart: contest?.priceDistribution[i].rankStart,
-                rankEnd: contest?.priceDistribution[i].rankEnd,
-                priceAmount: contest?.priceDistribution[i].priceAmount,
-                
-              });
+              const currentDistribution = contest.priceDistribution[i];
+
+              if (!currentDistribution.hasOwnProperty('originalPricePool')) {
+                await ContestPriceDistribution.create({
+                  contestId: newContestId,
+                  rankStart: currentDistribution.rankStart,
+                  rankEnd: currentDistribution.rankEnd,
+                  priceAmount: parseFloat(currentDistribution.priceAmount),
+                });
+              }
             }
           }
+        } else {
+          throw new Error(
+            'Cannot create contest without non-existing sub-category!',
+          );
         }
-      } else {
-        throw new Error(
-          'Cannot create contest without non-existing sub-category!',
-        );
       }
     } catch (error) {
       console.error('Error while creating contest with CRON job: ', error);
@@ -97,7 +105,7 @@ export default {
   //       (stock) => stock.token,
   //     );
 
-  //     // * Bulk Updating the stock prices   
+  //     // * Bulk Updating the stock prices
   // const updatePromises = stockPricesToBeUpdated.map((stock) =>
   //     Stocks.update(
   //       {
@@ -113,111 +121,133 @@ export default {
   //   Promise.all(updatePromises).then((results) => {
   //     const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
   //     console.log(`${updatedRows} Stock Prices updated`);
-      
+
   //     const timeEnd = performance.now() - start;
   //     console.log('Time taken: ', timeEnd);
   //   });
   //   } catch (error) {
   //   console.error('Error while updating stock data:', error);
-  //   } 
+  //   }
   //   // console.log("update2")
   // },
 
-  
   updateStockPrices: async function () {
     try {
       let start = performance.now();
-  
+
       const token_list = [];
       const stocks = await Stocks.findAll();
-  
+
       stocks.forEach((stock) => {
         token_list.push(stock.zerodhaInstrumentToken);
       });
-  
-      const response = await axios.post('https://redis-stocks-server.onrender.com/api/getStockLTP', {
+
+      const response = await axios.post(
+        'https://redis-stocks-server.onrender.com/api/getStockLTP',
+        {
+          stockInstrumentArray: token_list,
+        },
+      );
+
+      console.log(response.data);
+
+      const stockPricesToBeUpdated = response.data;
+
+      const updatePromises = stockPricesToBeUpdated.map((stockData) => {
+        const token = Object.keys(stockData)[0];
+        const open_price = parseFloat(stockData[token]);
+
+        return Stocks.update(
+          {
+            open_price: open_price,
+          },
+          {
+            where: { zerodhaInstrumentToken: token },
+          },
+        ).catch((updateError) => {
+          console.error(
+            `Error updating stock with token ${token}:`,
+            updateError,
+          );
+          return 0; // Treat the failed update as 0 affected rows
+        });
+      });
+
+      Promise.all(updatePromises).then((results) => {
+        const updatedRows = results.reduce(
+          (sum, affectedRows) => sum + affectedRows,
+          0,
+        );
+        console.log(`${updatedRows} Stock Prices updated`);
+
+        const timeEnd = performance.now() - start;
+        console.log('Time taken: ', timeEnd);
+      });
+    } catch (error) {
+      console.error(
+        'Error while updating stock data:',
+        error.response.status,
+        error.response.data,
+      );
+    }
+  },
+  updateStockClosePrices: async function () {
+    try {
+      let start = performance.now();
+
+      const token_list = [];
+      const stocks = await Stocks.findAll();
+
+      stocks.forEach((stock) => {
+        token_list.push(stock.zerodhaInstrumentToken);
+      });
+
+      const response = await axios.post(process.env.STOCKS_PRICE_API_LINK, {
         stockInstrumentArray: token_list,
       });
 
-    console.log(response.data);
+      console.log(response.data);
 
-    const stockPricesToBeUpdated = response.data;
+      const stockPricesToBeUpdated = response.data;
 
-    const updatePromises = stockPricesToBeUpdated.map((stockData) => {
-      const token = Object.keys(stockData)[0]; 
-      const open_price = parseFloat(stockData[token]);
+      const updatePromises = stockPricesToBeUpdated.map((stockData) => {
+        const token = Object.keys(stockData)[0];
+        const close_price = parseFloat(stockData[token]);
 
-      return Stocks.update(
-        {
-          open_price: open_price,
-        },
-        {
-          where: { zerodhaInstrumentToken: token },
-        }
-      ).catch((updateError) => {
-        console.error(`Error updating stock with token ${token}:`, updateError);
-        return 0; // Treat the failed update as 0 affected rows
+        return Stocks.update(
+          {
+            close_price: close_price,
+          },
+          {
+            where: { zerodhaInstrumentToken: token },
+          },
+        ).catch((updateError) => {
+          console.error(
+            `Error updating stock with token ${token}:`,
+            updateError,
+          );
+          return 0; // Treat the failed update as 0 affected rows
+        });
       });
-    });
 
-    Promise.all(updatePromises).then((results) => {
-      const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
-      console.log(`${updatedRows} Stock Prices updated`);
+      Promise.all(updatePromises).then((results) => {
+        const updatedRows = results.reduce(
+          (sum, affectedRows) => sum + affectedRows,
+          0,
+        );
+        console.log(`${updatedRows} Stock Prices updated`);
 
-      const timeEnd = performance.now() - start;
-      console.log('Time taken: ', timeEnd);
-    });
-  } catch (error) {
-    console.error('Error while updating stock data:', error.response.status, error.response.data);
-  }
-},
-updateStockClosePrices: async function () {
-  try {
-    let start = performance.now();
-
-    const token_list = [];
-    const stocks = await Stocks.findAll();
-
-    stocks.forEach((stock) => {
-      token_list.push(stock.zerodhaInstrumentToken);
-    });
-
-    const response = await axios.post(process.env.STOCKS_PRICE_API_LINK, {
-      stockInstrumentArray: token_list,
-    });
-
-  console.log(response.data);
-
-  const stockPricesToBeUpdated = response.data;
-
-  const updatePromises = stockPricesToBeUpdated.map((stockData) => {
-    const token = Object.keys(stockData)[0]; 
-    const close_price = parseFloat(stockData[token]);
-
-    return Stocks.update(
-      {
-        close_price: close_price,
-      },
-      {
-        where: { zerodhaInstrumentToken: token },
-      }
-    ).catch((updateError) => {
-      console.error(`Error updating stock with token ${token}:`, updateError);
-      return 0; // Treat the failed update as 0 affected rows
-    });
-  });
-
-  Promise.all(updatePromises).then((results) => {
-    const updatedRows = results.reduce((sum, affectedRows) => sum + affectedRows, 0);
-    console.log(`${updatedRows} Stock Prices updated`);
-
-    const timeEnd = performance.now() - start;
-    console.log('Time taken: ', timeEnd);
-  });
-} catch (error) {
-  console.error('Error while updating stock data:', error.response.status, error.response.data);
-}
-},
+        const timeEnd = performance.now() - start;
+        console.log('Time taken: ', timeEnd);
+      });
+    } catch (error) {
+      console.error(
+        'Error while updating stock data:',
+        error.response.status,
+        error.response.data,
+      );
+    }
+  },
 
   calculatePortfolioScore: async function () {
     try {
@@ -322,66 +352,161 @@ updateStockClosePrices: async function () {
       console.error('Error while calculating portfolio scores: ', error);
     }
   },
+  // generateWinners: async function () {
+  //   try {
+  //     const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
+  //     const formattedDate = today.format('YYYY-MM-DD');
+
+  //     const contests = await Contest.findAll({
+  //       where: {
+  //         date: formattedDate,
+  //       },
+  //       include: [
+  //         {
+  //           model: Portfolio,
+  //           through: ContestPortfolios,
+  //           order: [[Portfolio, 'score', 'DESC']],
+  //         },
+  //       ],
+  //     });
+
+  //     console.log('Contest in generate WInners: ', contests[0]);
+
+  //     for (let index = 0; index < contests.length; index++) {
+  //       const contest = contests[index];
+  //       // ! Not checking if there are already winners declared for the contest since its a CRON job
+
+  //       let totalParticipants = contest.portfolios.length;
+
+  //       console.log('Total Participants: ', totalParticipants);
+  //       let rank = 0;
+  //       let prevScore = -1; // * To check if 2 or more portfolio's have the same score
+
+  //       for (const portfolio of contest.portfolios) {
+  //         if (prevScore !== portfolio.score) {
+  //           prevScore = portfolio.score;
+  //           rank += 1;
+  //         }
+
+  //         await ContestWinners.create({
+  //           contestId: contest.id,
+  //           userId: portfolio.userId,
+  //           rank: rank,
+  //         });
+
+  //         // * Update Ticket count
+  //         if (rank / totalParticipants <= 0.75) {
+  //           await User.increment(['tickets'], {
+  //             where: {
+  //               id: portfolio.userId,
+  //             },
+  //           });
+  //         }
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(
+  //       "Error while generating winners for all the today's contest: ",
+  //       error,
+  //     );
+  //   }
+  // },
 
   generateWinners: async function () {
     try {
-      const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
+      const today = moment.tz(moment(), 'Asia/Kolkata');
       const formattedDate = today.format('YYYY-MM-DD');
-
+  
       const contests = await Contest.findAll({
         where: {
           date: formattedDate,
         },
-        include: [
-          {
-            model: Portfolio,
-            through: ContestPortfolios,
-            order: [[Portfolio, 'score', 'DESC']],
-          },
-        ],
       });
+  
+      for (const contest of contests) {
+        const contestId = contest.id;
+  
+        const portfolioData = await Portfolio.findAll({
+          where: {
+            contestId: contestId,
+          },
+          order: [['score', 'DESC']], // Sort by score in descending order
+        });
+  
+        if (portfolioData.length === 0) {
+          console.log('No participants for this contest. Skipping winner generation.');
+          continue;
+        }
+        console.log('Total Participants: ', portfolioData.length);
 
-      console.log('Contest in generate WInners: ', contests[0]);
+        const prizeDistribution = await ContestPriceDistribution.findAll({
+          attributes: ['contestId', 'rankStart', 'rankEnd', 'priceAmount'],
+          where: {
+            contestId: contestId,
+          },
+        });
+            // console.log(JSON.stringify(prizeDistribution))
 
-      for (let index = 0; index < contests.length; index++) {
-        const contest = contests[index];
-        // ! Not checking if there are already winners declared for the contest since its a CRON job
-
-        let totalParticipants = contest.portfolios.length;
-
-        console.log('Total Participants: ', totalParticipants);
         let rank = 0;
-        let prevScore = -1; // * To check if 2 or more portfolio's have the same score
-
-        for (const portfolio of contest.portfolios) {
+        let prevScore = -1; // To check if 2 or more portfolios have the same score
+  
+        for (const portfolio of portfolioData) {
           if (prevScore !== portfolio.score) {
             prevScore = portfolio.score;
             rank += 1;
           }
 
-          await ContestWinners.create({
+          const prizeInfo = prizeDistribution.find(
+            (prize) => rank >= prize.rankStart && rank <= prize.rankEnd
+        );
+
+        if (prizeInfo) {
+            const priceAmount = prizeInfo.priceAmount;
+            console.log(`User ${portfolio.userId} won ${priceAmount} for rank ${rank}`);
+        }
+            await ContestWinners.create({
             contestId: contest.id,
             userId: portfolio.userId,
             rank: rank,
+            winningAmount: prizeInfo.priceAmount,
+            username: portfolio.username
           });
-
-          // * Update Ticket count
-          if (rank / totalParticipants <= 0.75) {
+  
+          // Update Ticket count
+          if (rank / portfolioData.length <= 0.75) {
             await User.increment(['tickets'], {
               where: {
                 id: portfolio.userId,
               },
             });
           }
+          
+          const user = await User.findByPk(portfolio.userId);
+          const currentAppCoins = user.appCoins;
+          
+          const newAppCoins = currentAppCoins + prizeInfo.priceAmount
+
+          // console.log(newAppCoins)
+
+          await User.update(
+            { appCoins: newAppCoins },
+            {
+              where: {
+                id: portfolio.userId,
+              },
+            }
+          );
+
         }
+    
       }
     } catch (error) {
-      console.error(
-        "Error while generating winners for all the today's contest: ",
-        error,
-      );
+      console.error("Error while generating winners for all today's contests: ", error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+  
+  
 
   insertNewCoupons: async function () {
     try {
@@ -528,34 +653,39 @@ updateStockClosePrices: async function () {
 
   closeAllContestEntry: async function () {
     try {
-      console.log("Closing all contest entry")
+      console.log('Closing all contest entry');
       const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
-      const allContests = await Contest.update({
-        canJoin: false
-      },{
-        where: {
-          date: today
-        }
-      })
+      const allContests = await Contest.update(
+        {
+          canJoin: false,
+        },
+        {
+          where: {
+            date: today,
+          },
+        },
+      );
     } catch (error) {
-      console.log("Error closing all contests entry:  ", error)
+      console.log('Error closing all contests entry:  ', error);
     }
   },
 
-  closeAllContests: async function(){
+  closeAllContests: async function () {
     try {
       const today = momentTimezone.tz(moment(), 'Asia/Kolkata');
-      console.log("today is:  ")
-      const allContests = await Contest.update({
-        isActive: false
-      },
-      {
-        where: {
-          date: today
-        }
-      })
+      console.log('today is:  ');
+      const allContests = await Contest.update(
+        {
+          isActive: false,
+        },
+        {
+          where: {
+            date: today,
+          },
+        },
+      );
     } catch (error) {
-      console.log("Error closing all contests for the day:  ", error)
+      console.log('Error closing all contests for the day:  ', error);
     }
-  }
+  },
 };
