@@ -78,6 +78,8 @@ export default {
           role: await user.get('UserRoles')[0]?.Role?.get('role'),
           wallet: await user.get('wallet')?.get(),
           appCoins: await user.get('appCoins'),
+          bonusCoins: await user.get('bonusCoins'),
+          winningsAmount: await user.get('winningsAmount')
         };
         return res.status(200).json(result);
       } else {

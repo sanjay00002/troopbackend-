@@ -3,8 +3,10 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "start:backend": "nodemon --exec babel-node ./backend/server.js",
-        "start:websocket": "nodemon --exec babel-node ./websockets/server.js",
+        "start:backend": "babel-node ./backend/server.js",
+        "start:websocket": "babel-node ./websockets/server.js",
+        "dev:backend": "nodemon --exec babel-node ./backend/server.js",
+        "dev:websocket": "nodemon --exec babel-node ./websockets/server.js",
         "generate:token": "node ./websockets/stockSocket/generate_token.mjs",
         "migrate": "npx sequelize-cli db:migrate",
         "undo-migration": "npx sequelize-cli db:migrate:undo",
