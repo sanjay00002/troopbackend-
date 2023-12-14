@@ -3,6 +3,7 @@ import model from '../../../database/models';
 import { validatePortfolio } from '../lib/portfolio';
 import { getContestStatus } from '../lib/contest';
 import calculatePayout, { calculatePrivatePayout } from './../lib/payout';
+import deductCoinsForUser from '../api/deductCoinsForUser';
 
 const {
   ContestCategories,
@@ -346,7 +347,7 @@ export default {
           },
         });
     
-        console.log('Existing Contest: ', existingContest);
+        // console.log('Existing Contest: ', existingContest);
     
         if (existingContest) {
           const contestStatus = getContestStatus(existingContest);
@@ -366,12 +367,12 @@ export default {
     
           const canJoin = await existingContest.get('canJoin');
     
-          if (!canJoin) {
+
+              if (!canJoin) {
             return res.status(403).json({
               message: 'Cannot join this contest at the moment',
             });
           }
-    
           // Count the total participants in the contest
           const totalParticipants = await ContestParticipants.findAndCountAll({
             where: { contestId: existingContestId },
@@ -399,8 +400,18 @@ export default {
           });
     
           const username = user ? user.get('username') : null;
-          console.log('Username:', username);
+          // console.log('Username:', username);
 
+          const entryAmount = await existingContest.get('entryAmount');
+
+          try {
+            const deductionResult = await deductCoinsForUser(userId, entryAmount);
+            console.log(deductionResult);
+          } catch (deductionError) {
+            return res.status(400).json({
+              message: deductionError.message,
+            });
+          }
           // Create a new participant in the contest
           const newParticipant = await ContestParticipants.create({
             userId,
@@ -448,7 +459,9 @@ export default {
                 portfolioId: await portfolio.get('id'),
               });
             }
-    
+
+            // console.log("entryAmount",existingContest.entryAmount)
+       
             return res.status(200).json({
               message: 'Join Contest Successful',
             });
@@ -498,7 +511,7 @@ export default {
           },
         });
     
-        console.log('Existing Contest: ', existingContest);
+        // console.log('Existing Contest: ', existingContest);
     
         if (existingContest) {
           const contestStatus = getContestStatus(existingContest);
@@ -551,7 +564,7 @@ export default {
           });
     
           const username = user ? user.get('username') : null;
-          console.log('Username:', username);
+          // console.log('Username:', username);
 
           // Create a new participant in the contest
           const newParticipant = await ContestParticipants.create({

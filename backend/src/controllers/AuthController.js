@@ -70,6 +70,9 @@ export default {
       newUser.refreshToken = refreshTokenHash;
       newUser.loggedInAt = moment().toISOString();
 
+      const bonusCoins = 25;
+      newUser.bonusCoins = bonusCoins;
+
       await newUser.save();
 
       const roleId = await role?.get('id');

@@ -483,13 +483,17 @@ export default {
           
           const user = await User.findByPk(portfolio.userId);
           const currentAppCoins = user.appCoins;
-          
+          const currentWinningCoins = user.winningsAmount
+          const newWinningCoins = currentWinningCoins + prizeInfo.priceAmount
           const newAppCoins = currentAppCoins + prizeInfo.priceAmount
+
+
 
           // console.log(newAppCoins)
 
           await User.update(
             { appCoins: newAppCoins },
+            {winningsAmount: newWinningCoins},
             {
               where: {
                 id: portfolio.userId,

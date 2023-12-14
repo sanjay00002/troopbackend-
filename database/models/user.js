@@ -64,40 +64,40 @@ export default (sequelize, DataTypes) => {
         : `Troop-${await generateUserId()}`;
       user.id = id;
 
-      if (user?.dataValues?.isBot === false) {
-        if (!user?.dataValues.firstName && !user?.dataValues.lastName) {
-          user.username = "Trooper-" + user?.id.split("-")[1];
-        }
+      // if (user?.dataValues?.isBot === false) {
+      //   if (!user?.dataValues.firstName && !user?.dataValues.lastName) {
+      //     user.username = "Trooper-" + user?.id.split("-")[1];
+      //   }
 
-        if (
-          user?.dataValues.firstName &&
-          user?.dataValues.lastName &&
-          !user?.dataValues.username === false
-        ) {
-          const randomFullName = randomIndianName();
-          user.firstName = randomFullName.split(" ")[0];
-          user.lastName = randomFullName.split(" ")[1];
-          const randomCondition = Math.floor(Math.random() * 3);
+      //   if (
+      //     user?.dataValues.firstName &&
+      //     user?.dataValues.lastName &&
+      //     !user?.dataValues.username === false
+      //   ) {
+      //     const randomFullName = randomIndianName();
+      //     user.firstName = randomFullName.split(" ")[0];
+      //     user.lastName = randomFullName.split(" ")[1];
+      //     const randomCondition = Math.floor(Math.random() * 3);
 
-          switch (randomCondition) {
-            case 0:
-              user.username = `${user.firstName}-${user.lastName}`;
-              break;
-            case 1:
-              user.username = `${user.firstName}${Math.floor(
-                Math.random() * 100
-              )}`;
-              break;
-            case 2:
-              user.username = `${user.firstName}${user.lastName}${Math.floor(
-                Math.random() * 100
-              )}`;
-              break;
-            default:
-              break;
-          }
-        }
-      }
+      //     switch (randomCondition) {
+      //       case 0:
+      //         user.username = `${user.firstName}-${user.lastName}`;
+      //         break;
+      //       case 1:
+      //         user.username = `${user.firstName}${Math.floor(
+      //           Math.random() * 100
+      //         )}`;
+      //         break;
+      //       case 2:
+      //         user.username = `${user.firstName}${user.lastName}${Math.floor(
+      //           Math.random() * 100
+      //         )}`;
+      //         break;
+      //       default:
+      //         break;
+      //     }
+      //   }
+      // }
 
       if (user?.dataValues?.isBot === true) {
         const randomFullName = randomIndianName();
