@@ -64,11 +64,11 @@ export default (sequelize, DataTypes) => {
         : `Troop-${await generateUserId()}`;
       user.id = id;
 
-      // if (user?.dataValues?.isBot === false) {
-      //   if (!user?.dataValues.firstName && !user?.dataValues.lastName) {
-      //     user.username = "Trooper-" + user?.id.split("-")[1];
-      //   }
-
+      if (user?.dataValues?.isBot === false) {
+        if (!user?.dataValues.firstName && !user?.dataValues.lastName) {
+          user.username = "Trooper-" + user?.id.split("-")[1];
+        }
+      }
       //   if (
       //     user?.dataValues.firstName &&
       //     user?.dataValues.lastName &&
