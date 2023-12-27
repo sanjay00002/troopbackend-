@@ -21,7 +21,7 @@ export default {
       let role;
 
       // Verified User i.e. signs up with phone number
-      if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) {
+      if (userDetails?.phoneNumber !== undefined && userDetails?.phoneNumber) { //if phone number is there
         const referralCode = await generateReferralCode();
 
         if (!userDetails?.firstName || !userDetails?.lastName) {
@@ -42,6 +42,9 @@ export default {
           referralCode: referralCode,
           referrer: userDetails?.referrer,
           referredAt: userDetails?.referrer ? moment().toISOString() : null,
+          isBot: false,
+          appCoins: 500,
+
         });
 
         role = await Role.findOne({
@@ -49,7 +52,10 @@ export default {
         });
       } else {
         // Unverified User i.e. Guest
-        newUser = await User.create();
+        newUser = await User.create({
+          username: userDetails.username,
+          appCoins: 500
+        });
 
         role = await Role.findOne({
           where: { role: 'guest' },
@@ -96,6 +102,10 @@ export default {
         error: 'Something went wrong while signing up the user',
       });
     }
+
+    // res.send("hi")
+
+    
   },
 
   signIn: async function (req, res) {

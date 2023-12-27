@@ -60,10 +60,12 @@ export default (sequelize, DataTypes) => {
       matched: { type: DataTypes.BOOLEAN, allowNull: true },
       isBot: { type: DataTypes.BOOLEAN, allowNull: true},
       contestEntryPrice: { type: DataTypes.INTEGER, allowNull:true},
+      
     },
     {
       sequelize,
       modelName: 'LiveContestUserPool',
+      tableName: 'LiveContestUserPool',
     }
   );
   LiveContestUserPool.beforeValidate(async (liveuser, options) => {

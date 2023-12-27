@@ -15,6 +15,10 @@ import currentUserCount from "./handlers/currentUserCount";
 import tryToMatchUsers from "./handlers/tryToMatchUsers";
 import matchWithBot from "./handlers/matchWithBot";
 
+import model from '../database/models';
+
+const { User } = model;
+
 const io = new Server({
   cors: {
     origin: "*",
@@ -29,29 +33,6 @@ const pool = new Pool({
   port: process.env.PGPORT,
 });
 
-// io.on("connection", (socket) => {
-//   chat(io);
-//   console.log("Connection Established!: ");
-//   socket.on("send-stock-tokens", (stock_token) => {
-//     console.log("Someone is hitting deprecated send stocks event")
-//     // getStocks(io, socket, stock_token, true);
-//   });
-// });
-
-// const normalContest = io.of("/normalContest");
-
-// normalContest.on("connection", (socket) => {
-
-//   // socket connection to show the live contest joined users
-//   socket.on("user-count", (contests) => {
-//     // here the contest id list is fetched from the frontend
-//     contests.forEach((contest) => {
-//       currentUserCount(io, socket, pool, contest);
-//     });
-//   });
-// });
-
-// Creating a namespace for handling all the socket connections for live econtests
 
 const liveContest = io.of("/liveContest");
 
@@ -61,8 +42,17 @@ liveContest.on("connection", (socket) => {
   
 
   socket.on("add-user-to-live-contest", async (user) => {
-    await joinLiveContest(socket, pool, user);
-    await tryToMatchUsers(io, socket, pool, user);
+
+    const canUserEnterContest = await checkIfUserHasEnoughCoins(user.user_id, user.contest_entry_price)
+
+			if(canUserEnterContest == false){
+				console.log("User does not have enough coins to enter the contest.");
+			}
+      else{
+        await joinLiveContest(socket, pool, user);
+        await tryToMatchUsers(io, socket, pool, user);
+      }
+
   });
 
 
@@ -83,3 +73,12 @@ slotMachine.on("connection", (socket) => {
 io.adapter(createAdapter(pool));
 
 io.listen(5001);
+
+
+async function checkIfUserHasEnoughCoins(userId, contestEntryAmount) {
+	const user = await User.findByPk(userId)
+	if(user.bonusCoins + user.appCoins >= contestEntryAmount){
+		return true
+	}
+	else{return false}
+}
