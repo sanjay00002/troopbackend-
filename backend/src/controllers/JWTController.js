@@ -10,6 +10,7 @@ import {
 } from '../utils/settings';
 import crypto from 'crypto';
 
+
 export default {
   createToken: async (payload, refresh = false) => {
     const accessToken = jwt.sign(payload, SECRET, {

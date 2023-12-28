@@ -3,7 +3,11 @@ import AuthController from '../controllers/AuthController';
 
 const router = Router();
 
+router.route('/checkUniqueness').post(AuthController.checkUniqueness)
+
 router.route('/signUp').post(AuthController.signUp);
+
+router.route('/guestSignUp').post(AuthController.guestSignUp);
 
 router.route('/signIn').post(AuthController.signIn);
 
