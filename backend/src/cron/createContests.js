@@ -64,7 +64,7 @@ module.exports = () => {
           subCategoryId: 2,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
-          pricePool:  parseInt(priceDistribution.niftyIT[0][0].originalPricePool),
+          pricePool:  parseInt(priceDistribution.niftyIT[0][7].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.niftyIT[0],
         });
@@ -117,7 +117,7 @@ module.exports = () => {
           subCategoryId: 3,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
-          pricePool:  parseInt(priceDistribution.niftyAuto[0][0].originalPricePool),
+          pricePool:  parseInt(priceDistribution.niftyAuto[0][7].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.niftyAuto[0],
         });
@@ -170,7 +170,7 @@ module.exports = () => {
           subCategoryId: 4,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 11,
-          pricePool:  parseInt(priceDistribution.niftyBank[0][0].originalPricePool),
+          pricePool:  parseInt(priceDistribution.niftyBank[0][7].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.niftyBank[0],
         });
@@ -223,7 +223,7 @@ module.exports = () => {
           subCategoryId: 6,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 99,
-          pricePool:  parseInt(priceDistribution.giantStocks[0][0].originalPricePool),
+          pricePool:  parseInt(priceDistribution.giantStocks[0][7].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.giantStocks[0],
         });
@@ -276,7 +276,7 @@ module.exports = () => {
           subCategoryId: 5,
           date: tomorrow.format('YYYY-MM-DD'),
           entryAmount: 2,
-          pricePool:  parseInt(priceDistribution.pennyStocks[0][0].originalPricePool),
+          pricePool:  parseInt(priceDistribution.pennyStocks[0][7].originalPricePool),
           slots: 500,
           priceDistribution: priceDistribution.pennyStocks[0],
         });

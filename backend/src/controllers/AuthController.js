@@ -103,9 +103,12 @@ export default {
 			const accessTokenHash = await JWTController.hashToken(accessToken);
 			const refreshTokenHash = await JWTController.hashToken(refreshToken);
 
-			newUser.accessToken = accessTokenHash;
-			newUser.refreshToken = refreshTokenHash;
-			newUser.loggedInAt = moment().toISOString();
+      newUser.accessToken = accessTokenHash;
+      newUser.refreshToken = refreshTokenHash;
+      newUser.loggedInAt = moment().toISOString();
+
+      const bonusCoins = 25;
+      newUser.bonusCoins = bonusCoins;
 
 			await newUser.save();
 
