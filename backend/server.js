@@ -53,15 +53,6 @@ import bankDetailRouter from './src/routes/bankDetail';
 import faqRouter from './src/routes/faq';
 import ccavenueRouter from './src/routes/ccavenue'
 
-// const findMatch = require('./src/socketfiles/findMatch');
-// const joinLiveContest = require('./src/socketfiles/joinLiveContest');
-
-// const currentUserCount = require('./src/socketfiles/currentUserCount');
-// const getStock = require('./Stock-socket/getStocks');
-
-// const { createAdapter } = require('@socket.io/postgres-adapter');
-// const { Pool } = require('pg');
-// require('dotenv').config({ path: './.env.local' });
 require('dotenv').config({ path: './.env' ,override:true});
 const app = express();
 
@@ -344,7 +335,3 @@ app.listen(port, () => {
   updateAllStockPricesCronJobs();
   updateAllPortfolioScoresCronJobs();
 });
-
-// httpServer.on('error', (err) => {
-//   console.log('Error in the server: ', err);
-// });

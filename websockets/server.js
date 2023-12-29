@@ -52,7 +52,6 @@ liveContest.on("connection", (socket) => {
         await joinLiveContest(socket, pool, user);
         await tryToMatchUsers(io, socket, pool, user);
       }
-
   });
 
 

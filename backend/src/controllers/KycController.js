@@ -1,15 +1,21 @@
 const axios = require('axios');
 const crypto = require('crypto');
 
+import model from '../../../database/models';
+
+const {
+  BankDetails
+} = model;
+
 const baseUrl = 'https://payout-api.cashfree.com';
 
 const baseUrl2 = 'https://api.cashfree.com';
 
 export default {
   bankverification: async function (req, res) {
-    console.log("hello")
+    
     try {
-      const { name, phone, bankAccount, ifsc } = req.query;
+      const { name, phone, bankAccount, ifsc } = req.body;
 
         const headers = { 
           'Authorization': `Bearer ${req.authtoken.data.data.token}`,
@@ -19,13 +25,16 @@ export default {
         };
      
       const response = await axios.get(`${baseUrl}/payout/v1/asyncValidation/bankDetails?name=${name}&phone=${phone}&bankAccount=${bankAccount}&ifsc=${ifsc}`,{headers:headers});
-        
-
-
       const verificationStatus = response.data.status; 
       const message = response.data.message; 
-
       res.json({ status: verificationStatus, message });
+
+      if(verificationStatus=="SUCCESS"){
+        await BankDetails.create({
+
+        })
+      }
+
     } 
     catch (error) {
       console.error('Error:', error.response ? error.response.data : error.message);
@@ -36,7 +45,8 @@ export default {
   upiverification: async function (req, res) {
     console.log("hello")
     try {
-      const { name, vpa} = req.query;
+      const { name, vpa} = req.body;
+      console.log()
 
         const headers = { 
           'Authorization': `Bearer ${req.authtoken.data.data.token}`,
@@ -46,15 +56,13 @@ export default {
         };
 
       const response = await axios.get(`${baseUrl2}/payout/v1/validation/upiDetails?name=${name}&vpa=${vpa}`,{headers:headers});
-        
-      console.log(name)
-      console.log(vpa)
-      console.log(response.data);
 
       const verificationStatus = response.data.status; 
       const message = response.data.message; 
 
       res.json({ status: verificationStatus, message });
+
+      
     } 
     catch (error) {
       console.error('Error:', error.response ? error.response.data : error.message);
