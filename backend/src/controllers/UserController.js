@@ -208,49 +208,36 @@ export default {
 		}
 	},
 
+	withdrawMoney: async function (req,res){
+		try {
+			const userId = req.id
+			const {withdrawalAmount} = req.body
+			console.log(withdrawalAmount)
+			const user = await User.findByPk(userId)
 
-	//Below coins related api calls are to be deprecated
+			if (!user) {
+				return res.status(404).json({ error: 'User not found' });
+			}
 
-	// deductCoins: async function (req, res) {
-	//   try {
-	// 	const userId = req.id;
-	// 	const coinsToDeduct = req.body.coinsToDeduct
-	// 	const user = await User.findByPk(userId)
-	// 	if(user){
-	// 		user.appCoins -= coinsToDeduct;
-	//     await user.save();
-	// 		res.status(201).json({ message: 'AppCoins decremented successfully!' })
-	// 	}
-	// 	else{
-	// 		console.log("User not found")
-	// 		res.status(404).json({ error: 'User not found.' });
-	// 	}
+			if (withdrawalAmount <= 0) {
+				return res.status(400).json({ error: 'Invalid withdrawal amount' });
+			}
 
-	//   } catch (error) {
-	// 	console.error('Error decrementing appCoins:', error);
-	//   	res.status(500).json({ error: 'Internal Server Error' });
-	// }
-	// },
+			if (user.appCoins < withdrawalAmount) {
+				return res.status(400).json({ error: 'Insufficient balance' });
+			}
 
-	// addCoins: async function (req, res) {
-	//   try {
-	// 	const userId = req.id;
-	// 	const coinsToAdd = req.body.coinsToAdd
-	// 	const user = await User.findByPk(userId)
-	// 	if(user){
-	// 		await user.increment('appCoins', {by: coinsToAdd})
-	// 		res.status(201).json({ message: 'AppCoins incremented successfully!' })
-	// 	}
-	// 	else{
-	// 		console.log("User not found")
-	// 		res.status(404).json({ error: 'User not found.' });
-	// 	}
+			user.appCoins -= withdrawalAmount
 
-	//   } catch (error) {
-	// 	console.error('Error incrementing appCoins:', error);
-	//   	res.status(500).json({ error: 'Internal Server Error' });
-	// }
-	// },
+			await user.save();
+			console.log("To send request further")
+			return res.status(200).json({ message: 'Database Updated, request sent forward', user });
+			
 
+		} catch (error) {
+			console.error(error);
+        	return res.status(500).json({ error: 'Internal server error' });
+		}
+	}
 
 };

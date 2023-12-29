@@ -44,6 +44,11 @@ const matchWithBot = async (io, socket,pool,user) => {
     const selectQuery = 'Select * FROM public."LiveContestUserPool" WHERE "contestId" = $1 AND "userId" = $2'
     const currentUserLiveContestUserPoolObj = await pool.query(selectQuery, [contestId, selfId])
 
+    if(!currentUserLiveContestUserPoolObj){
+        console.log("No original entry found for person you are trying to do a bot match for")
+        return
+    }
+
  
     const liveContestUserPoolDbEntryId = currentUserLiveContestUserPoolObj.rows[0].id
 

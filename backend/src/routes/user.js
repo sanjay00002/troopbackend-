@@ -14,4 +14,6 @@ router.route('/all').get(validate, UserController.getAllUsers);
 
 router.route('/updateProfilePicture').patch(validate, UserController.updateProfilePicture)
 
+router.route('/withdrawMoney').post(validate, UserController.withdrawMoney)
+
 module.exports = router;
