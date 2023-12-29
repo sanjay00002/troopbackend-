@@ -5,13 +5,10 @@ require('@babel/register')({
 import express, { json } from 'express';
 import cors from 'cors';
 import { Sequelize } from 'sequelize';
-// import { createServer } from 'http';
-// import { Server } from 'socket.io';
 import momentTimezone from 'moment-timezone';
 import moment from 'moment/moment';
 import path from 'path'
 import fs from 'fs'
-// import chat from './chatWS';
 import authRouter from './src/routes/auth';
 import userRouter from './src/routes/user';
 import contestRouter from './src/routes/contest';
