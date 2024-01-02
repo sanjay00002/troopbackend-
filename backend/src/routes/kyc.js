@@ -11,7 +11,7 @@ router.route('/bankverification').post(validate, getcashfreetoken,KycController.
 router.route('/upiverification').post(validate, getcashfreetoken,KycController.upiverification);
 router.route('/otpaadharverification').post(validate, getcashfreetoken,KycController.otpaadharverification);
 router.route('/aadharverification').post(validate, getcashfreetoken,KycController.aadharverification);
-router.route('/panverification').post(validate, panimage,KycController.aadharverification);
+router.route('/panverification').post(validate,getcashfreetoken, KycController.panverificationSync);
 
 
 module.exports = router;

@@ -27,8 +27,8 @@ export default (sequelize, DataTypes) => {
     {
       bankAccount: { type: DataTypes.STRING, allowNull: false },
       ifsc: { type: DataTypes.STRING, allowNull: false },
-      address: { type: DataTypes.STRING, allowNull: false },
       userId: { type: DataTypes.STRING, allowNull: false },
+      cashfreeVerificationId: {type: DataTypes.STRING, allowNull: false}
     },
     {
       name: {
