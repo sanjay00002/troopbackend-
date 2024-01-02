@@ -48,6 +48,9 @@ export default (sequelize, DataTypes) => {
       appCoins: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0},
       winningsAmount: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0},
       bonusCoins: { type: DataTypes.FLOAT, allowNull: false, defaultValue: 0.0},
+      bankVerificationDone: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false},
+      panNumber: {type: DataTypes.STRING, allowNull: true},
+      upiId: {type: DataTypes.STRING, allowNull: true}
     },
     {
       sequelize,

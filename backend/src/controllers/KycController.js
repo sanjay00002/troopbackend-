@@ -17,47 +17,66 @@ const baseUrl2 = 'https://api.cashfree.com';
 export default {
 	bankverification: async function (req, res) {
 		try {
-		  const { name, phone, bankAccount, ifsc } = req.body;
-		  const userId = req.id;
-		  const bankDetail = await BankDetail.findOne({
-			where: {
-			  userId: req.id 
+			const { name, phone, bankAccount, ifsc } = req.body;
+			const userId = req.id;
+			console.log(userId)
+
+
+			// Code to be added after testing is done
+			// const bankDetail = await BankDetail.findOne({
+			// 	where: {
+			// 	  userId: req.id 
+			// 	}
+			//   });
+		  
+			//   if (bankDetail) {
+			// 	return res.status(400).send({ "message": "User's bank verification is already done" });
+			//   }
+
+			const user = await User.findByPk(userId);
+			console.log(user)
+
+			if(!user){
+				return res.status(400).send({"message": "Logged in user not found"})
 			}
-		  });
-	  
-		  if (bankDetail) {
-			return res.status(400).send({ "message": "User's bank verification is already done" });
-		  }
-	  
-		  const headers = {
-			'Authorization': `Bearer ${req.authtoken.data.data.token}`,
-			'Content-Type': 'application/json',
-			'X-Client-Id': process.env.CASHFREE_API_KEY,
-			'X-Client-Secret': process.env.CASHFREE_API_SECRET,
-		  };
-	  
-		  const response = await axios.get(`${baseUrl}/payout/v1/validation/bankDetails?name=${name}&phone=${phone}&bankAccount=${bankAccount}&ifsc=${ifsc}`, { headers: headers });
-		  const verificationStatus = response.data.status;
-		  const message = response.data.message;
-		  console.log(response.data);
-	  
-		  if (message == "Bank Account details verified successfully.") {
-			await BankDetail.create({
-			  bankAccount: bankAccount,
-			  ifsc: ifsc,
-			  userId: req.id,
-			  cashfreeVerificationId: "BV" + String(response.data.data.refId)
-			})
-			return res.json(response.data);
-		  } else {
-			return res.json(response.data);
-		  }
+
+
+			const headers = {
+				'Authorization': `Bearer ${req.authtoken.data.data.token}`,
+				'Content-Type': 'application/json',
+				'X-Client-Id': process.env.CASHFREE_API_KEY,
+				'X-Client-Secret': process.env.CASHFREE_API_SECRET,
+			};
+
+			const response = await axios.get(`${baseUrl}/payout/v1/validation/bankDetails?name=${name}&phone=${phone}&bankAccount=${bankAccount}&ifsc=${ifsc}`, { headers: headers });
+			const verificationStatus = response.data.status;
+			const message = response.data.message;
+			console.log(response.data);
+
+			if (message == "Bank Account details verified successfully.") {
+				await BankDetail.create({
+					bankAccount: bankAccount,
+					ifsc: ifsc,
+					userId: req.id,
+					cashfreeVerificationId: "BV" + String(response.data.data.refId)
+				})
+
+
+				await user.update({ bankVerificationDone: true });
+
+
+
+				return res.json(response.data);
+				
+			} else {
+				return res.json(response.data);
+			}
 		} catch (error) {
-		  console.error('Error:', error.response ? error.response.data : error.message);
-		  return res.status(500).json({ error: 'An error occurred during bank verification.' });
+			console.error('Error:', error.response ? error.response.data : error.message);
+			return res.status(500).json({ error: 'An error occurred during bank verification.' });
 		}
-	  },
-	  
+	},
+
 
 	upiverification: async function (req, res) {
 		console.log("hello")
@@ -185,10 +204,10 @@ export default {
 		}
 	},
 
-	panverificationSync: async function (req, res){
+	panverificationSync: async function (req, res) {
 		try {
 
-			const {panNumber, name} = req.body
+			const { panNumber, name } = req.body
 			const userId = req.id
 			const headers = {
 				'Authorization': `Bearer ${req.authtoken.data.data.token}`,
@@ -202,11 +221,11 @@ export default {
 			}
 			const response = await axios.post(`${baseUrl2}/verification/pan`, requestData, { headers: headers });
 			console.log(response.data)
-			if(response.data.valid){
+			if (response.data.valid) {
 				//write logic for saving pan in database
 				res.status(200).json(response.data);
 			}
-			
+
 		} catch (error) {
 			console.log(error)
 			console.error('Error:', error.response ? error.response.data : error.message);
